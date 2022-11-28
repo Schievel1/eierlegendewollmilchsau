@@ -63,7 +63,7 @@ I added some more images that are not included in the build guide into the folde
 
 ** License
 Please note that the [[file:images/more_images/Pinout-Micro_latest.png][Arduino Micro pinout image]] and the part that is used in the image of the [[file:images/wiring_right.png][right sides wiring diagram]] is [[https://creativecommons.org/licenses/by-sa/4.0/][CC-BY-SA]] licensed. The image is work of [[https://www.arduino.cc/][Arduino]].
-All other images are [[https://creativecommons.org/licenses/by-sa/4.0/][CC-BY-SA]] licensed as well.
+All other things in this repo are [[https://creativecommons.org/licenses/by-nc/3.0/legalcode][CC-BY-NC]] licensed as well. So you are not allowed to use this in any commercial product. 
 
 * Building guide
 
