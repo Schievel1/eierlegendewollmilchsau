@@ -27,26 +27,59 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define DIODE_DIRECTION     COL2ROW
 
 // #define USB_VBUS_PIN        B10 // doesn't seem to work for me on one of my controllers... */
-#define SPLIT_HAND_PIN      C14  // high = left, low = right
+/* #define SPLIT_HAND_PIN      C14  // high = left, low = right */
+#define MASTER_RIGHT
+#define SPLIT_TRANSPORT_MIRROR
 
 // WS2812 RGB LED strip input and number of LEDs
 #define RGB_DI_PIN          A1
 #define WS2812_PWM_DRIVER   PWMD2  // default: PWMD2
 #define WS2812_PWM_CHANNEL  2      // default: 2
 #define WS2812_PWM_PAL_MODE 1      // Pin "alternate function", see the respective datasheet for the appropriate values for your MCU. default: 2
-#define WS2812_EXTERNAL_PULLUP
+// #define WS2812_EXTERNAL_PULLUP // don't have external pullup, don't know how it works - pascal
 //#define WS2812_PWM_COMPLEMENTARY_OUTPUT // Define for a complementary timer output (TIMx_CHyN); omit for a normal timer output (TIMx_CHy).
 #define WS2812_DMA_STREAM   STM32_DMA1_STREAM7  // DMA Stream for TIMx_UP, see the respective reference manual for the appropriate values for your MCU.
 #define WS2812_DMA_CHANNEL  3                   // DMA Channel for TIMx_UP, see the respective reference manual for the appropriate values for your MCU.
 #define WS2812_PWM_TARGET_PERIOD 800000
 
-
-#define RGBLED_NUM          52
-#define RGBLIGHT_SPLIT
-#define RGBLED_SPLIT \
-    { 26, 26 }
+#define DRIVER_LED_TOTAL 62
+#define RGB_MATRIX_LED_COUNT 62
+#define RGBLED_NUM          62
+#define RGB_MATRIX_SPLIT { 32, 30 }
 
 #define DEBUG_LED_PIN      C13
+
+#define RGB_MATRIX_KEYPRESSES
+#define RGB_MATRIX_FRAMEBUFFER_EFFECTS
+#define RGB_MATRIX_MAXIMUM_BRIGHTNESS 120
+#define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_CYCLE_ALL
+#define ENABLE_RGB_MATRIX_ALPHAS_MODS
+#define ENABLE_RGB_MATRIX_GRADIENT_UP_DOWN
+#define ENABLE_RGB_MATRIX_GRADIENT_LEFT_RIGHT
+#define ENABLE_RGB_MATRIX_BREATHING
+#define ENABLE_RGB_MATRIX_BAND_SAT
+#define ENABLE_RGB_MATRIX_BAND_VAL
+#define ENABLE_RGB_MATRIX_BAND_PINWHEEL_SAT
+#define ENABLE_RGB_MATRIX_BAND_PINWHEEL_VAL
+#define ENABLE_RGB_MATRIX_BAND_SPIRAL_SAT
+#define ENABLE_RGB_MATRIX_BAND_SPIRAL_VAL
+#define ENABLE_RGB_MATRIX_CYCLE_ALL
+#define ENABLE_RGB_MATRIX_CYCLE_LEFT_RIGHT
+#define ENABLE_RGB_MATRIX_CYCLE_UP_DOWN
+#define ENABLE_RGB_MATRIX_RAINBOW_MOVING_CHEVRON
+#define ENABLE_RGB_MATRIX_CYCLE_OUT_IN
+#define ENABLE_RGB_MATRIX_CYCLE_OUT_IN_DUAL
+#define ENABLE_RGB_MATRIX_CYCLE_PINWHEEL
+#define ENABLE_RGB_MATRIX_CYCLE_SPIRAL
+#define ENABLE_RGB_MATRIX_DUAL_BEACON
+#define ENABLE_RGB_MATRIX_RAINBOW_BEACON
+#define ENABLE_RGB_MATRIX_RAINBOW_PINWHEELS
+#define ENABLE_RGB_MATRIX_RAINDROPS
+#define ENABLE_RGB_MATRIX_JELLYBEAN_RAINDROPS
+#define ENABLE_RGB_MATRIX_HUE_BREATHING
+#define ENABLE_RGB_MATRIX_HUE_PENDULUM
+#define ENABLE_RGB_MATRIX_HUE_WAVE
+#define ENABLE_RGB_MATRIX_PIXEL_RAIN
 
 /* Audio config */
 #define AUDIO_PIN          B1
