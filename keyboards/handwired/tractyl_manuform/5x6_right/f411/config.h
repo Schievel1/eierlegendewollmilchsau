@@ -81,6 +81,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * PA13 and PA14 are pins SWCLK and SWDIO of the
  * debug header
  * */
+#define ENCODER_RESOLUTION 1
 #define ENCODERS_PAD_A \
     { A13 }
 #define ENCODERS_PAD_B \

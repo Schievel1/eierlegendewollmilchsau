@@ -128,11 +128,32 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /*****************************/
 /*  f o r   e n c o d e r s  */
 /*****************************/
+/* bool encoder_update_user(uint8_t index, bool clockwise) { */
+/*   if (clockwise) { */
+/*         tap_code(KC_WH_U); */
+/*   } else { */
+/*         tap_code(KC_WH_D); */
+/*   } */
+/*   return true; */
+/* } */
+
 bool encoder_update_user(uint8_t index, bool clockwise) {
-  if (clockwise) {
-    tap_code(KC_WH_U);
-  } else {
-    tap_code(KC_WH_D);
+  dprintf("encoder index: %d\n", index);
+  if (index == 1) // master side
+  {
+        if (clockwise) {
+            tap_code(KC_KB_VOLUME_UP);
+        } else {
+            tap_code(KC_KB_VOLUME_DOWN);
+        }
+  }
+  if (index == 0) // slave side
+  {
+        if (clockwise) {
+            tap_code(KC_WH_U);
+        } else {
+            tap_code(KC_WH_D);
+        }
   }
   return true;
 }
