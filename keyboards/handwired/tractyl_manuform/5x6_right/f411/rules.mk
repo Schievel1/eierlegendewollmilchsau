@@ -16,6 +16,4 @@ AUDIO_DRIVER  = pwm_hardware
 
 DEBOUNCE_TYPE = asym_eager_defer_pk
 
-# added by pascal
-RGB_MATRIX_ENABLE = yes
-RGB_MATRIX_DRIVER = WS2812
+

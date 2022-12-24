@@ -29,7 +29,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // #define USB_VBUS_PIN        B10 // doesn't seem to work for me on one of my controllers... */
 /* #define SPLIT_HAND_PIN      C14  // high = left, low = right */
 #define MASTER_RIGHT
-#define SPLIT_TRANSPORT_MIRROR
 
 // WS2812 RGB LED strip input and number of LEDs
 #define RGB_DI_PIN          A1
@@ -49,37 +48,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define DEBUG_LED_PIN      C13
 
-#define RGB_MATRIX_KEYPRESSES
-#define RGB_MATRIX_FRAMEBUFFER_EFFECTS
-#define RGB_MATRIX_MAXIMUM_BRIGHTNESS 120
-#define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_CYCLE_ALL
-#define ENABLE_RGB_MATRIX_ALPHAS_MODS
-#define ENABLE_RGB_MATRIX_GRADIENT_UP_DOWN
-#define ENABLE_RGB_MATRIX_GRADIENT_LEFT_RIGHT
-#define ENABLE_RGB_MATRIX_BREATHING
-#define ENABLE_RGB_MATRIX_BAND_SAT
-#define ENABLE_RGB_MATRIX_BAND_VAL
-#define ENABLE_RGB_MATRIX_BAND_PINWHEEL_SAT
-#define ENABLE_RGB_MATRIX_BAND_PINWHEEL_VAL
-#define ENABLE_RGB_MATRIX_BAND_SPIRAL_SAT
-#define ENABLE_RGB_MATRIX_BAND_SPIRAL_VAL
-#define ENABLE_RGB_MATRIX_CYCLE_ALL
-#define ENABLE_RGB_MATRIX_CYCLE_LEFT_RIGHT
-#define ENABLE_RGB_MATRIX_CYCLE_UP_DOWN
-#define ENABLE_RGB_MATRIX_RAINBOW_MOVING_CHEVRON
-#define ENABLE_RGB_MATRIX_CYCLE_OUT_IN
-#define ENABLE_RGB_MATRIX_CYCLE_OUT_IN_DUAL
-#define ENABLE_RGB_MATRIX_CYCLE_PINWHEEL
-#define ENABLE_RGB_MATRIX_CYCLE_SPIRAL
-#define ENABLE_RGB_MATRIX_DUAL_BEACON
-#define ENABLE_RGB_MATRIX_RAINBOW_BEACON
-#define ENABLE_RGB_MATRIX_RAINBOW_PINWHEELS
-#define ENABLE_RGB_MATRIX_RAINDROPS
-#define ENABLE_RGB_MATRIX_JELLYBEAN_RAINDROPS
-#define ENABLE_RGB_MATRIX_HUE_BREATHING
-#define ENABLE_RGB_MATRIX_HUE_PENDULUM
-#define ENABLE_RGB_MATRIX_HUE_WAVE
-#define ENABLE_RGB_MATRIX_PIXEL_RAIN
 
 /* Audio config */
 #define AUDIO_PIN          B1
@@ -109,7 +77,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define I2C1_CLOCK_SPEED  400000
 #define I2C1_DUTY_CYCLE FAST_DUTY_CYCLE_16_9
 
-/* encoder config */
+/* encoder config
+ * PA13 and PA14 are pins SWCLK and SWDIO of the
+ * debug header
+ * */
 #define ENCODERS_PAD_A \
     { A13 }
 #define ENCODERS_PAD_B \
