@@ -7,11 +7,12 @@
 /*************************************************************************************************************************/
 #define SPLIT_TRANSPORT_MIRROR
 #define SPLIT_TRANSACTION_IDS_USER USER_SYNC_A
+#define USER_COM_POLL_TIME_MS 100 // user data is sent between the two halfes by this time in milliseconds
 /*************************************/
 /*  R G B   M a t r i x   m o d e s  */
 /*************************************/
 #define RGB_MATRIX_MAXIMUM_BRIGHTNESS 80
-#define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_CYCLE_ALL
+#define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_TYPING_HEATMAP
 #define RGB_MATRIX_FRAMEBUFFER_EFFECTS
 #define RGB_DISABLE_WHEN_USB_SUSPENDED
 /* #define RGB_MATRIX_KEYPRESSES */

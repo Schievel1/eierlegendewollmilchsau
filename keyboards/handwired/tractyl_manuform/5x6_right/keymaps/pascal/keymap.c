@@ -17,9 +17,13 @@
 #include QMK_KEYBOARD_H
 #include "rgb_matrix_user.h"
 #include "transactions.h"
+/* #include "qp.h" */
 
 //debugging:
 #include "print.h"
+
+// for the big oled display
+painter_device_t big_display;
 
 /*******************/
 /*  k e y m a p s  */
@@ -57,37 +61,48 @@ void housekeeping_task_user(void) {
     if (is_keyboard_master()) {
         // Interact with slave every 500ms
         static uint32_t last_sync = 0;
-        if (timer_elapsed32(last_sync) > 100) {
+        if (timer_elapsed32(last_sync) > USER_COM_POLL_TIME_MS) {
             /* dprintf("current layer state: %d\n", layer_state); */
             master_to_slave_t m2s = {layer_state};
             slave_to_master_t s2m = {0};
-            if(transaction_rpc_exec(USER_SYNC_A, sizeof(m2s), &m2s, sizeof(s2m), &s2m)) {
+            if (transaction_rpc_exec(USER_SYNC_A, sizeof(m2s), &m2s, sizeof(s2m), &s2m)) {
                 last_sync = timer_read32();
                 /* dprintf("Slave current layer value: %d\n", s2m.current_layer_state); */
             } else {
                 dprint("Slave sync failed!\n");
             }
         }
+        // draw display every 33 ms
+        static uint32_t last_draw = 0;
+        if (timer_elapsed32(last_draw) > 33) { // Throttle to 30fps
+            last_draw = timer_read32();
+            // Draw a rect based off the current RGB color
+            qp_rect(big_display, 0, 7, 0, 239, 255, 255, 255, true);
+            qp_flush(big_display);
+        }
     }
 }
 
-/***********/
-/*  i n i t */
-/***********/
-void keyboard_post_init_user(void) {
-  // Customise these values to desired behaviour
-  debug_enable=true;
-  debug_matrix=true;
-  debug_keyboard=true;
-  debug_mouse=true;
-  transaction_register_rpc(USER_SYNC_A, user_sync_a_slave_handler);
-}
+    /***********/
+    /*  i n i t */
+    /***********/
+    void keyboard_post_init_user(void) {
+        // Customise these values to desired behaviour
+        debug_enable   = true;
+        debug_matrix   = true;
+        debug_keyboard = true;
+        debug_mouse    = true;
+        transaction_register_rpc(USER_SYNC_A, user_sync_a_slave_handler);
+        big_display = qp_ili9341_make_spi_device(320, 240, B1, B10, B2, 4, 0);
+        qp_init(big_display, QP_ROTATION_0);
+        qp_power(big_display, true);
+    }
 
-/*******************/
-/*  k e y m a p s  */
-/*******************/
+    /*******************/
+    /*  k e y m a p s  */
+    /*******************/
 
-// clang-format off
+    // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_DVORAK] = LAYOUT_5x6_right(
      KC_ESC , KC_1  , KC_2  , KC_3  , KC_4  , KC_5  ,                         KC_6  , KC_7  , KC_8  , KC_9  , KC_0  ,KC_0,
@@ -123,40 +138,40 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                _______,_______,         _______,_______
   ),
 };
-// clang-format on
+    // clang-format on
 
-/*****************************/
-/*  f o r   e n c o d e r s  */
-/*****************************/
-/* bool encoder_update_user(uint8_t index, bool clockwise) { */
-/*   if (clockwise) { */
-/*         tap_code(KC_WH_U); */
-/*   } else { */
-/*         tap_code(KC_WH_D); */
-/*   } */
-/*   return true; */
-/* } */
+    /*****************************/
+    /*  f o r   e n c o d e r s  */
+    /*****************************/
+    /* bool encoder_update_user(uint8_t index, bool clockwise) { */
+    /*   if (clockwise) { */
+    /*         tap_code(KC_WH_U); */
+    /*   } else { */
+    /*         tap_code(KC_WH_D); */
+    /*   } */
+    /*   return true; */
+    /* } */
 
-bool encoder_update_user(uint8_t index, bool clockwise) {
-  dprintf("encoder index: %d\n", index);
-  if (index == 1) // master side
-  {
-        if (clockwise) {
-            tap_code(KC_KB_VOLUME_UP);
-        } else {
-            tap_code(KC_KB_VOLUME_DOWN);
+    bool encoder_update_user(uint8_t index, bool clockwise) {
+        dprintf("encoder index: %d\n", index);
+        if (index == 1) // master side
+        {
+            if (clockwise) {
+                tap_code(KC_KB_VOLUME_UP);
+            } else {
+                tap_code(KC_KB_VOLUME_DOWN);
+            }
         }
-  }
-  if (index == 0) // slave side
-  {
-        if (clockwise) {
-            tap_code(KC_WH_U);
-        } else {
-            tap_code(KC_WH_D);
+        if (index == 0) // slave side
+        {
+            if (clockwise) {
+                tap_code(KC_WH_U);
+            } else {
+                tap_code(KC_WH_D);
+            }
         }
-  }
-  return true;
-}
+        return true;
+    }
 
 /*************************************/
 /*  f o r   O L E D   d i s p l a y  */
@@ -165,7 +180,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 bool oled_task_user(void) {
     /* Host Keyboard Layer Status */
     oled_write_P(PSTR("Layer: "), false);
-    switch (layer_state/2) {
+    switch (layer_state/2) { // HACK: Dunno why layer_states or 0, 2 and 4.
         case _DVORAK:
             oled_write_P(PSTR("Dvorak\n"), false);
             break;
@@ -334,7 +349,7 @@ bool oled_task_user(void) {
 /*************************************************************/
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     for (uint8_t i = led_min; i <= led_max; i++) {
-        switch(layer_state/2) {
+        switch(layer_state/2) { // HACK: Dunno why layer_states or 0, 2 and 4.
             case _RAISE:
               rgb_matrix_set_color(i, RGB_BLUE);
                 break;
@@ -347,4 +362,5 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     }
     return false;
 }
+
 
