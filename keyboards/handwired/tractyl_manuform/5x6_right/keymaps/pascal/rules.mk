@@ -9,4 +9,7 @@ OLED_ENABLE = yes
 
 # for the big oled display
 QUANTUM_PAINTER_ENABLE = yes
-QUANTUM_PAINTER_DRIVERS += ili9341_spi
+QUANTUM_PAINTER_DRIVERS = ili9341_spi
+# painter images
+SRC += graphics/dickbutt.qgf.c
+SRC += rgb_matrix_user.c

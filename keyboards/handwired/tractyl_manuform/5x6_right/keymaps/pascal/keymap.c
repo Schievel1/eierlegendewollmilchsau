@@ -17,13 +17,17 @@
 #include QMK_KEYBOARD_H
 #include "rgb_matrix_user.h"
 #include "transactions.h"
-/* #include "qp.h" */
+#include "qp.h"
+
+// quantum painter images
+#include "graphics/dickbutt.qgf.h"
 
 //debugging:
 #include "print.h"
 
 // for the big oled display
 painter_device_t big_display;
+painter_image_handle_t dickbutt;
 
 /*******************/
 /*  k e y m a p s  */
@@ -72,37 +76,42 @@ void housekeeping_task_user(void) {
                 dprint("Slave sync failed!\n");
             }
         }
-        // draw display every 33 ms
-        static uint32_t last_draw = 0;
-        if (timer_elapsed32(last_draw) > 33) { // Throttle to 30fps
-            last_draw = timer_read32();
-            // Draw a rect based off the current RGB color
-            qp_rect(big_display, 0, 7, 0, 239, 255, 255, 255, true);
-            qp_flush(big_display);
-        }
+    }
+    // draw display every 33 ms
+    static uint32_t last_draw = 0;
+    if (timer_elapsed32(last_draw) > 33) { // Throttle to 30fps
+        last_draw = timer_read32();
+		/* qp_drawimage(big_display, 0, 0, dickbutt); */
+		qp_circle(big_display, last_draw%240, last_draw%320, 25, last_draw%255, 255, 255, false);
+        qp_flush(big_display);
     }
 }
 
-    /***********/
-    /*  i n i t */
-    /***********/
-    void keyboard_post_init_user(void) {
-        // Customise these values to desired behaviour
-        debug_enable   = true;
-        debug_matrix   = true;
-        debug_keyboard = true;
-        debug_mouse    = true;
-        transaction_register_rpc(USER_SYNC_A, user_sync_a_slave_handler);
-        big_display = qp_ili9341_make_spi_device(320, 240, B1, B10, B2, 4, 0);
-        qp_init(big_display, QP_ROTATION_0);
-        qp_power(big_display, true);
-    }
+/***********/
+/*  i n i t */
+/***********/
+void keyboard_post_init_user(void) {
+    // Debug: Customise these values to desired behaviour
+    debug_enable   = true;
+    debug_matrix   = true;
+    debug_keyboard = true;
+    debug_mouse    = true;
+	// user comms
+    transaction_register_rpc(USER_SYNC_A, user_sync_a_slave_handler);
+	// quantum painter
+    big_display = qp_ili9341_make_spi_device(240, 320, B1, B10, B2, 2, 0);
+    qp_init(big_display, QP_ROTATION_0);
+    qp_power(big_display, true);
+    qp_rect(big_display, 0, 0, 239, 319, HSV_BLACK, true);
+    qp_rect(big_display, 40, 40, 200, 300, HSV_WHITE, true);
+	/* dickbutt =  qp_load_image_mem(dickbutt); */
+}
 
-    /*******************/
-    /*  k e y m a p s  */
-    /*******************/
+/*******************/
+/*  k e y m a p s  */
+/*******************/
 
-    // clang-format off
+// clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_DVORAK] = LAYOUT_5x6_right(
      KC_ESC , KC_1  , KC_2  , KC_3  , KC_4  , KC_5  ,                         KC_6  , KC_7  , KC_8  , KC_9  , KC_0  ,KC_0,
@@ -138,40 +147,31 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                _______,_______,         _______,_______
   ),
 };
-    // clang-format on
+// clang-format on
 
-    /*****************************/
-    /*  f o r   e n c o d e r s  */
-    /*****************************/
-    /* bool encoder_update_user(uint8_t index, bool clockwise) { */
-    /*   if (clockwise) { */
-    /*         tap_code(KC_WH_U); */
-    /*   } else { */
-    /*         tap_code(KC_WH_D); */
-    /*   } */
-    /*   return true; */
-    /* } */
-
-    bool encoder_update_user(uint8_t index, bool clockwise) {
-        dprintf("encoder index: %d\n", index);
-        if (index == 1) // master side
-        {
-            if (clockwise) {
-                tap_code(KC_KB_VOLUME_UP);
-            } else {
-                tap_code(KC_KB_VOLUME_DOWN);
-            }
+/*****************************/
+/*  f o r   e n c o d e r s  */
+/*****************************/
+bool encoder_update_user(uint8_t index, bool clockwise) {
+    dprintf("encoder index: %d\n", index);
+    if (index == 1) // master side
+    {
+        if (clockwise) {
+            tap_code(KC_KB_VOLUME_UP);
+        } else {
+            tap_code(KC_KB_VOLUME_DOWN);
         }
-        if (index == 0) // slave side
-        {
-            if (clockwise) {
-                tap_code(KC_WH_U);
-            } else {
-                tap_code(KC_WH_D);
-            }
-        }
-        return true;
     }
+    if (index == 0) // slave side
+    {
+        if (clockwise) {
+            tap_code(KC_WH_U);
+        } else {
+            tap_code(KC_WH_D);
+        }
+    }
+    return true;
+}
 
 /*************************************/
 /*  f o r   O L E D   d i s p l a y  */
