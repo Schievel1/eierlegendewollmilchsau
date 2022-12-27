@@ -8,6 +8,14 @@
 #define SPLIT_TRANSPORT_MIRROR
 #define SPLIT_TRANSACTION_IDS_USER USER_SYNC_A
 #define USER_COM_POLL_TIME_MS 100 // user data is sent between the two halfes by this time in milliseconds
+
+/*****************************************************/
+/*  P M W 3 3 6 0   t r a c k b a l l   s e n s o r  */
+/*****************************************************/
+#define PMW33XX_LIFTOFF_DISTANCE 0x08
+#undef ROTATIONAL_TRANSFORM_ANGLE
+#define ROTATIONAL_TRANSFORM_ANGLE -15
+
 /*************************************/
 /*  R G B   M a t r i x   m o d e s  */
 /*************************************/
