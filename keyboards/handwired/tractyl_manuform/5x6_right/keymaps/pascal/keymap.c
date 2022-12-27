@@ -110,44 +110,52 @@ void keyboard_post_init_user(void) {
 /*******************/
 /*  k e y m a p s  */
 /*******************/
+const key_override_t lcbr_key_override =
+    ko_make_basic(MOD_MASK_SHIFT, KC_LCBR, KC_LBRC);  // Shift { is [
+const key_override_t rcbr_key_override =
+    ko_make_basic(MOD_MASK_SHIFT, KC_RCBR, KC_RBRC); // Shift } is ]
+const key_override_t** key_overrides = (const key_override_t*[]){
+    &lcbr_key_override,
+    &rcbr_key_override,
+    NULL
+};
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_DVORAK] = LAYOUT_5x6_right(
-     KC_ESC , KC_1  , KC_2  , KC_3  , KC_4  , KC_5  ,                         KC_6  , KC_7  , KC_8  , KC_9  , KC_0  ,KC_0,
-     KC_TAB , KC_Q  , KC_W  , KC_E  , KC_R  , KC_T  ,                         KC_Y  , KC_U  , KC_I  , KC_O  , QK_BOOT  ,KC_MINS,
-     KC_LSFT, KC_A  , KC_S  , KC_D  , KC_F  , KC_G  ,                         KC_H  , KC_J  , KC_K  , KC_L  ,KC_SCLN,KC_QUOT,
-     RGB_TOG, RGB_MOD  , KC_X  , KC_C  , KC_V  , KC_B  ,                         KC_N  , KC_M  ,KC_COMM,KC_DOT ,RGB_MOD, RGB_TOG,
-                      KC_LBRC,KC_RBRC,                                                       KC_PLUS, KC_EQL,
-                                      RAISE,KC_SPC,                                    LOWER,
-                                      KC_TAB,KC_HOME,                                  KC_DEL,
-                                      KC_BSPC, KC_GRV,                        KC_LGUI, KC_ENT
-  ),
+                         KC_GRV,     KC_1,    KC_2,    KC_3 ,    KC_4 ,    KC_5,                  KC_6    ,    KC_7 ,       KC_8 ,      KC_9 ,      KC_0        ,KC_EQL,
+                         KC_TAB,     KC_QUOT, KC_COMM, KC_DOT  , KC_P    , KC_Y   ,               KC_F    ,    KC_G       , KC_C      , KC_R      , KC_L ,       KC_SLSH,
+                         KC_ESC, KC_A ,   KC_O   , KC_E    , KC_U    , KC_I   ,               KC_D    ,    KC_H       , KC_T      , KC_N      , KC_S        ,KC_MINS,
+                         KC_NO,      KC_SCLN, KC_Q   , KC_J    , KC_K    , KC_X   ,               KC_B    ,    KC_M       , KC_W   ,    KC_V    ,   KC_Z     ,   KC_BSLS,
+                                          KC_LBRC, KC_RBRC,                                                       KC_PGUP, LOWER,
+                                                            KC_LSFT,    KC_SPC,                 KC_RSFT,
+                                                            KC_LCTL,    LOWER,                     KC_BSPC,
+                                                            KC_LALT,    KC_LGUI,        KC_ENT, KC_RALT
+                         ),
 
   [_LOWER] = LAYOUT_5x6_right(
-     KC_TILD,KC_EXLM, KC_AT ,KC_HASH,KC_DLR ,KC_PERC,                        KC_CIRC,KC_AMPR,KC_ASTR,KC_LPRN,KC_RPRN,KC_DEL,
-     _______,_______,_______,_______,_______,KC_LBRC,                        KC_RBRC, KC_P7 , KC_P8 , KC_P9 ,_______,KC_PLUS,
-     _______,KC_HOME,KC_PGUP,KC_PGDN,KC_END ,KC_LPRN,                        KC_RPRN, KC_P4 , KC_P5 , KC_P6 ,KC_MINS,KC_PIPE,
-     _______,_______,_______,_______,_______,_______,                        _______, KC_P1 , KC_P2 , KC_P3 ,KC_EQL ,KC_UNDS,
-                     _______,KC_PSCR,                                                        _______, KC_P0,
-                                             _______,_______,                _______,
-                                             _______,_______,                _______,
-                                             _______,_______,        _______,_______
 
-  ),
+                        KC_TILD,     KC_F1,    KC_F2,    KC_F3,         KC_F4,     KC_F5,        KC_F6,   KC_F7,     KC_F8,     KC_F9,       KC_F10,     KC_DEL ,
+                        _______,    _______, _______,  _______,       _______,   KC_LCBR,        KC_RCBR, KC_BTN2,   _______,   _______  ,   _______ ,   QK_BOOT,
+                        _______,    _______, _______,  RAISE,     KC_DEL,   KC_LPRN,        KC_RPRN, KC_LEFT ,  KC_UP,     KC_DOWN,     KC_RGHT,    KC_PIPE,
+                        KC_CAPS ,   RGB_TOG, _______,  LCTL(KC_X), LCTL(KC_C),LCTL(KC_V),        _______, KC_BTN1  , _______,   _______,     _______,    _______,
+                                           RGB_MOD,RGB_RMOD,                                                       RGB_HUI,RGB_SAI,
+                                                                 _______,_______,                         _______,
+                                                                 _______,_______,                         _______,
+                                                                 _______,_______,                 _______,_______
+                        ),
 
   [_RAISE] = LAYOUT_5x6_right(
-       KC_F12 , KC_F1 , KC_F2 , KC_F3 , KC_F4 , KC_F5 ,                        KC_F6  , KC_F7 , KC_F8 , KC_F9 ,KC_F10 ,KC_F11 ,
-       _______,_______,_______,_______,_______,KC_LBRC,                        KC_RBRC,_______,KC_NUM,KC_INS ,KC_SCRL,KC_MUTE,
-       _______,KC_LEFT,KC_UP  ,KC_DOWN,KC_RGHT,KC_LPRN,                        KC_RPRN,KC_MPRV,KC_MPLY,KC_MNXT,_______,KC_VOLU,
-       _______,_______,_______,_______,_______,_______,                        _______,_______,_______,_______,_______,KC_VOLD,
-                       _______,_______,                                                        KC_EQL ,_______,
-                                               _______,_______,                _______,
-                                               _______,_______,                _______,
-                                               _______,_______,         _______,_______
-  ),
-};
-// clang-format on
+
+                        _______, _______, _______, _______, _______, _______,                    _______, _______, KC_PSLS, KC_PAST, KC_PMNS, KC_CALC,
+                        _______, _______, _______, _______, _______, KC_LBRC,                    KC_RBRC, KC_P7,   KC_P8,   KC_P9,   KC_PPLS, KC_MUTE,
+                        _______, _______, _______, _______, _______, KC_LPRN,                    KC_RPRN, KC_P4,   KC_P5,   KC_P6,   _______, KC_VOLU,
+                        _______, _______, _______, _______, _______, _______,                    KC_P0,   KC_P1,   KC_P2,   KC_P3,   KC_PEQL, KC_VOLD,
+                                           _______,_______,                                                         KC_DOT, KC_COMM,
+                                                                 _______,_______,                     _______,
+                                                                 _______,_______,                     _______,
+                                                                 _______,_______,             _______,_______
+                        ),};// clang-format on
 
 /*****************************/
 /*  f o r   e n c o d e r s  */

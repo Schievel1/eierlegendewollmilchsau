@@ -7,6 +7,9 @@ ENCODER_ENABLE = yes
 # for the small oled display
 OLED_ENABLE = yes
 
+# for changing what shift does to a key
+KEY_OVERRIDE_ENABLE = yes
+
 # for the big oled display
 QUANTUM_PAINTER_ENABLE = yes
 QUANTUM_PAINTER_DRIVERS = ili9341_spi
