@@ -85,6 +85,8 @@ void housekeeping_task_user(void) {
 		qp_circle(big_display, last_draw%240, last_draw%320, 25, last_draw%255, 255, 255, false);
         qp_flush(big_display);
     }
+    // enable sniping mode with lower layer
+    charybdis_set_pointer_sniping_enabled((biton32(layer_state)) == _LOWER);
 }
 
 /***********/
