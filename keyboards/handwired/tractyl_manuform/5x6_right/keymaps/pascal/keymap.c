@@ -190,7 +190,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 bool oled_task_user(void) {
     /* Host Keyboard Layer Status */
     oled_write_P(PSTR("Layer: "), false);
-    switch (layer_state/2) { // HACK: Dunno why layer_states or 0, 2 and 4.
+    switch (biton32(layer_state)) {
         case _DVORAK:
             oled_write_P(PSTR("Dvorak\n"), false);
             break;
@@ -211,166 +211,216 @@ bool oled_task_user(void) {
     } else {
         switch (rgb_matrix_get_mode()) {
             case MY_RGB_MATRIX_SOLID_COLOR:
-                oled_write_P(PSTR("SOLID_COLOR\n"), false);
+                oled_write_P(PSTR("Solid Color\n"), false);
                 break;
             case MY_RGB_MATRIX_ALPHAS_MODS:
-                oled_write_P(PSTR("ALPHAS_MODS\n"), false);
+                oled_write_P(PSTR("Alphas Mods\n"), false);
                 break;
             case MY_RGB_MATRIX_GRADIENT_UP_DOWN:
-                oled_write_P(PSTR("GRADIENT_UP_DOWN\n"), false);
+                oled_write_P(PSTR("Gradient Up Down\n"), false);
                 break;
             case MY_RGB_MATRIX_GRADIENT_LEFT_RIGHT:
-                oled_write_P(PSTR("GRADIENT_LEFT_RIGHT\n"), false);
+                oled_write_P(PSTR("Gradient Left Right\n"), false);
                 break;
             case MY_RGB_MATRIX_BREATHING:
-                oled_write_P(PSTR("BREATHING\n"), false);
+                oled_write_P(PSTR("Breathing\n"), false);
                 break;
             case MY_RGB_MATRIX_BAND_SAT:
-                oled_write_P(PSTR("BAND_SAT\n"), false);
+                oled_write_P(PSTR("Band Sat\n"), false);
                 break;
             case MY_RGB_MATRIX_BAND_VAL:
-                oled_write_P(PSTR("BAND_VAL\n"), false);
+                oled_write_P(PSTR("Band VAL\n"), false);
                 break;
             case MY_RGB_MATRIX_BAND_PINWHEEL_SAT:
-                oled_write_P(PSTR("BAND_PINWHEEL_SAT\n"), false);
+                oled_write_P(PSTR("Band Pinwheel Sat\n"), false);
                 break;
             case MY_RGB_MATRIX_BAND_PINWHEEL_VAL:
-                oled_write_P(PSTR("BAND_PINWHEEL_VAL\n"), false);
+                oled_write_P(PSTR("Band Pinwheel Val\n"), false);
                 break;
             case MY_RGB_MATRIX_BAND_SPIRAL_SAT:
-                oled_write_P(PSTR("BAND_SPIRAL_SAT\n"), false);
+                oled_write_P(PSTR("Band Spiral Sat\n"), false);
                 break;
             case MY_RGB_MATRIX_BAND_SPIRAL_VAL:
-                oled_write_P(PSTR("BAND_SPIRAL_VAL\n"), false);
+                oled_write_P(PSTR("Band Spiral Val\n"), false);
                 break;
             case MY_RGB_MATRIX_CYCLE_ALL:
-                oled_write_P(PSTR("CYCLE_ALL\n"), false);
+                oled_write_P(PSTR("Cycle All\n"), false);
                 break;
             case MY_RGB_MATRIX_CYCLE_LEFT_RIGHT:
-                oled_write_P(PSTR("CYCLE_LEFT_RIGHT\n"), false);
+                oled_write_P(PSTR("Cycle Left Right\n"), false);
                 break;
             case MY_RGB_MATRIX_CYCLE_UP_DOWN:
-                oled_write_P(PSTR("CYCLE_UP_DOWN\n"), false);
+                oled_write_P(PSTR("Cycle Up Down\n"), false);
                 break;
             case MY_RGB_MATRIX_CYCLE_OUT_IN:
-                oled_write_P(PSTR("CYCLE_OUT_IN\n"), false);
+                oled_write_P(PSTR("Cycle Out In\n"), false);
                 break;
             case MY_RGB_MATRIX_CYCLE_OUT_IN_DUAL:
-                oled_write_P(PSTR("CYCLE_OUT_IN_DUAL\n"), false);
+                oled_write_P(PSTR("Cycle Out IN Dual\n"), false);
                 break;
             case MY_RGB_MATRIX_RAINBOW_MOVING_CHEVRON:
-                oled_write_P(PSTR("RAINBOW_MOVING_CHEVRON\n"), false);
+                oled_write_P(PSTR("Rainbow Moving Chevron\n"), false);
                 break;
             case MY_RGB_MATRIX_CYCLE_PINWHEEL:
-                oled_write_P(PSTR("CYCLE_PINWHEEL\n"), false);
+                oled_write_P(PSTR("Cycle Pinwheel\n"), false);
                 break;
             case MY_RGB_MATRIX_CYCLE_SPIRAL:
-                oled_write_P(PSTR("CYCLE_SPIRAL\n"), false);
+                oled_write_P(PSTR("Cycle Spiral\n"), false);
                 break;
             case MY_RGB_MATRIX_DUAL_BEACON:
-                oled_write_P(PSTR("DUAL_BEACON\n"), false);
+                oled_write_P(PSTR("Dual Beacon\n"), false);
                 break;
             case MY_RGB_MATRIX_RAINBOW_BEACON:
-                oled_write_P(PSTR("RAINBOW_BEACON\n"), false);
+                oled_write_P(PSTR("Rainbow Beacon\n"), false);
                 break;
             case MY_RGB_MATRIX_RAINBOW_PINWHEELS:
-                oled_write_P(PSTR("RAINBOW_PINWHEELS\n"), false);
+                oled_write_P(PSTR("Rainbow Pinwheels\n"), false);
                 break;
             case MY_RGB_MATRIX_RAINDROPS:
-                oled_write_P(PSTR("RAINDROPS\n"), false);
+                oled_write_P(PSTR("Raindrops\n"), false);
                 break;
             case MY_RGB_MATRIX_JELLYBEAN_RAINDROPS:
-                oled_write_P(PSTR("JELLYBEAN_RAINDROPS\n"), false);
+                oled_write_P(PSTR("Jellybean Raindrops\n"), false);
                 break;
             case MY_RGB_MATRIX_HUE_BREATHING:
-                oled_write_P(PSTR("HUE_BREATHING\n"), false);
+                oled_write_P(PSTR("Hue Breathing\n"), false);
                 break;
             case MY_RGB_MATRIX_HUE_PENDULUM:
-                oled_write_P(PSTR("HUE_PENDULUM\n"), false);
+                oled_write_P(PSTR("Hue Pendulum\n"), false);
                 break;
             case MY_RGB_MATRIX_HUE_WAVE:
-                oled_write_P(PSTR("HUE_WAVE\n"), false);
+                oled_write_P(PSTR("Hue Wave\n"), false);
                 break;
 #    if defined(RGB_MATRIX_FRAMEBUFFER_EFFECTS)
             case MY_RGB_MATRIX_TYPING_HEATMAP:
-                oled_write_P(PSTR("TYPING_HEATMAP\n"), false);
+                oled_write_P(PSTR("Typing Heatmap\n"), false);
                 break;
             case MY_RGB_MATRIX_DIGITAL_RAIN:
-                oled_write_P(PSTR("DIGITAL_RAIN\n"), false);
+                oled_write_P(PSTR("Digital Rain\n"), false);
                 break;
 #    endif
-#    if defined(RGB_MATRIX_KEYPRESSES) || defined(RGB_MATRIX_KEYRELEASES)
+#    if defined(RGB_MATRIX_KEYPRESSES) || defined(RGb_MATRIX_KEYRELEASES)
             case MY_RGB_MATRIX_SOLID_REACTIVE_SIMPLE:
-                oled_write_P(PSTR("SOLID_REACTIVE_SIMPLE\n"), false);
+                oled_write_P(PSTR("Solid Reactive Simple\n"), false);
                 break;
             case MY_RGB_MATRIX_SOLID_REACTIVE:
-                oled_write_P(PSTR("SOLID_REACTIVE\n"), false);
+                oled_write_P(PSTR("Solid Reactive\n"), false);
                 break;
             case MY_RGB_MATRIX_SOLID_REACTIVE_WIDE:
-                oled_write_P(PSTR("SOLID_REACTIVE_WIDE\n"), false);
+                oled_write_P(PSTR("Solid Reactive Wide\n"), false);
                 break;
             case MY_RGB_MATRIX_SOLID_REACTIVE_MULTIWIDE:
-                oled_write_P(PSTR("SOLID_REACTIVE_MULTIWIDE\n"), false);
+                oled_write_P(PSTR("Solid Reactive Multiwide\n"), false);
                 break;
             case MY_RGB_MATRIX_SOLID_REACTIVE_CROSS:
-                oled_write_P(PSTR("SOLID_REACTIVE_CROSS\n"), false);
+                oled_write_P(PSTR("Solid Reactive Cross\n"), false);
                 break;
             case MY_RGB_MATRIX_SOLID_REACTIVE_MULTICROSS:
-                oled_write_P(PSTR("SOLID_REACTIVE_MULTICROSS\n"), false);
+                oled_write_P(PSTR("Solid Reactive Multicross\n"), false);
                 break;
             case MY_RGB_MATRIX_SOLID_REACTIVE_NEXUS:
-                oled_write_P(PSTR("SOLID_REACTIVE_NEXUS\n"), false);
+                oled_write_P(PSTR("Solid Reactive NEXUS\n"), false);
                 break;
             case MY_RGB_MATRIX_SOLID_REACTIVE_MULTINEXUS:
-                oled_write_P(PSTR("SOLID_REACTIVE_MULTINEXUS\n"), false);
+                oled_write_P(PSTR("Solid Reactive Multinexus\n"), false);
                 break;
             case MY_RGB_MATRIX_SPLASH:
-                oled_write_P(PSTR("SPLASH\n"), false);
+                oled_write_P(PSTR("Splash\n"), false);
                 break;
             case MY_RGB_MATRIX_MULTISPLASH:
-                oled_write_P(PSTR("MULTISPLASH\n"), false);
+                oled_write_P(PSTR("Multisplash\n"), false);
                 break;
             case MY_RGB_MATRIX_SOLID_SPLASH:
-                oled_write_P(PSTR("SOLID_SPLASH\n"), false);
+                oled_write_P(PSTR("Solid Splash\n"), false);
                 break;
             case MY_RGB_MATRIX_SOLID_MULTISPLASH:
-                oled_write_P(PSTR("SOLID_MULTISPLASH\n"), false);
+                oled_write_P(PSTR("Solid Multisplash\n"), false);
                 break;
 #    endif
             case MY_RGB_MATRIX_EFFECT_MAX:
-              break;
-                oled_write_P(PSTR("MATRIX_EFFECT_MAX\n"), false);
+                break;
+                oled_write_P(PSTR("Matrix Effect Max\n"), false);
             default:
                 oled_write_P(PSTR("Undefined\n"), false);
         }
     }
 
-        /* Host Keyboard LED Status */
-        led_t led_state = host_keyboard_led_state();
-        oled_write_P(led_state.num_lock ? PSTR("NUM ") : PSTR("    "), false);
-        oled_write_P(led_state.caps_lock ? PSTR("CAP ") : PSTR("    "), false);
-        oled_write_P(led_state.scroll_lock ? PSTR("SCR ") : PSTR("    "), false);
-        return false;
-    }
+    /* Host Keyboard LED Status */
+    led_t led_state = host_keyboard_led_state();
+    oled_write_P(led_state.num_lock ? PSTR("NUM ") : PSTR("    "), false);
+    oled_write_P(led_state.caps_lock ? PSTR("CAP ") : PSTR("    "), false);
+    oled_write_P(led_state.scroll_lock ? PSTR("SCR ") : PSTR("    "), false);
+    return false;
+}
 #endif
 
 /*************************************************************/
 /*  R G B   m a t r i x   r e s p o n d s   t o   l a y e r  */
 /*************************************************************/
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
-    for (uint8_t i = led_min; i <= led_max; i++) {
-        switch(layer_state/2) { // HACK: Dunno why layer_states or 0, 2 and 4.
-            case _RAISE:
-              rgb_matrix_set_color(i, RGB_BLUE);
-                break;
-            case _LOWER:
-                rgb_matrix_set_color(i, RGB_YELLOW);
-                break;
-            default:
-                break;
-        }
+    static bool re_raise = false;
+    static bool re_lower = false;
+    switch (biton32(layer_state)) {
+        case _RAISE:
+            if (!re_raise) {
+                for (int i = 0; i < 10; i++) {
+                    rgb_matrix_increase_hue_noeeprom();
+                }
+                dprint("doing the raise raise (10)!\n");
+            }
+            re_raise = true;
+            // set num block keys to static color
+            rgb_matrix_set_color(36, RGB_YELLOW); // num lock
+            rgb_matrix_set_color(42, RGB_GREEN); // numbers
+            rgb_matrix_set_color(41, RGB_GREEN);
+            rgb_matrix_set_color(40, RGB_GREEN);
+            rgb_matrix_set_color(48, RGB_GREEN);
+            rgb_matrix_set_color(47, RGB_GREEN);
+            rgb_matrix_set_color(46, RGB_GREEN);
+            rgb_matrix_set_color(55, RGB_GREEN);
+            rgb_matrix_set_color(54, RGB_GREEN);
+            rgb_matrix_set_color(53, RGB_GREEN);
+            rgb_matrix_set_color(52, RGB_GREEN);
+            rgb_matrix_set_color(35, RGB_BLUE); // operators
+            rgb_matrix_set_color(34, RGB_BLUE);
+            rgb_matrix_set_color(33, RGB_BLUE);
+            rgb_matrix_set_color(39, RGB_BLUE);
+            rgb_matrix_set_color(35, RGB_BLUE);
+            rgb_matrix_set_color(51, RGB_RED); // equals
+            break;
+        case _LOWER:
+            if (!re_lower) {
+                for (int i = 0; i < 15; i++) {
+                    rgb_matrix_increase_hue_noeeprom();
+                }
+                dprint("doing the lower raise (20)!\n");
+            }
+            if (re_raise) {
+                for (int i = 0; i < 10; i++) {
+                    rgb_matrix_decrease_hue_noeeprom();
+                }
+                dprint("going back 10!\n");
+                re_raise = false;
+            }
+            re_lower = true;
+            break;
+        case _DVORAK:
+            if (re_lower) {
+                for (int i = 0; i < 15; i++) {
+                    rgb_matrix_decrease_hue_noeeprom();
+                }
+                dprint("going back 20!\n");
+            }
+            if (re_raise) {
+                for (int i = 0; i < 10; i++) {
+                    rgb_matrix_decrease_hue_noeeprom();
+                }
+                dprint("going back 10!\n");
+            }
+            re_raise = false;
+            re_lower = false;
+        default:
+            break;
     }
     return false;
 }
-
-
