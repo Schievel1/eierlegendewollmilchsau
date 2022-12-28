@@ -101,7 +101,7 @@ void keyboard_post_init_user(void) {
 	// user comms
     transaction_register_rpc(USER_SYNC_A, user_sync_a_slave_handler);
 	// quantum painter
-    big_display = qp_ili9341_make_spi_device(240, 320, B1, B10, B2, 2, 0);
+    big_display = qp_ili9341_make_spi_device(240, 320, ILI9341_CS_PIN, ILI9341_DCRS_PIN, ILI9341_RESET_PIN, 2, 0);
     qp_init(big_display, QP_ROTATION_0);
     qp_power(big_display, true);
     qp_rect(big_display, 0, 0, 239, 319, HSV_BLACK, true);

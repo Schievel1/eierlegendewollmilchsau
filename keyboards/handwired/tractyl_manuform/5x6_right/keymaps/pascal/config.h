@@ -18,6 +18,13 @@
 #define ROTATIONAL_TRANSFORM_ANGLE -15
 #define CHARYBDIS_MINIMUM_DEFAULT_DPI 1600
 
+/***************************************************/
+/*  I L I 9 3 4 1   b i g   L E D   d i s p l a y  */
+/***************************************************/
+#define ILI9341_CS_PIN B1
+#define ILI9341_DCRS_PIN B10
+#define ILI9341_RESET_PIN B2
+
 /*************************************/
 /*  R G B   M a t r i x   m o d e s  */
 /*************************************/
