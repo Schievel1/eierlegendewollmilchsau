@@ -142,11 +142,11 @@ const key_override_t** key_overrides = (const key_override_t*[]){
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_DVORAK] = LAYOUT_5x6_right(
-                         KC_GRV,     KC_1,    KC_2,    KC_3 ,    KC_4 ,    KC_5,                  KC_6    ,    KC_7 ,       KC_8 ,      KC_9 ,      KC_0        ,KC_EQL,
-                         KC_TAB,     KC_QUOT, KC_COMM, KC_DOT  , KC_P    , KC_Y   ,               KC_F    ,    KC_G       , KC_C      , KC_R      , KC_L ,       KC_SLSH,
-                         KC_ESC, KC_A ,   KC_O   , KC_E    , KC_U    , KC_I   ,               KC_D    ,    KC_H       , KC_T      , KC_N      , KC_S        ,KC_MINS,
-                         KC_NO,      KC_SCLN, KC_Q   , KC_J    , KC_K    , KC_X   ,               KC_B    ,    KC_M       , KC_W   ,    KC_V    ,   KC_Z     ,   KC_BSLS,
-                                          KC_LBRC, KC_RBRC,                                                       KC_PGUP, LOWER,
+                         KC_GRV,     KC_1,    KC_2,    KC_3 ,    KC_4,    KC_5,                  KC_6,    KC_7,       KC_8,      KC_9,      KC_0,   KC_EQL,
+                         KC_TAB,  KC_QUOT, KC_COMM,   KC_DOT,    KC_P,    KC_Y,                  KC_F,    KC_G,       KC_C,      KC_R,      KC_L,  KC_SLSH,
+                         KC_ESC,     KC_A,    KC_O,     KC_E,    KC_U,    KC_I,                  KC_D,    KC_H,       KC_T,      KC_N,      KC_S,  KC_MINS,
+                         KC_NO,   KC_SCLN,    KC_Q,     KC_J,    KC_K,    KC_X,                  KC_B,    KC_M,       KC_W,      KC_V,      KC_Z,  KC_BSLS,
+                                           KC_LBRC,  KC_RBRC,                                                      KC_PGUP,     LOWER,
                                                             KC_LSFT,    KC_SPC,                 KC_RSFT,
                                                             KC_LCTL,    LOWER,                     KC_BSPC,
                                                             KC_LALT,    KC_LGUI,        KC_ENT, KC_RALT
@@ -154,10 +154,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_LOWER] = LAYOUT_5x6_right(
 
-                        KC_TILD,     KC_F1,    KC_F2,    KC_F3,         KC_F4,     KC_F5,        KC_F6,   KC_F7,     KC_F8,     KC_F9,       KC_F10,     KC_DEL ,
-                        _______,    _______, _______,  _______,       _______,   KC_LCBR,        KC_RCBR, KC_BTN2,   _______,   _______  ,   _______ ,   QK_BOOT,
-                        _______,    _______, _______,  RAISE,     KC_DEL,   KC_LPRN,        KC_RPRN, KC_LEFT ,  KC_UP,     KC_DOWN,     KC_RGHT,    KC_PIPE,
-                        KC_CAPS ,   RGB_TOG, _______,  LCTL(KC_X), LCTL(KC_C),LCTL(KC_V),        _______, KC_BTN1  , _______,   _______,     _______,    _______,
+                        KC_TILD,     KC_F1,    KC_F2,    KC_F3,         KC_F4,     KC_F5,          KC_F6,   KC_F7,     KC_F8,       KC_F9,      KC_F10,     KC_DEL,
+                        _______,    _______, _______,  _______,       _______,   KC_LCBR,        KC_RCBR, KC_BTN2,   _______,     _______,     _______,    QK_BOOT,
+                        _______,    _______, _______,    RAISE,        KC_DEL,   KC_LPRN,        KC_RPRN, KC_LEFT,     KC_UP,     KC_DOWN,     KC_RGHT,    KC_PIPE,
+                        KC_CAPS ,   RGB_TOG, _______,  LCTL(KC_X), LCTL(KC_C),LCTL(KC_V),        _______, KC_BTN1,   BL_TOGG,       BL_UP,     BL_DOWN,    _______,
                                            RGB_MOD,RGB_RMOD,                                                       RGB_HUI,RGB_SAI,
                                                                  _______,_______,                         _______,
                                                                  _______,_______,                         _______,
@@ -184,9 +184,9 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
     if (index == 1) // master side
     {
         if (clockwise) {
-            tap_code(KC_KB_VOLUME_UP);
+            tap_code(KC_WH_U);
         } else {
-            tap_code(KC_KB_VOLUME_DOWN);
+            tap_code(KC_WH_D);
         }
     }
     if (index == 0) // slave side
@@ -383,7 +383,6 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
                 for (int i = 0; i < 10; i++) {
                     rgb_matrix_increase_hue_noeeprom();
                 }
-                dprint("doing the raise raise (10)!\n");
             }
             re_raise = true;
             // set num block keys to static color
@@ -410,13 +409,11 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
                 for (int i = 0; i < 15; i++) {
                     rgb_matrix_increase_hue_noeeprom();
                 }
-                dprint("doing the lower raise (20)!\n");
             }
             if (re_raise) {
                 for (int i = 0; i < 10; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
                 }
-                dprint("going back 10!\n");
                 re_raise = false;
             }
             re_lower = true;
@@ -426,13 +423,11 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
                 for (int i = 0; i < 15; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
                 }
-                dprint("going back 20!\n");
             }
             if (re_raise) {
                 for (int i = 0; i < 10; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
                 }
-                dprint("going back 10!\n");
             }
             re_raise = false;
             re_lower = false;
