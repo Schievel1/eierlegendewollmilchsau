@@ -21,18 +21,31 @@
 /***************************************************/
 /*  I L I 9 3 4 1   b i g   L E D   d i s p l a y  */
 /***************************************************/
-#define ILI9341_CS_PIN B1
+#define ILI9341_CS_PIN C15
 #define ILI9341_DCRS_PIN B10
 #define ILI9341_RESET_PIN B2
+// LED backlight of the screen
+// Using the audio pin from the original Tracktyl, since we dont have audio anyway
+#undef AUDIO_PIN
+#undef AUDIO_PWM_DRIVER
+#undef AUDIO_PWM_CHANNEL
+#undef AUDIO_PWM_PAL_MODE
+#define BACKLIGHT_PIN          B1
+#define BACKLIGHT_PWM_DRIVER PWMD3
+#define BACKLIGHT_PWM_CHANNEL 4
+#define BACKLIGHT_PAL_MODE 2
+#define BACKLIGHT_LEVELS 5
 
 /*************************************/
 /*  R G B   M a t r i x   m o d e s  */
 /*************************************/
 #define RGB_MATRIX_MAXIMUM_BRIGHTNESS 80
 #define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_TYPING_HEATMAP
+#define RGB_DISABLE_WHEN_USB_SUSPENDED
 #define RGB_MATRIX_FRAMEBUFFER_EFFECTS
 #define RGB_DISABLE_WHEN_USB_SUSPENDED
 #define RGB_MATRIX_KEYPRESSES
+#define RGB_TRIGGER_ON_KEYDOWN
 
 #define ENABLE_RGB_MATRIX_NON
 #define ENABLE_RGB_MATRIX_SOLID_COLOR

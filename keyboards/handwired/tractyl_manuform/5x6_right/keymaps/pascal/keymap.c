@@ -107,6 +107,8 @@ void keyboard_post_init_user(void) {
     qp_rect(big_display, 0, 0, 239, 319, HSV_BLACK, true);
     qp_rect(big_display, 40, 40, 200, 300, HSV_WHITE, true);
 	/* dickbutt =  qp_load_image_mem(dickbutt); */
+	backlight_enable();
+	backlight_level(4);
 }
 
 /*******************/
