@@ -84,10 +84,21 @@ void housekeeping_task_user(void) {
     }
     // draw display every 33 ms
     static uint32_t last_draw = 0;
+	static uint32_t clear_timer = 0;
     if (timer_elapsed32(last_draw) > 33) { // Throttle to 30fps
         last_draw = timer_read32();
 		/* qp_drawimage(big_display, 0, 0, dickbutt); */
 		qp_circle(big_display, last_draw%240, last_draw%320, 25, last_draw%255, 255, 255, false);
+        qp_rect(big_display, 0, 0, 10, 10, HSV_BLUE, true);
+        qp_rect(big_display, 10, 10, 20, 20, HSV_GREEN, true);
+        if (timer_elapsed32(clear_timer) > 10000 && timer_elapsed32(clear_timer) < 10500) {
+                dprint("Slave sync failed`\n");
+            qp_clear(big_display);
+			qp_init(big_display, QP_ROTATION_270);
+            qp_power(big_display, true);
+            qp_rect(big_display, 0, 0, 319, 239, HSV_BLACK, true);
+            clear_timer = timer_read32();
+        }
         qp_flush(big_display);
     }
     // enable sniping mode with lower layer
@@ -106,11 +117,10 @@ void keyboard_post_init_user(void) {
 	// user comms
     transaction_register_rpc(USER_SYNC_A, user_sync_a_slave_handler);
 	// quantum painter
-    big_display = qp_ili9341_make_spi_device(240, 320, ILI9341_CS_PIN, ILI9341_DCRS_PIN, ILI9341_RESET_PIN, 2, 0);
-    qp_init(big_display, QP_ROTATION_0);
+    big_display = qp_ili9341_make_spi_device(320, 240, ILI9341_CS_PIN, ILI9341_DCRS_PIN, ILI9341_RESET_PIN, 2, 0);
+    qp_init(big_display, QP_ROTATION_270);
     qp_power(big_display, true);
-    qp_rect(big_display, 0, 0, 239, 319, HSV_BLACK, true);
-    qp_rect(big_display, 40, 40, 200, 300, HSV_WHITE, true);
+    qp_rect(big_display, 0, 0, 319, 239, HSV_BLACK, true);
 	/* dickbutt =  qp_load_image_mem(dickbutt); */
 	backlight_enable();
 	backlight_level(4);
