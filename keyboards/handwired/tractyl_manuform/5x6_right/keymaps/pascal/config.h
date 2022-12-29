@@ -1,5 +1,8 @@
 #pragma once
 
+#define IDLE_TIMEOUT_SECS 30
+#define RGB_MATRIX_IDLE_MODE MY_RGB_MATRIX_RAINBOW_PINWHEELS
+
 /*************************************************************************************************************************/
 /*  S p l i t   o p t i o n s                                                                                            */
 /*  T h i s   i s   t o   h a v e   l a y e r   d a t a   o f

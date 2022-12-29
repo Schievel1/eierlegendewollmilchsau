@@ -29,6 +29,12 @@
 painter_device_t big_display;
 painter_image_handle_t dickbutt;
 
+// global variables for idle mode
+bool idle_mode = false;
+int old_rgb_mode;
+uint32_t idle_timer = 0;
+void idle_function(void);
+
 /*******************/
 /*  k e y m a p s  */
 /*******************/
@@ -63,7 +69,6 @@ void user_sync_a_slave_handler(uint8_t in_buflen, const void* in_data, uint8_t o
 
 void housekeeping_task_user(void) {
     if (is_keyboard_master()) {
-        // Interact with slave every 500ms
         static uint32_t last_sync = 0;
         if (timer_elapsed32(last_sync) > USER_COM_POLL_TIME_MS) {
             /* dprintf("current layer state: %d\n", layer_state); */
@@ -425,4 +430,37 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
             break;
     }
     return false;
+}
+
+/*******************************************/
+/*  k e y b o a r d   i d l e   t i m e r  */
+/*******************************************/
+bool process_record_user(uint16_t keycode, keyrecord_t* record) {
+    if (record->event.pressed) {
+        idle_timer = timer_read32();
+        idle_mode  = false;
+    }
+    return true;
+}
+
+void matrix_scan_user(void) {
+    // idle_timer needs to be set one time
+    if (idle_timer == 0) idle_timer = timer_read32();
+    if (timer_elapsed32(idle_timer) > IDLE_TIMEOUT_SECS * 1000 && !idle_mode) {
+		idle_mode = true;
+		idle_timer = timer_read32();
+    }
+	idle_function();
+}
+
+void idle_function() {
+	static bool last_state_idle = false;
+	if (idle_mode && !last_state_idle) { // rising edge of idle mode
+		old_rgb_mode = rgb_matrix_get_mode();
+		rgb_matrix_mode(RGB_MATRIX_IDLE_MODE);
+	}
+	if (!idle_mode && last_state_idle) { // falling edge of idle mode
+		rgb_matrix_mode(old_rgb_mode);
+	}
+	last_state_idle = idle_mode;
 }
