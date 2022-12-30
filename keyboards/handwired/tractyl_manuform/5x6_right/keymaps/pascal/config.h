@@ -8,9 +8,16 @@
 /*  T h i s   i s   t o   h a v e   l a y e r   d a t a   o f
  *  t h e   m a s t e r   o n   t h e   s l a v e   s i d e  */
 /*************************************************************************************************************************/
+#undef SPLIT_HAND_PIN
+#define MASTER_RIGHT
 #define SPLIT_TRANSPORT_MIRROR
 #define SPLIT_TRANSACTION_IDS_USER USER_SYNC_A
 #define USER_COM_POLL_TIME_MS 100 // user data is sent between the two halfes by this time in milliseconds
+
+/*********************************/
+/*  E n c o d e r   c o n f i g  */
+/*********************************/
+#define ENCODER_RESOLUTION 1
 
 /*****************************************************/
 /*  P M W 3 3 6 0   t r a c k b a l l   s e n s o r  */
@@ -39,9 +46,17 @@
 #define BACKLIGHT_PAL_MODE 2
 #define BACKLIGHT_LEVELS 5
 
-/*************************************/
-/*  R G B   M a t r i x   m o d e s  */
-/*************************************/
+/***************************************/
+/*  W S 2 8 1 2   R G B   M a t r i x  */
+/***************************************/
+#undef WS2812_EXTERNAL_PULLUP
+#undef RGBLED_NUM
+#undef RGBLIGHT_SPLIT
+#undef RGBLED_SPLIT
+#define DRIVER_LED_TOTAL 62
+#define RGB_MATRIX_LED_COUNT 62
+#define RGBLED_NUM          62
+#define RGB_MATRIX_SPLIT { 32, 30 }
 #define RGB_MATRIX_MAXIMUM_BRIGHTNESS 80
 #define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_TYPING_HEATMAP
 #define RGB_DISABLE_WHEN_USB_SUSPENDED

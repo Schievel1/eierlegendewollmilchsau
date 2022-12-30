@@ -3,7 +3,7 @@ MCU = STM32F411
 BOARD = BLACKPILL_STM32_F411
 
 # Bootloader selection
-BOOTLOADER = tinyuf2
+BOOTLOADER = stm32-dfu
 
 KEYBOARD_SHARED_EP = yes
 CONSOLE_ENABLE     = yes
@@ -15,5 +15,3 @@ SERIAL_DRIVER = usart
 AUDIO_DRIVER  = pwm_hardware
 
 DEBOUNCE_TYPE = asym_eager_defer_pk
-
-

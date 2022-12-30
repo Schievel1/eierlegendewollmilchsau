@@ -1,5 +1,6 @@
 #pragma once
 
+#ifdef RGB_MATRIX_ENABLE
 #define MY_RGB_MATRIX_NONE 0
 #define MY_RGB_MATRIX_SOLID_COLOR 1
 #define MY_RGB_MATRIX_ALPHAS_MODS 2
@@ -47,3 +48,5 @@
 #    define MY_RGB_MATRIX_SOLID_MULTISPLASH 41
 #endif
 #define MY_RGB_MATRIX_EFFECT_MAX 42
+
+#endif // RGB_MATRIX_ENABLE

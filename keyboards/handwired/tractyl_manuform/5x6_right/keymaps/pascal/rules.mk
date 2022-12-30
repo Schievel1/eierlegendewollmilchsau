@@ -1,4 +1,5 @@
-# added by pascal
+BOOTLOADER = tinyuf2
+
 RGB_MATRIX_ENABLE = yes
 RGB_MATRIX_DRIVER = WS2812
 
@@ -15,6 +16,15 @@ KEY_OVERRIDE_ENABLE = yes
 # for the big oled display
 QUANTUM_PAINTER_ENABLE = yes
 QUANTUM_PAINTER_DRIVERS = ili9341_spi
+
+# master slave user sync
+SRC += transport.c
+# big LED display
+SRC += ili9341_display.c
+# small oled display
+SRC += oled_display.c
+# rgb matrix
+SRC += rgb_matrix_user.c
 # painter images
 SRC += graphics/dickbutt.qgf.c
 # SRC += rgb_matrix_user.c
