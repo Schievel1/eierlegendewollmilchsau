@@ -23,17 +23,14 @@
 #include "ili9341_display.h"
 #include "rgb_matrix_user.h"
 
-// quantum painter images
-#include "graphics/dickbutt.qgf.h"
-
-//debugging:
+// debugging:
 #include "print.h"
 
-// global variables for idle mode
-bool idle_mode = false;
-int old_rgb_mode;
+// global declarations for idle mode
+bool     idle_mode = false;
+int      old_rgb_mode;
 uint32_t idle_timer = 0;
-void idle_function(void);
+void     idle_function(void);
 
 void housekeeping_task_user(void) {
     /* master_slave_com(); */
@@ -53,10 +50,10 @@ void housekeeping_task_user(void) {
 /***********/
 void keyboard_post_init_user(void) {
     // Debug: Customise these values to desired behaviour
-    debug_enable   = true;
-    debug_matrix   = true;
-    debug_keyboard = true;
-    debug_mouse    = true;
+    debug_enable   = false;
+    debug_matrix   = false;
+    debug_keyboard = false;
+    debug_mouse    = false;
     // user comms
     user_sync_init();
     // init ili9341 display
@@ -74,15 +71,9 @@ void keyboard_post_init_user(void) {
 /*******************/
 /*  k e y m a p s  */
 /*******************/
-const key_override_t lcbr_key_override =
-    ko_make_basic(MOD_MASK_SHIFT, KC_LCBR, KC_LBRC);  // Shift { is [
-const key_override_t rcbr_key_override =
-    ko_make_basic(MOD_MASK_SHIFT, KC_RCBR, KC_RBRC); // Shift } is ]
-const key_override_t** key_overrides = (const key_override_t*[]){
-    &lcbr_key_override,
-    &rcbr_key_override,
-    NULL
-};
+const key_override_t   lcbr_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_LCBR, KC_LBRC); // Shift { is [
+const key_override_t   rcbr_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_RCBR, KC_RBRC); // Shift } is ]
+const key_override_t** key_overrides     = (const key_override_t*[]){&lcbr_key_override, &rcbr_key_override, NULL};
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -119,7 +110,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                                  _______,_______,                     _______,
                                                                  _______,_______,                     _______,
                                                                  _______,_______,             _______,_______
-                        ),};// clang-format on
+                        ),}; // clang-format on
 
 /*****************************/
 /*  f o r   e n c o d e r s  */
@@ -160,21 +151,20 @@ void matrix_scan_user(void) {
     // idle_timer needs to be set one time
     if (idle_timer == 0) idle_timer = timer_read32();
     if (timer_elapsed32(idle_timer) > IDLE_TIMEOUT_SECS * 1000 && !idle_mode) {
-		idle_mode = true;
-		idle_timer = timer_read32();
+        idle_mode  = true;
+        idle_timer = timer_read32();
     }
-	idle_function();
+    idle_function();
 }
 
 void idle_function() {
-	static bool last_state_idle = false;
-	if (idle_mode && !last_state_idle) { // rising edge of idle mode
-		old_rgb_mode = rgb_matrix_get_mode();
-		rgb_matrix_mode(RGB_MATRIX_IDLE_MODE);
-	}
-	if (!idle_mode && last_state_idle) { // falling edge of idle mode
-		rgb_matrix_mode(old_rgb_mode);
-	}
-	last_state_idle = idle_mode;
+    static bool last_state_idle = false;
+    if (idle_mode && !last_state_idle) { // rising edge of idle mode
+        old_rgb_mode = rgb_matrix_get_mode();
+        rgb_matrix_mode(RGB_MATRIX_IDLE_MODE);
+    }
+    if (!idle_mode && last_state_idle) { // falling edge of idle mode
+        rgb_matrix_mode(old_rgb_mode);
+    }
+    last_state_idle = idle_mode;
 }
-

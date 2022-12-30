@@ -27,4 +27,3 @@ SRC += oled_display.c
 SRC += rgb_matrix_user.c
 # painter images
 SRC += graphics/dickbutt.qgf.c
-# SRC += rgb_matrix_user.c
