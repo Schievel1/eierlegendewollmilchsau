@@ -2,10 +2,12 @@
 
 typedef struct _master_to_slave_t {
     layer_state_t current_layer_state;
+    bool          current_idle_state;
 } master_to_slave_t;
 
 typedef struct _slave_to_master_t {
     layer_state_t current_layer_state;
+    bool          current_idle_state;
 } slave_to_master_t;
 
 void user_sync_init(void);

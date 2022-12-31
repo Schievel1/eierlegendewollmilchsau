@@ -33,7 +33,7 @@ uint32_t idle_timer = 0;
 void     idle_function(void);
 
 void housekeeping_task_user(void) {
-    /* master_slave_com(); */
+    master_slave_com();
     // draw display every 33 ms
     static uint32_t last_draw = 0;
     if (timer_elapsed32(last_draw) > 33) { // Throttle to 30fps
