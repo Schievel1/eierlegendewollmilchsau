@@ -24,6 +24,7 @@
 #include "action_layer.h"
 #include "eeconfig.h"
 #include "bootmagic.h"
+#include "../keycode_config.h" // HACK why???? I only need this for my tractyl keymap, it works with the default keymaps
 
 keymap_config_t keymap_config;
 
