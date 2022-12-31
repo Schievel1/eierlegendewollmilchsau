@@ -1,5 +1,33 @@
 #pragma once
 
+/*******************************/
+/*  d e b u g   d e f i n e s  */
+/*******************************/
+/* #define DEBUG_MATRIX_SCAN_RATE */
+
+/*****************************************/
+/*  b o o t m a g i c   l i t e   k e y  */
+/*****************************************/
+/* We want the top left key to be the bootmagic lite key.
+ * Hold this key down while plugging in the keyboard to put the MCU
+ * into bootloader mode. Be aware that (since we are defining MASTER_RIGHT
+ * further down) the key for the left half is also the TOP LEFT key. */
+
+/* #define BOOTMAGIC_LITE_ROW 6 */ // this is only here for reference, it is
+                                   // defined like this in 5x6_right config.h
+                                   // already
+// we want to have the top left key to be the bootmagic lite key
+// pressing the top right key (predefined in 5x6_right config.h
+// is inconvenient)
+#undef BOOTMAGIC_LITE_COLUMN_RIGHT // we want to have the top left key to be
+                                   // the bootmagic lite key. Pressing the
+                                   // top right key (like defined in 5x6_right config.h
+                                   // is inconvenient)
+#define BOOTMAGIC_LITE_COLUMN_RIGHT 0
+
+/***********************/
+/*  i d l e   m o d e  */
+/***********************/
 #define IDLE_TIMEOUT_SECS 30
 #define RGB_MATRIX_IDLE_MODE MY_RGB_MATRIX_RAINBOW_PINWHEELS
 
