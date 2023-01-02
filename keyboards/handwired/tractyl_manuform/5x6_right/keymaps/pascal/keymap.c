@@ -24,7 +24,9 @@
 #include "rgb_matrix_user.h"
 
 // debugging:
-#include "print.h"
+#ifdef CONSOLE_ENABLE
+#    include "print.h"
+#endif
 
 // global declarations for idle mode
 bool     idle_mode = false;
@@ -40,9 +42,10 @@ void housekeeping_task_user(void) {
         last_draw = timer_read32();
         ili9341_draw_display(big_display);
     }
-
     // enable sniping mode with lower layer
-    charybdis_set_pointer_sniping_enabled((biton32(layer_state)) == _LOWER);
+    charybdis_set_pointer_sniping_enabled(biton32(layer_state) == _LOWER);
+    // enable dragscroll mode when left shift key is pressed
+    charybdis_set_pointer_dragscroll_enabled(biton32(layer_state) == _RAISE);
 }
 
 /***********/
@@ -58,7 +61,7 @@ void keyboard_post_init_user(void) {
     user_sync_init();
     // init ili9341 display
     big_display = ili9341_init();
-    // backlight
+    // backlight of the big LED screen on on startup
     backlight_enable();
     backlight_level(4);
     // turn numlock on on startup
@@ -145,6 +148,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
         idle_timer = timer_read32();
         idle_mode  = false;
     }
+    // If console is enabled, it will print the matrix position and status of each key pressed
+#ifdef CONSOLE_ENABLE
+    dprintf("KL: kc: 0x%04X, col: %2u, row: %2u, pressed: %u, time: %5u, int: %u, count: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
+#endif
     return true;
 }
 

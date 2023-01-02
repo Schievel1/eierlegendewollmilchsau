@@ -55,6 +55,8 @@
 #undef ROTATIONAL_TRANSFORM_ANGLE
 #define ROTATIONAL_TRANSFORM_ANGLE -15
 #define CHARYBDIS_MINIMUM_DEFAULT_DPI 1600
+#define CHARYBDIS_DRAGSCROLL_DPI 200
+#define CHARYBDIS_DRAGSCROLL_REVERSE_Y
 
 /***************************************************/
 /*  I L I 9 3 4 1   b i g   L E D   d i s p l a y  */
