@@ -513,6 +513,7 @@ void rgb_matrix_set_suspend_state(bool state) {
     if (state && !suspend_state) { // only run if turning off, and only once
         rgb_task_render(0);        // turn off all LEDs when suspending
         rgb_task_flush(0);         // and actually flash led state to LEDs
+        oled_off();
     }
     suspend_state = state;
 #endif
