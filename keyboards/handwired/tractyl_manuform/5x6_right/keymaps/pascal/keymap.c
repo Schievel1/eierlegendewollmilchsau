@@ -28,6 +28,7 @@
 #    include "print.h"
 #endif
 
+static void normalize_keymap(void);
 // global declarations for idle mode
 bool     idle_mode = false;
 int      old_rgb_mode;
@@ -69,6 +70,27 @@ void keyboard_post_init_user(void) {
         register_code(KC_NUM_LOCK);
         unregister_code(KC_NUM_LOCK);
     }
+	normalize_keymap();
+}
+
+// HACK terrible hack to UNmagic the keymap
+// somehow this gets mixed up all over the place sometimes
+static void normalize_keymap(void) {
+    keymap_config.raw                      = eeconfig_read_keymap();
+    keymap_config.swap_control_capslock    = false;
+    keymap_config.swap_escape_capslock     = false;
+    keymap_config.capslock_to_control      = false;
+    keymap_config.swap_lalt_lgui           = false;
+    keymap_config.swap_ralt_rgui           = false;
+    keymap_config.swap_lctl_lgui           = false;
+    keymap_config.swap_rctl_rgui           = false;
+    keymap_config.no_gui                   = false;
+    keymap_config.swap_grave_esc           = false;
+    keymap_config.swap_backslash_backspace = false;
+    keymap_config.swap_lalt_lgui = keymap_config.swap_ralt_rgui = false;
+    keymap_config.swap_lctl_lgui = keymap_config.swap_rctl_rgui = false;
+    eeconfig_update_keymap(keymap_config.raw);
+    clear_keyboard();
 }
 
 /*******************/
