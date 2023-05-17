@@ -2,6 +2,7 @@
 
 #include "rgb_matrix_user.h"
 #include "keymap.h"
+ #include "print.h"
 
 void oled_idle_task0(void);
 void oled_idle_task1(void);
@@ -27,9 +28,11 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
 
 bool oled_task_user(void) {
     if (!idle_mode) {
+
         /* Host Keyboard Layer Status */
 		oled_clear();
 	    oled_set_cursor(0, 0);
+         oled_write_P(PSTR("\nLayer"), false);
         oled_write_P(PSTR("\nLayer"), false);
         switch (biton32(layer_state)) {
             case _DVORAK:
@@ -189,13 +192,14 @@ bool oled_task_user(void) {
         oled_write_P(led_state.num_lock ? PSTR("NUM ") : PSTR(""), false);
         oled_write_P(led_state.caps_lock ? PSTR("CAP ") : PSTR(""), false);
         oled_write_P(led_state.scroll_lock ? PSTR("SCR ") : PSTR(""), false);
-    } else {
+    /* } else if (!sleep_mode) {
+        uprintf("%i Status sleep\n",sleep_mode); */
 
         /***********************/
        /*  i d l e   m o d e oled  */
       /***********************/
 
-if (timer_elapsed32(anim_timer) > ANIM_FRAME_DURATION) {
+/* if (timer_elapsed32(anim_timer) > ANIM_FRAME_DURATION) {
         anim_timer = timer_read32();
         if (current_frame < 5) {
         current_frame = current_frame + 1;
@@ -220,13 +224,19 @@ if (timer_elapsed32(anim_timer) > ANIM_FRAME_DURATION) {
         oled_idle_task4();
     break;
  case 5:    
+
         oled_idle_task5();
+        
     break;
 default:
                     oled_off();
             }
-        }
+        } */
+    }else {
+        print("oled off\n");
+       oled_off(); 
     }
+
     return false;
 }
 

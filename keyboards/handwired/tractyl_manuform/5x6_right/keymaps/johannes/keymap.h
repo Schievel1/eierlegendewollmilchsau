@@ -14,3 +14,4 @@ enum custom_layers {
 #define LOWER MO(_LOWER)
 
 extern bool idle_mode;
+extern bool sleep_mode;

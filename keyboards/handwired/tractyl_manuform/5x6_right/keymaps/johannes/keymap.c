@@ -31,9 +31,11 @@
 static void normalize_keymap(void);
 // global declarations for idle mode
 bool     idle_mode = false;
+bool     sleep_mode = false;
 int      old_rgb_mode;
 uint32_t idle_timer = 0;
-void     idle_function(void);
+void     idle_function(void); 
+void     sleep_function(void);
 void suspend_power_down_kb(void) { oled_off(); } 
 void housekeeping_task_user(void) {
     master_slave_com();
@@ -60,7 +62,7 @@ void keyboard_post_init_user(void) {
     debug_keyboard = true;
     debug_mouse    = true;
     // user comms
-    print("1");
+ print("1");
     user_sync_init();
     // init ili9341 display
    // big_display = ili9341_init();
@@ -122,7 +124,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                         KC_TILD,     KC_F1,    KC_F2,    KC_F3,         KC_F4,     KC_F5,          KC_F6,   KC_F7,     KC_F8,       KC_F9,      KC_F10,     EE_CLR,
                         _______,    _______, _______,  _______,       _______,   KC_LCBR,        KC_RCBR, KC_LEFT,     KC_UP,     KC_DOWN,     KC_RGHT,    QK_BOOT,
                         _______,    _______, _______,    RAISE,        KC_DEL,   KC_LPRN,        KC_RPRN, KC_BTN1,   KC_BTN2,     KC_DOWN,     KC_RGHT,    KC_PIPE,
-                        KC_CAPS ,   RGB_TOG, _______,  LCTL(KC_X), LCTL(KC_C),LCTL(KC_V),        KC_DEL, _______,   BL_TOGG,       BL_UP,     BL_DOWN,    DB_TOGG,
+                        KC_CAPS ,   RGB_TOG, _______,  LCTL(KC_X), LCTL(KC_C),LCTL(KC_V),        KC_DEL, LSFT(KC_INS),   BL_TOGG,       BL_UP,     BL_DOWN,    DB_TOGG,
                                            RGB_MOD,RGB_RMOD,                                                       RGB_HUI,RGB_SAI,
                                                                  KC_LSFT,_______,                         _______,
                                                                  S_D_RMOD,S_D_MOD,                        KC_BSPC,
@@ -155,7 +157,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
         if (clockwise) {
             tap_code(KC_WH_U);
         } else {
-            tap_code(KC_WH_D);
+            tap_code(KC_WH_D);          
         }
     }
     if (index == 0) // slave side
@@ -259,6 +261,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
     if (record->event.pressed) {
         idle_timer = timer_read32();
         idle_mode  = false;
+        sleep_mode  = false;
     }
     // If console is enabled, it will print the matrix position and status of each key pressed
 #ifdef CONSOLE_ENABLE
@@ -274,20 +277,44 @@ void matrix_scan_user(void) {
         idle_mode  = true;
         idle_timer = timer_read32();
     }
+    if (timer_elapsed32(idle_timer) > IDLE_TIMEOUT_SECS * 2000 && !sleep_mode) {
+        print("sleep 1\n");
+        sleep_mode  = true;
+        idle_timer = timer_read32();
+    }
     idle_function();
+    sleep_function();
+
 }
 
 void idle_function(void) {
     static bool last_state_idle = false;
     if (idle_mode && !last_state_idle) { // rising edge of idle mode
         old_rgb_mode = rgb_matrix_get_mode();
+                    print("sleep 2\n");
+        dprintf("%i Status sleep\n",sleep_mode);
         rgb_matrix_mode(RGB_MATRIX_IDLE_MODE);
     }
     if (!idle_mode && last_state_idle) { // falling edge of idle mode
         rgb_matrix_mode(old_rgb_mode);
+
     }
     last_state_idle = idle_mode;
 }
+
+void sleep_function(void) {
+ 
+    static bool last_state_sleep = false;
+    if (sleep_mode && !last_state_sleep) { // rising edge of idle mode
+        rgb_matrix_mode(RGB_MATRIX_SLEEP_MODE);
+
+    }
+    if (!sleep_mode && last_state_sleep) { // falling edge of idle mode
+        rgb_matrix_mode(old_rgb_mode);
+    }
+    last_state_sleep = sleep_mode;
+}
+
 
 /*******************************************/
 /*  oled sleep mode */

@@ -30,7 +30,7 @@
 /***********************/
 #define IDLE_TIMEOUT_SECS 30
 #define RGB_MATRIX_IDLE_MODE MY_RGB_MATRIX_BREATHING
-
+#define RGB_MATRIX_SLEEP_MODE MY_RGB_MATRIX_RAINBOW_PINWHEELS
 /*************************************************************************************************************************/
 /*  S p l i t   o p t i o n s                                                                                            */
 /*  T h i s   i s   t o   h a v e   l a y e r   d a t a   o f
@@ -74,14 +74,14 @@
 #define RGB_MATRIX_SPLIT \
     { 32, 30 }
 #define RGB_MATRIX_MAXIMUM_BRIGHTNESS 80
-#define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_TYPING_HEATMAP
+#define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_SOLID_REACTIVE
 #define RGB_DISABLE_WHEN_USB_SUSPENDED
 #define RGB_MATRIX_FRAMEBUFFER_EFFECTS
 #define RGB_DISABLE_WHEN_USB_SUSPENDED
 #define RGB_MATRIX_KEYPRESSES
 #define RGB_TRIGGER_ON_KEYDOWN
 
-#define ENABLE_RGB_MATRIX_NON
+#define ENABLE_RGB_MATRIX_NONE
 #define ENABLE_RGB_MATRIX_SOLID_COLOR
 #define ENABLE_RGB_MATRIX_ALPHAS_MODS
 #define ENABLE_RGB_MATRIX_GRADIENT_UP_DOWN
