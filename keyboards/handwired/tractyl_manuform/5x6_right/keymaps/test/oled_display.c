@@ -22,10 +22,10 @@ uint8_t current_frame = 0;
 
 #ifdef OLED_ENABLE
 #define ANIM_FRAME_DURATION 120
-oled_rotation_t oled_init_user(oled_rotation_t rotation) {
+/* oled_rotation_t oled_init_user(oled_rotation_t rotation) {
     return OLED_ROTATION_270;
 }
-
+ */
 bool oled_task_user(void) {
     if (!idle_mode) {
 

@@ -42,7 +42,6 @@
 #define SPLIT_TRANSACTION_IDS_USER USER_SYNC_A
 #define USER_COM_POLL_TIME_MS 100 // user data is sent between the two halfes by this time in milliseconds
 
-#define UNICODE_SELECTED_MODES UNICODE_MODE_WINCOMPOSE
 /*********************************/
 /*  E n c o d e r   c o n f i g  */
 /*********************************/
@@ -137,4 +136,5 @@
 
 /*oleddisplayd */
 #define OLED_FONT_H "solairefont.c"
-#define OLED_TIMEOUT 20000
+#define OLED_TIMEOUT 6000
+#define OLED_DISPLAY_128X64	
