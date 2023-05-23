@@ -122,7 +122,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_LOWER] = LAYOUT_5x6_right(
 
                         KC_TILD,     KC_F1,    KC_F2,    KC_F3,         KC_F4,     KC_F5,          KC_F6,   KC_F7,     KC_F8,       KC_F9,      KC_F10,     EE_CLR,
-                        _______,    _______, _______,  _______,       _______,   UC("tf"),        KC_RCBR, KC_LEFT,     KC_UP,     KC_DOWN,     KC_RGHT,    QK_BOOT,
+                        _______,    _______, _______,  _______,       _______,   _______,        KC_RCBR, KC_LEFT,     KC_UP,     KC_DOWN,     KC_RGHT,    QK_BOOT,
                         _______,    _______, UC(0x00DF),    RAISE,        KC_DEL,   KC_LPRN,        KC_RPRN, KC_BTN1,   KC_BTN2,     KC_DOWN,     KC_RGHT,    KC_PIPE,
                         KC_CAPS ,   RGB_TOG, _______,  LCTL(KC_X), LCTL(KC_C),LCTL(KC_V),        KC_DEL, LSFT(KC_INS),   BL_TOGG,       BL_UP,     BL_DOWN,    DB_TOGG,
                                            RGB_MOD,RGB_RMOD,                                                       RGB_HUI,RGB_SAI,
