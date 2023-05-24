@@ -30,7 +30,7 @@
 /***********************/
 #define IDLE_TIMEOUT_SECS 30
 #define RGB_MATRIX_IDLE_MODE MY_RGB_MATRIX_BREATHING
-#define RGB_MATRIX_SLEEP_MODE MY_RGB_MATRIX_NONE
+#define RGB_MATRIX_SLEEP_MODE MY_RGB_MATRIX_MULTISPLASH
 /*************************************************************************************************************************/
 /*  S p l i t   o p t i o n s                                                                                            */
 /*  T h i s   i s   t o   h a v e   l a y e r   d a t a   o f
@@ -78,7 +78,6 @@
 #define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_SOLID_REACTIVE
 #define RGB_DISABLE_WHEN_USB_SUSPENDED
 #define RGB_MATRIX_FRAMEBUFFER_EFFECTS
-#define RGB_DISABLE_WHEN_USB_SUSPENDED
 #define RGB_MATRIX_KEYPRESSES
 #define RGB_TRIGGER_ON_KEYDOWN
 
@@ -138,3 +137,10 @@
 /*oleddisplayd */
 #define OLED_FONT_H "solairefont.c"
 #define OLED_TIMEOUT 20000
+
+
+//Space shift 
+//#define LSPO_KEY KC_RSFT, KC_TRNS, KC_SPC 
+#define LSPO_KEYS KC_LSFT, KC_TRNS, KC_SPC
+
+  
