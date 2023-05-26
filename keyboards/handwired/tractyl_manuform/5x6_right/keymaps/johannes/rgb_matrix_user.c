@@ -69,7 +69,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
             }
             re_raise = true;
             // set num block keys to static color
-            rgb_matrix_set_color(36, RGB_YELLOW); // num lock
+            rgb_matrix_set_color(36, 255,0,0); // num lock
             rgb_matrix_set_color(42, RGB_GREEN); // numbers
             rgb_matrix_set_color(41, RGB_GREEN);
             rgb_matrix_set_color(40, RGB_GREEN);
