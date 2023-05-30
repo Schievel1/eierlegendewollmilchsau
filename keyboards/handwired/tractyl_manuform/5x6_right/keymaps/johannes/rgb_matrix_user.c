@@ -67,25 +67,44 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
                     rgb_matrix_increase_hue_noeeprom();
                 }
             }
-            re_raise = true;
+            re_raise = true; 
+            led_t led_state = host_keyboard_led_state();
+           if (led_state.num_lock){ 
+               rgb_matrix_set_color(33, RGB_RED); 
+             }else{rgb_matrix_set_color(33, RGB_WHITE);} 
+
             // set num block keys to static color
-            rgb_matrix_set_color(36, 255,0,0); // num lock
+            //rgb_matrix_set_color(33, RGB_RED); // num lock
             rgb_matrix_set_color(42, RGB_GREEN); // numbers
             rgb_matrix_set_color(41, RGB_GREEN);
             rgb_matrix_set_color(40, RGB_GREEN);
-            rgb_matrix_set_color(48, RGB_GREEN);
             rgb_matrix_set_color(47, RGB_GREEN);
             rgb_matrix_set_color(46, RGB_GREEN);
+            rgb_matrix_set_color(45, RGB_GREEN);
             rgb_matrix_set_color(55, RGB_GREEN);
             rgb_matrix_set_color(54, RGB_GREEN);
             rgb_matrix_set_color(53, RGB_GREEN);
             rgb_matrix_set_color(52, RGB_GREEN);
-            rgb_matrix_set_color(35, RGB_BLUE); // operators
+            rgb_matrix_set_color(36, RGB_BLUE); // operators
+            rgb_matrix_set_color(35, RGB_BLUE);
             rgb_matrix_set_color(34, RGB_BLUE);
-            rgb_matrix_set_color(33, RGB_BLUE);
             rgb_matrix_set_color(39, RGB_BLUE);
-            rgb_matrix_set_color(35, RGB_BLUE);	
-			// equals
+            rgb_matrix_set_color(32, RGB_OFF);// Blank keys
+            rgb_matrix_set_color(37, RGB_OFF);
+            rgb_matrix_set_color(43, RGB_OFF);
+            rgb_matrix_set_color(38, RGB_OFF);
+            rgb_matrix_set_color(44, RGB_OFF);
+            rgb_matrix_set_color(48, RGB_OFF);
+            rgb_matrix_set_color(49, RGB_OFF);
+            rgb_matrix_set_color(50, RGB_OFF);
+            rgb_matrix_set_color(51, RGB_OFF);
+            rgb_matrix_set_color(56, RGB_OFF);
+            rgb_matrix_set_color(57, RGB_OFF);
+            rgb_matrix_set_color(58, RGB_OFF);
+            rgb_matrix_set_color(59, RGB_OFF);
+            rgb_matrix_set_color(60, RGB_OFF);
+            rgb_matrix_set_color(61, RGB_OFF);
+		// equals
             break;
         case _LOWER:
             if (!re_lower) {

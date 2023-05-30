@@ -41,7 +41,8 @@
 #define SPLIT_TRANSPORT_MIRROR
 #define SPLIT_TRANSACTION_IDS_USER USER_SYNC_A
 #define USER_COM_POLL_TIME_MS 100 // user data is sent between the two halfes by this time in milliseconds
-
+ #define SPLIT_LED_STATE_ENABLE
+ 
 #define UNICODE_SELECTED_MODES UNICODE_MODE_WINCOMPOSE
 /*********************************/
 /*  E n c o d e r   c o n f i g  */
@@ -51,11 +52,11 @@
 /*****************************************************/
 /*  P M W 3 3 6 0   t r a c k b a l l   s e n s o r  */
 /*****************************************************/
-#define PMW33XX_LIFTOFF_DISTANCE 0x07  //default 0x08
+#define PMW33XX_LIFTOFF_DISTANCE 0x08  //default 0x08
 #define POINTING_DEVICE_ROTATION_180
 #undef ROTATIONAL_TRANSFORM_ANGLE 
 #define ROTATIONAL_TRANSFORM_ANGLE -15
-#define CHARYBDIS_MINIMUM_DEFAULT_DPI 1000
+#define CHARYBDIS_MINIMUM_DEFAULT_DPI 1500
 #define CHARYBDIS_DRAGSCROLL_DPI 200
 #define CHARYBDIS_DRAGSCROLL_REVERSE_Y
 
@@ -81,6 +82,7 @@
 #define RGB_MATRIX_KEYPRESSES
 #define RGB_TRIGGER_ON_KEYDOWN
 #define RGB_MATRIX_DEFAULT_SPD 127
+#define RGB_MATRIX_CENTER { 100, 24 }
 
 #define ENABLE_RGB_MATRIX_NONE
 #define ENABLE_RGB_MATRIX_SOLID_COLOR
