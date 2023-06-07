@@ -5,6 +5,8 @@ RGB_MATRIX_DRIVER = WS2812
 
 ENCODER_ENABLE = yes
 
+WPM_ENABLE = yes
+
 # for the small oled display
 OLED_ENABLE = yes
 

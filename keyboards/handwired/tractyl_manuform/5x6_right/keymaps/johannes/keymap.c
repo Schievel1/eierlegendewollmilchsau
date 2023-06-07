@@ -32,6 +32,17 @@ static void normalize_keymap(void);
 // global declarations for idle mode
 bool     idle_mode = false;
 bool     sleep_mode = false;
+
+
+bool isSneaking = false;
+bool isJumping  = false;
+bool showedJump = true;
+/* status variables */
+int   current_wpm = 0;
+led_t led_usb_state;
+
+
+
 int      old_rgb_mode;
 uint32_t idle_timer = 0;
 void     idle_function(void); 
@@ -49,6 +60,14 @@ void housekeeping_task_user(void) {
     charybdis_set_pointer_sniping_enabled(biton32(layer_state) == _LOWER);
     // enable dragscroll mode when left shift key is pressed
     charybdis_set_pointer_dragscroll_enabled(biton32(layer_state) == _RAISE);
+
+        /* KEYBOARD PET VARIABLES START */
+
+    current_wpm   = get_current_wpm();
+    led_usb_state = host_keyboard_led_state();
+
+    /* KEYBOARD PET VARIABLES END */
+
  
 }
 
@@ -272,13 +291,34 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
                 SEND_STRING("Hello, world!\n");
             }
             return false;
+             /* KEYBOARD PET STATUS START */
+
+        case KC_LCTL:
+        case KC_RCTL:
+            if (record->event.pressed) {
+                isSneaking = true;
+            } else {
+                isSneaking = false;
+            }
+            break;
+        case KC_SPC:
+            if (record->event.pressed) {
+                isJumping  = true;
+                showedJump = false;
+            } else {
+                isJumping = false;
+            }
+            break;
+
+            /* KEYBOARD PET STATUS END */
+
     }
     // If console is enabled, it will print the matrix position and status of each key pressed
 #ifdef CONSOLE_ENABLE
     dprintf("KL: kc: 0x%04X, col: %2u, row: %2u, pressed: %u, time: %5u, int: %u, count: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
 #endif
     return true;
-    
+
 }
 
 

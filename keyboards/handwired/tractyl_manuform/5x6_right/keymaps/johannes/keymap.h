@@ -15,3 +15,8 @@ enum custom_layers {
 
 extern bool idle_mode;
 extern bool sleep_mode;
+extern bool isSneaking;
+extern bool isJumping;
+extern bool showedJump;
+
+
