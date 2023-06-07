@@ -38,8 +38,8 @@ bool isSneaking = false;
 bool isJumping  = false;
 bool showedJump = true;
 /* status variables */
-int   current_wpm = 0;
-led_t led_usb_state;
+ wpm_state_t   current_wpms = 0;
+ led_t led_usb_state;
 
 
 
@@ -49,10 +49,12 @@ void     idle_function(void);
 void     sleep_function(void);
 
 void housekeeping_task_user(void) {
-    master_slave_com();
+        current_wpms   = get_current_wpm();
+        
+        master_slave_com();
     // draw display every 33 ms
     static uint32_t last_draw = 0;
-    if (timer_elapsed32(last_draw) > 33) { // Throttle to 30fps
+    if (timer_elapsed32(last_draw) > 150) { // Throttle to 30fps
         last_draw = timer_read32();
    //     ili9341_draw_display(big_display);
     }
@@ -60,13 +62,6 @@ void housekeeping_task_user(void) {
     charybdis_set_pointer_sniping_enabled(biton32(layer_state) == _LOWER);
     // enable dragscroll mode when left shift key is pressed
     charybdis_set_pointer_dragscroll_enabled(biton32(layer_state) == _RAISE);
-
-        /* KEYBOARD PET VARIABLES START */
-
-    current_wpm   = get_current_wpm();
-    led_usb_state = host_keyboard_led_state();
-
-    /* KEYBOARD PET VARIABLES END */
 
  
 }
@@ -279,6 +274,9 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 /*  k e y b o a r d   i d l e   t i m e r  */
 /*******************************************/
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
+
+
+
     if (record->event.pressed) {
         idle_timer = timer_read32();
         idle_mode  = false;
@@ -303,6 +301,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
             break;
         case KC_SPC:
             if (record->event.pressed) {
+                isJumping  = true;
+                showedJump = false;
+            } else {
+                isJumping = false;
+            }
+            break;
+            case SC_LSPO:
+            if (record->event.pressed&&current_wpms>MIN_WALK_SPEED) {
                 isJumping  = true;
                 showedJump = false;
             } else {

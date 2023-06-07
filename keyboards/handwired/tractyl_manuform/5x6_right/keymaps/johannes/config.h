@@ -42,6 +42,7 @@
 #define SPLIT_TRANSACTION_IDS_USER USER_SYNC_A
 #define USER_COM_POLL_TIME_MS 100 // user data is sent between the two halfes by this time in milliseconds
  #define SPLIT_LED_STATE_ENABLE
+ #define SPLIT_WPM_ENABLE
  
 #define UNICODE_SELECTED_MODES UNICODE_MODE_WINCOMPOSE
 /*********************************/
