@@ -47,17 +47,17 @@
 /*********************************/
 /*  E n c o d e r   c o n f i g  */
 /*********************************/
-#define ENCODER_RESOLUTION 1
+#define ENCODER_RESOLUTION 2
 
 /*****************************************************/
 /*  P M W 3 3 6 0   t r a c k b a l l   s e n s o r  */
 /*****************************************************/
-#define PMW33XX_LIFTOFF_DISTANCE 0x08  //default 0x08
+#define PMW33XX_LIFTOFF_DISTANCE 0x04 //default 0x08
 #define POINTING_DEVICE_ROTATION_180
 #undef ROTATIONAL_TRANSFORM_ANGLE 
-#define ROTATIONAL_TRANSFORM_ANGLE -15
-#define CHARYBDIS_MINIMUM_DEFAULT_DPI 800
-#define CHARYBDIS_DRAGSCROLL_DPI 500
+#define ROTATIONAL_TRANSFORM_ANGLE -12
+#define CHARYBDIS_MINIMUM_DEFAULT_DPI 1000
+#define CHARYBDIS_DRAGSCROLL_DPI 200
 #define CHARYBDIS_DRAGSCROLL_REVERSE_Y
 
 

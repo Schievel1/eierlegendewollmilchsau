@@ -193,7 +193,7 @@ bool oled_task_user(void) {
         oled_write_P(led_state.scroll_lock ? PSTR("SCR\n") : PSTR(""), false);
 } else if (!sleep_mode) {
         uprintf("%i Status sleep\n",sleep_mode); 
-
+ 
         /***********************/
        /*  i d l e   m o d e oled  */
       /***********************/

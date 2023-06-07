@@ -61,7 +61,7 @@ void keyboard_post_init_user(void) {
     debug_matrix   = true;
     debug_keyboard = true;
     debug_mouse    = true; 
-    rgb_matrix_disable();
+    //rgb_matrix_disable();
     // user comms
  print("1");
     user_sync_init();
@@ -74,10 +74,11 @@ void keyboard_post_init_user(void) {
     //backlight_level(4);
     // turn numlock on on startup
     print("4");
-    /* if (!(host_keyboard_leds() & (1 << USB_LED_NUM_LOCK))) {
+     if (!(host_keyboard_leds() & (1 << USB_LED_NUM_LOCK))) {
         register_code(KC_NUM_LOCK);
         unregister_code(KC_NUM_LOCK);
-    } */
+    } 
+    
 	normalize_keymap();
 }
 
@@ -98,6 +99,9 @@ static void normalize_keymap(void) {
     keymap_config.swap_lalt_lgui = keymap_config.swap_ralt_rgui = false;
     keymap_config.swap_lctl_lgui = keymap_config.swap_rctl_rgui = false;
     eeconfig_update_keymap(keymap_config.raw);
+    
+
+
     clear_keyboard();
 }
 /*******************/
@@ -113,7 +117,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                          KC_ESC,     KC_1,    KC_2,     KC_3 ,   KC_4,    KC_5,                  KC_6,    KC_7,       KC_8,      KC_9,      KC_0,    KC_EQL,
                          KC_LSFT,     KC_Q,    KC_W,     KC_E,    KC_R,    KC_T,                  KC_Z,    KC_U,       KC_I,      KC_O,      KC_P,    KC_MINS,
                          KC_TAB,     KC_A,    KC_S,     MEH_T(KC_D),    C_S_T(KC_F),    KC_G,                  KC_H,    KC_J,       KC_K,      KC_L,      KC_SCLN, KC_QUOT,
-                         TG(RAISE),      KC_Y,    KC_X,     KC_C,    KC_V,    KC_B,                  KC_N,    KC_M,       KC_COMM,   KC_DOT,    KC_SLSH, KC_BSLS,
+                         KC_LCTL,      KC_Y,    KC_X,     KC_C,    KC_V,    KC_B,                  KC_N,    KC_M,       KC_COMM,   KC_DOT,    KC_SLSH, KC_BSLS,
                                            KC_LBRC,  KC_RBRC,                                                      KC_PGUP,     LOWER,
                                                             KC_LSFT,    SC_LSPO,                 KC_RSFT,
                                                             KC_LCTL,    LOWER,                     SC_LSPO,
@@ -150,23 +154,24 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /*****************************/
 bool encoder_update_user(uint8_t index, bool clockwise) {
     dprintf("encoder index: %d\n", index);
+  
    switch (biton32(layer_state)) {
             case _DVORAK:
 /////////////////////////////////////////////		
                 if (index == 1) // master side
     {
         if (clockwise) {
-            rgb_matrix_increase_speed();
+            layer_move(_LOWER);
         } else {
-           rgb_matrix_decrease_speed();          
+            rgb_matrix_increase_hue();      
         }
     }
     if (index == 0) // slave side
     {
         if (clockwise) {
-			tap_code(KC_WH_L);
+            tap_code(KC_VOLU);
         } else {
-            tap_code(KC_WH_R);
+            tap_code(KC_VOLD);
         }
     }
     return true;
@@ -178,9 +183,9 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
                 if (index == 1) // master side
     {
         if (clockwise) {
-            tap_code(KC_VOLU);
+            layer_move(_RAISE); 
         } else {
-            tap_code(KC_VOLD);
+            
         }
     }
     if (index == 0) // slave side
@@ -204,21 +209,17 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
                 if (index == 1) // master side
     {
         if (clockwise) {
-            tap_code(KC_WH_U);
+            layer_move(_DVORAK);
         } else {
-            tap_code(KC_WH_D);
+            
         }
     }
     if (index == 0) // slave side
     {
         if (clockwise) {
-            register_code(KC_LCTL);
-			tap_code(KC_WH_U);
-			unregister_code(KC_LCTL);
+	        rgb_matrix_increase_val();
         } else {
-			register_code(KC_LCTL);  
-            tap_code(KC_WH_D);
-			unregister_code(KC_LCTL);
+            rgb_matrix_decrease_val();
         }
     }
     return true;
@@ -230,9 +231,9 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
                 if (index == 1) // master side
     {
         if (clockwise) {
-            tap_code(KC_WH_U);
+            layer_move(_DVORAK);
         } else {
-            tap_code(KC_WH_D);
+            layer_move(_DVORAK);  
         }
     }
     if (index == 0) // slave side
@@ -264,12 +265,25 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
         idle_mode  = false;
         sleep_mode  = false;
     }
+
+    switch (keycode) {
+        case KC_ESC:
+            if (record->event.pressed) {
+                SEND_STRING("Hello, world!\n");
+            }
+            return false;
+    }
     // If console is enabled, it will print the matrix position and status of each key pressed
 #ifdef CONSOLE_ENABLE
     dprintf("KL: kc: 0x%04X, col: %2u, row: %2u, pressed: %u, time: %5u, int: %u, count: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed, record->event.time, record->tap.interrupted, record->tap.count);
 #endif
     return true;
+    
 }
+
+
+
+
 
 void matrix_scan_user(void) {
     // idle_timer needs to be set one time
