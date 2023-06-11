@@ -36,7 +36,6 @@ bool     sleep_mode = false;
 
 bool isSneaking = false;
 bool isJumping  = false;
-bool showedJump = true;
 /* status variables */
  wpm_state_t   current_wpms = 0;
  led_t led_usb_state;
@@ -302,7 +301,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
         case KC_SPC:
             if (record->event.pressed) {
                 isJumping  = true;
-                showedJump = false;
             } else {
                 isJumping = false;
             }
@@ -310,7 +308,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
             case SC_LSPO:
             if (record->event.pressed&&current_wpms>MIN_WALK_SPEED) {
                 isJumping  = true;
-                showedJump = false;
             } else {
                 isJumping = false;
             }

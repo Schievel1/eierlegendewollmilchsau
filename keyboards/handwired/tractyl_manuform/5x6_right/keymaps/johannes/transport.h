@@ -6,7 +6,6 @@ typedef struct _master_to_slave_t {
     bool          current_sleep_state;
     bool          current_Sneaking;
     bool          current_Jumping;
-    bool          current_showedJump; 
 } master_to_slave_t;
 
 typedef struct _slave_to_master_t {
@@ -15,7 +14,6 @@ typedef struct _slave_to_master_t {
     bool          current_sleep_state;
     bool          current_Sneaking;
     bool          current_Jumping;
-    bool          current_showedJump;
 } slave_to_master_t;
 
 void user_sync_init(void);
