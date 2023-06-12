@@ -283,12 +283,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
     }
 
     switch (keycode) {
-        case KC_ESC:
-            if (record->event.pressed) {
-                SEND_STRING("Hello, world!\n");
-            }
-            return false;
-             /* KEYBOARD PET STATUS START */
+        // case KC_ESC:
+        //     if (record->event.pressed) {
+        //         SEND_STRING("Hello, world!\n");
+        //     }
+        //     return false;
+        //      /* KEYBOARD PET STATUS START */
 
         case KC_LCTL:
         case KC_RCTL:
