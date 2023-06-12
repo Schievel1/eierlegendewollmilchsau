@@ -20,7 +20,7 @@ led_t led_usb_state;
  bool oldjump = 0;
 /* Defines */
 #ifdef OLED_ENABLE
- #define ANIM_FRAME_DURATION1 160
+ uint32_t ANIM_FRAME_DURATION1 = 160;
 #define ANIM_FRAME_DURATION 150
 /* Defines Luna */
 /* settings */
@@ -251,6 +251,17 @@ static void render_luna(int LUNA_X, int LUNA_Y) {
 //         oled_on();
 //     }
 // #    endif
+
+
+if (current_wpms <= MIN_WALK_SPEED) {
+            ANIM_FRAME_DURATION1 = 500;
+}else if (current_wpms <= MIN_WALK_SPEED+3) {
+             ANIM_FRAME_DURATION1 = 250;
+}else if (current_wpms <= MIN_WALK_SPEED+6) {
+             ANIM_FRAME_DURATION1 = 100;
+ } else {
+            ANIM_FRAME_DURATION1 = 600;
+        }
 
     /* animation timer */
     if (timer_elapsed32(anim_timer1) > ANIM_FRAME_DURATION1) {
