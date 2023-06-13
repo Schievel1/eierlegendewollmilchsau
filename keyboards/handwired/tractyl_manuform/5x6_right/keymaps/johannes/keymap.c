@@ -36,6 +36,7 @@ bool     sleep_mode = false;
 
 bool isSneaking = false;
 bool isJumping  = false;
+uint8_t ANIM_FRAME_DURATION1_OLD = 1;
 /* status variables */
  wpm_state_t   current_wpms = 0;
  led_t led_usb_state;
@@ -127,11 +128,11 @@ const key_override_t** key_overrides     = (const key_override_t*[]){&lcbr_key_o
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_DVORAK] = LAYOUT_5x6_right(
-                         KC_ESC,     KC_1,    KC_2,     KC_3 ,   KC_4,    KC_5,                  KC_6,    KC_7,       KC_8,      KC_9,      KC_0,    KC_EQL,
+                         KC_GRV,     KC_1,    KC_2,     KC_3 ,   KC_4,    KC_5,                  KC_6,    KC_7,       KC_8,      KC_9,      KC_0,    KC_EQL,
                          KC_LSFT,     KC_Q,    KC_W,     KC_E,    KC_R,    KC_T,                  KC_Z,    KC_U,       KC_I,      KC_O,      KC_P,    KC_MINS,
                          KC_TAB,     KC_A,    KC_S,     MEH_T(KC_D),    C_S_T(KC_F),    KC_G,                  KC_H,    KC_J,       KC_K,      KC_L,      KC_SCLN, KC_QUOT,
                          KC_LCTL,      KC_Y,    KC_X,     KC_C,    KC_V,    KC_B,                  KC_N,    KC_M,       KC_COMM,   KC_DOT,    KC_SLSH, KC_BSLS,
-                                           KC_LBRC,  KC_RBRC,                                                      KC_PGUP,     LOWER,
+                                           KC_LBRC,  KC_RBRC,                                                      KC_PGUP,     KC_PGDN,
                                                             KC_LSFT,    SC_LSPO,                 KC_RSFT,
                                                             KC_LCTL,    LOWER,                     SC_LSPO,
                                                             KC_LALT,    KC_LGUI,        KC_RALT,  SC_SENT
@@ -142,11 +143,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                         KC_TILD,     KC_F1,    KC_F2,    KC_F3,         KC_F4,     KC_F5,          KC_F6,   KC_F7,     KC_F8,       KC_F9,      KC_F10,     EE_CLR,
                         _______,    _______, _______,  _______,       _______,   _______,        LCTL(KC_Z), KC_LEFT,     KC_UP,     KC_DOWN,     KC_RGHT,    QK_BOOT,
                         LGUI(KC_L),    LCTL(KC_A), UC(0x00DF),    RAISE,        KC_DEL,   KC_LCBR,        KC_RCBR, KC_BTN1,   KC_BTN2,     KC_DOWN,     KC_RGHT,    KC_PIPE,
-                        KC_CAPS ,   LCTL(KC_Y),  LCTL(KC_X), LCTL(KC_C),LCTL(KC_V),  KC_LPRN,        KC_RPRN, LSFT(KC_INS),   RGB_TOG,       RGB_VAI,     _______,    DB_TOGG,
+                        KC_CAPS ,   LCTL(KC_Y),  LCTL(KC_X), LCTL(KC_C),LSFT(KC_INS),  KC_LPRN,        KC_RPRN, LSFT(KC_INS),   RGB_TOG,       RGB_VAI,     _______,    DB_TOGG,
                                            RGB_MOD,RGB_RMOD,                                                       RGB_HUI,RGB_SAI,
                                                                  KC_LSFT,_______,                         LCTL(KC_LBRC),
                                                                  S_D_RMOD,S_D_MOD,                        KC_BSPC,
-                                                                 DPI_RMOD,DPI_MOD,                 _______,_______
+                                                                 DPI_RMOD,DPI_MOD,                 _______, LGUI(KC_V)
+
                         ),
 
   [_RAISE] = LAYOUT_5x6_right(
@@ -329,6 +331,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
 
 
 void matrix_scan_user(void) {
+
+    ANIM_FRAME_DURATION1_OLD=timer_read32()%10;
     // idle_timer needs to be set one time
     if (idle_timer == 0) idle_timer = timer_read32();
     if (timer_elapsed32(idle_timer) > IDLE_TIMEOUT_SECS * 1000 && !idle_mode) {

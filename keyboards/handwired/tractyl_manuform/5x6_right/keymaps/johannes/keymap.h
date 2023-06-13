@@ -21,4 +21,5 @@ extern bool sleep_mode;
 extern bool isSneaking;
 extern bool isJumping;
 extern wpm_state_t  current_wpms;
+extern uint8_t ANIM_FRAME_DURATION1_OLD;
 

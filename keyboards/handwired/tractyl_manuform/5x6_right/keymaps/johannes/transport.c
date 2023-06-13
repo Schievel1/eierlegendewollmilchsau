@@ -29,6 +29,9 @@ void user_sync_a_slave_handler(uint8_t in_buflen, const void* in_data, uint8_t o
     } 
      if (isJumping != m2s->current_Jumping) {
         isJumping = m2s->current_Jumping;
+    }
+    if (ANIM_FRAME_DURATION1_OLD != m2s->current_ANIM_FRAME_DURATION1_OLD) {
+        ANIM_FRAME_DURATION1_OLD = m2s->current_ANIM_FRAME_DURATION1_OLD;
     } 
 
     
@@ -37,6 +40,7 @@ void user_sync_a_slave_handler(uint8_t in_buflen, const void* in_data, uint8_t o
     s2m->current_sleep_state  = m2s->current_sleep_state;  // just mirror it back for debug purposes
     s2m->current_Sneaking  = m2s->current_Sneaking;  // just mirror it back for debug purposes
     s2m->current_Jumping  = m2s->current_Jumping;  // just mirror it back for debug purposes
+    s2m->current_ANIM_FRAME_DURATION1_OLD  = m2s->current_ANIM_FRAME_DURATION1_OLD;  // just mirror it back for debug purposes
 }
 
 void master_slave_com() {
@@ -44,7 +48,7 @@ void master_slave_com() {
         static uint32_t last_sync = 0;
         if (timer_elapsed32(last_sync) > USER_COM_POLL_TIME_MS) {
             /* dprintf("current layer state: %d\n", layer_state); */
-            master_to_slave_t m2s = {layer_state, idle_mode, sleep_mode, isSneaking, isJumping};
+            master_to_slave_t m2s = {layer_state, idle_mode, sleep_mode, isSneaking, isJumping, ANIM_FRAME_DURATION1_OLD};
             slave_to_master_t s2m = {0};
             if (transaction_rpc_exec(USER_SYNC_A, sizeof(m2s), &m2s, sizeof(s2m), &s2m)) {
                 last_sync = timer_read32();
