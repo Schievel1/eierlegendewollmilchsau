@@ -341,7 +341,7 @@ bool oled_task_user(void) {
 	    oled_set_cursor(0, 0);
         oled_write_P(PSTR("\nLayer"), false);
         switch (biton32(layer_state)) {
-            case _DVORAK:
+            case _QWERTZ:
                 oled_write_P(PSTR("QWRTZ"), false);
                 break;
             case _LOWER:
@@ -349,6 +349,12 @@ bool oled_task_user(void) {
                 break;
             case _RAISE:
                 oled_write_P(PSTR("RAISE"), false);
+                break;
+            case _GAME:
+                oled_write_P(PSTR("GAME\n"), false);
+                break;
+            case _CONF:
+                oled_write_P(PSTR("Conf\n"), false);
                 break;
             default:
                 // Or use the write_ln shortcut over adding '\n' to the end of your string

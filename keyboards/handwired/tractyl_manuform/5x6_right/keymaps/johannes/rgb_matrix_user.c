@@ -4,6 +4,9 @@
 
 // clang-format off
 #ifdef RGB_MATRIX_ENABLE
+
+
+
 led_config_t g_led_config = { {
    //left
    {0, 1, 2, 3, 4, 5 },
@@ -60,10 +63,11 @@ led_config_t g_led_config = { {
 bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     static bool re_raise = false;
     static bool re_lower = false;
+    static bool re_game = false;
     switch (biton32(layer_state)) {
         case _RAISE:
             if (!re_raise) {
-                for (int i = 0; i < 10; i++) {
+                for (int i = 0; i < OffsLayer_2; i++) {
                     rgb_matrix_increase_hue_noeeprom();
                 }
             }
@@ -105,34 +109,106 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
             rgb_matrix_set_color(60, RGB_OFF);
             rgb_matrix_set_color(61, RGB_OFF);
 		// equals
+            if (re_lower) {
+                for (int i = 0; i < OffsLayer_1; i++) {
+                    rgb_matrix_decrease_hue_noeeprom();
+                }
+                re_lower = false;
+            }
+            if (re_game) {
+                for (int i = 0; i < OffsLayer_3; i++) {
+                    rgb_matrix_decrease_hue_noeeprom();
+                }
+                re_game = false;
+            }
             break;
         case _LOWER:
             if (!re_lower) {
-                for (int i = 0; i < 15; i++) {
+                for (int i = 0; i < OffsLayer_1; i++) {
                     rgb_matrix_increase_hue_noeeprom();
                 }
             }
             if (re_raise) {
-                for (int i = 0; i < 10; i++) {
+                for (int i = 0; i < OffsLayer_2; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
                 }
                 re_raise = false;
             }
+            if (re_game) {
+                for (int i = 0; i < OffsLayer_3; i++) {
+                    rgb_matrix_decrease_hue_noeeprom();
+                }
+                re_game = false;
+            }
             re_lower = true;
             break;
-        case _DVORAK:
+        case _GAME:
+            if (!re_game) {
+                for (int i = 0; i < OffsLayer_3; i++) {
+                    rgb_matrix_increase_hue_noeeprom();
+                }
+            }
+            if (re_raise) {
+                for (int i = 0; i < OffsLayer_2; i++) {
+                    rgb_matrix_decrease_hue_noeeprom();
+                }
+                re_raise = false;
+            }
             if (re_lower) {
-                for (int i = 0; i < 15; i++) {
+                for (int i = 0; i < OffsLayer_1; i++) {
+                    rgb_matrix_decrease_hue_noeeprom();
+                }
+                re_lower = false;
+            }
+
+            re_game = true;
+            break;
+        case _CONF:
+            if (re_lower) {
+                for (int i = 0; i < OffsLayer_1; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
                 }
             }
             if (re_raise) {
-                for (int i = 0; i < 10; i++) {
+                for (int i = 0; i < OffsLayer_2; i++) {
+                    rgb_matrix_decrease_hue_noeeprom();
+                }
+            }
+            if (re_game) {
+                for (int i = 0; i < OffsLayer_3; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
                 }
             }
             re_raise = false;
             re_lower = false;
+            re_game = false;
+
+
+
+
+
+
+            break;
+        case _QWERTZ:
+            if (re_lower) {
+                for (int i = 0; i < OffsLayer_1; i++) {
+                    rgb_matrix_decrease_hue_noeeprom();
+                }
+            }
+            if (re_raise) {
+                for (int i = 0; i < OffsLayer_2; i++) {
+                    rgb_matrix_decrease_hue_noeeprom();
+                }
+            }
+            if (re_game) {
+                for (int i = 0; i < OffsLayer_3; i++) {
+                    rgb_matrix_decrease_hue_noeeprom();
+                }
+            }
+            re_raise = false;
+            re_lower = false;
+            re_game = false;
+
         default:
             break;
     }

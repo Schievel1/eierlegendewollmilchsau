@@ -28,12 +28,12 @@
 #include "print.h"
 //#endif
 
-static void normalize_keymap(void);
+//static void normalize_keymap(void);
 // global declarations for idle mode
 bool     idle_mode = false;
 bool     sleep_mode = false;
 
-
+//global WPM declarations
 bool isSneaking = false;
 bool isJumping  = false;
 uint8_t ANIM_FRAME_DURATION1_OLD = 1;
@@ -41,6 +41,10 @@ uint8_t ANIM_FRAME_DURATION1_OLD = 1;
  wpm_state_t   current_wpms = 0;
  led_t led_usb_state;
 
+//Config mode declarations
+uint8_t OffsLayer_1 = 0;
+uint8_t OffsLayer_2 = 0;
+uint8_t OffsLayer_3 = 0;
 
 
 int      old_rgb_mode;
@@ -92,32 +96,33 @@ void keyboard_post_init_user(void) {
         register_code(KC_NUM_LOCK);
         unregister_code(KC_NUM_LOCK);
     } 
+    //use old RGB mode if it was disconnected in idle or sleep mode
     
-	normalize_keymap();
+	//normalize_keymap();
 }
 
 // HACK terrible hack to UNmagic the keymap
 // somehow this gets mixed up all over the place sometimes
-static void normalize_keymap(void) {
-    keymap_config.raw                      = eeconfig_read_keymap();
-    keymap_config.swap_control_capslock    = false;
-    keymap_config.swap_escape_capslock     = false;
-    keymap_config.capslock_to_control      = false;
-    keymap_config.swap_lalt_lgui           = false;
-    keymap_config.swap_ralt_rgui           = false;
-    keymap_config.swap_lctl_lgui           = false;
-    keymap_config.swap_rctl_rgui           = false;
-    keymap_config.no_gui                   = false;
-    keymap_config.swap_grave_esc           = false;
-    keymap_config.swap_backslash_backspace = false;
-    keymap_config.swap_lalt_lgui = keymap_config.swap_ralt_rgui = false;
-    keymap_config.swap_lctl_lgui = keymap_config.swap_rctl_rgui = false;
-    eeconfig_update_keymap(keymap_config.raw);
+// static void normalize_keymap(void) {
+//     keymap_config.raw                      = eeconfig_read_keymap();
+//     keymap_config.swap_control_capslock    = false;
+//     keymap_config.swap_escape_capslock     = false;
+//     keymap_config.capslock_to_control      = false;
+//     keymap_config.swap_lalt_lgui           = false;
+//     keymap_config.swap_ralt_rgui           = false;
+//     keymap_config.swap_lctl_lgui           = false;
+//     keymap_config.swap_rctl_rgui           = false;
+//     keymap_config.no_gui                   = false;
+//     keymap_config.swap_grave_esc           = false;
+//     keymap_config.swap_backslash_backspace = false;
+//     keymap_config.swap_lalt_lgui = keymap_config.swap_ralt_rgui = false;
+//     keymap_config.swap_lctl_lgui = keymap_config.swap_rctl_rgui = false;
+//     eeconfig_update_keymap(keymap_config.raw);
     
 
 
-    clear_keyboard();
-}
+//     clear_keyboard();
+// }
 /*******************/
 /*  k e y m a p s  */
 /*******************/
@@ -127,7 +132,7 @@ const key_override_t** key_overrides     = (const key_override_t*[]){&lcbr_key_o
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-  [_DVORAK] = LAYOUT_5x6_right(
+  [_QWERTZ] = LAYOUT_5x6_right(
                          QK_GESC,     KC_1,        KC_2,        KC_3,        KC_4,        KC_5,                          KC_6,        KC_7,        KC_8,        KC_9,        KC_0,        KC_EQL,
                          KC_LSFT,     KC_Q,        KC_W,        KC_E,        KC_R,        KC_T,                          KC_Z,        KC_U,        KC_I,        KC_O,        KC_P,        KC_MINS,
                          KC_TAB,      KC_A,        KC_S,        MEH_T(KC_D), C_S_T(KC_F), KC_G,                          KC_H,        KC_J,        KC_K,        KC_L,        KC_SCLN,     KC_QUOT,
@@ -147,11 +152,23 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                    RGB_MOD,     RGB_RMOD,                                                                          RGB_HUI,     RGB_SAI,
                                                                              KC_LSFT,    _______,                          LCTL(KC_LBRC),
                                                                                 S_D_RMOD,       S_D_MOD,                              KC_BSPC,
-                                                                                DPI_RMOD,       DPI_MOD,              _______,      LGUI(KC_V)
+                                                                                DPI_RMOD,       DPI_MOD,               TG(LOWER),      LGUI(KC_V)
 
                         ),
 
   [_RAISE] = LAYOUT_5x6_right(
+
+                         KC_ESC,      KC_ESC,      KC_1,        KC_2,        KC_3,        KC_4,                          TT(CONF),     KC_NUM,      KC_PSLS,     KC_PAST,     KC_PMNS,     KC_CALC,
+                         _______,     KC_TAB,      KC_Q,        KC_W,        KC_E,        KC_R,                          KC_RBRC,     KC_P7,       KC_P8,       KC_P9,       KC_PPLS,     KC_MUTE,
+                         _______,     KC_LSFT,     KC_A,        KC_S,        KC_D,        KC_F,                          KC_RPRN,     KC_P4,       KC_P5,       KC_P6,       _______,     KC_VOLU,
+                         KC_NO,       KC_LCTL,     KC_Y,        KC_X,        KC_C,        KC_V,                          KC_P0,       KC_P1,       KC_P2,       KC_P3,       KC_PEQL,     KC_VOLD,
+                                                   _______,     _______,                                                                           KC_DOT,      KC_COMM,
+                                                                             KC_LSFT,     KC_LSFT,                          _______,
+                                                                                KC_LCTL,        KC_LCTL,                            _______,
+                                                                                _______,        KC_LCTL,              TG(RAISE),  _______
+                        ),
+                        
+  [_GAME] = LAYOUT_5x6_right(
 
                          KC_ESC,      KC_ESC,      KC_1,        KC_2,        KC_3,        KC_4,                          _______,     KC_NUM,      KC_PSLS,     KC_PAST,     KC_PMNS,     KC_CALC,
                          _______,     KC_TAB,      KC_Q,        KC_W,        KC_E,        KC_R,                          KC_RBRC,     KC_P7,       KC_P8,       KC_P9,       KC_PPLS,     KC_MUTE,
@@ -160,7 +177,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                    _______,     _______,                                                                           KC_DOT,      KC_COMM,
                                                                              KC_LSFT,     KC_LSFT,                          _______,
                                                                                 KC_ENT,         KC_SPC,                            _______,
-                                                                                _______,        KC_LCTL,              TG(RAISE),  _______
+                                                                                _______,        KC_LCTL,              TG(GAME),  _______
+                        ),
+
+  [_CONF] = LAYOUT_5x6_right(
+
+                        TG(CONF),      KC_NO,      KC_NO,        KC_NO,        KC_NO,        KC_NO,                          KC_NO,     KC_NO,      KC_NO,     KC_NO,     KC_NO,     KC_NO,
+                         KC_NO,     KC_NO,      KC_NO,        KC_NO,        KC_NO,        KC_NO,                          KC_NO,     KC_NO,       KC_NO,       KC_NO,       KC_NO,     KC_NO,
+                         KC_NO,     KC_NO,     KC_NO,        KC_NO,        KC_NO,        KC_NO,                          KC_NO,     KC_NO,       KC_NO,       KC_NO,       KC_NO,     KC_NO,
+                         KC_NO,       KC_NO,     KC_NO,        KC_NO,        KC_NO,        KC_NO,                          KC_NO,       KC_NO,       KC_NO,       KC_NO,       KC_NO,     KC_NO,
+                                                   KC_NO,     KC_NO,                                                                           KC_NO,      KC_NO,
+                                                                             KC_NO,     KC_NO,                          KC_NO,
+                                                                                KC_NO,         KC_NO,                            KC_NO,
+                                                                                _______,        KC_NO,              KC_NO,  KC_NO
                         ),};
 // clang-format on
 
@@ -171,7 +200,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
     dprintf("encoder index: %d\n", index);
   
    switch (biton32(layer_state)) {
-            case _DVORAK:
+            case _QWERTZ:
 /////////////////////////////////////////////		
                 if (index == 1) // master side
     {
@@ -224,7 +253,29 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
                 if (index == 1) // master side
     {
         if (clockwise) {
-            layer_move(_DVORAK);
+            layer_move(_GAME);
+        } else {
+            
+        }
+    }
+    if (index == 0) // slave side
+    {
+        if (clockwise) {
+	        rgb_matrix_increase_val();
+        } else {
+            rgb_matrix_decrease_val();
+        }
+    }
+    return true;
+
+//////////////////////
+                break;
+            case _GAME:
+//////////////////////////////////////////////			
+                if (index == 1) // master side
+    {
+        if (clockwise) {
+            layer_move(_QWERTZ);
         } else {
             
         }
@@ -246,9 +297,9 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
                 if (index == 1) // master side
     {
         if (clockwise) {
-            layer_move(_DVORAK);
+            layer_move(_QWERTZ);
         } else {
-            layer_move(_DVORAK);  
+            layer_move(_QWERTZ);  
         }
     }
     if (index == 0) // slave side
@@ -332,14 +383,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
 
 void matrix_scan_user(void) {
 
+    //read chip timer to generate random number for cat idle blinks
     ANIM_FRAME_DURATION1_OLD=timer_read32()%10;
+   
     // idle_timer needs to be set one time
     if (idle_timer == 0) idle_timer = timer_read32();
     if (timer_elapsed32(idle_timer) > IDLE_TIMEOUT_SECS * 1000 && !idle_mode) {
         idle_mode  = true;
         idle_timer = timer_read32();
     }
-    //Bc I want to use not a new timer and only want to prevent the oled from burning in I used this dirty hack
+    //Bc I want to use not a new timer and only want to prevent the oled from burning in I used this dirty hack its rou
     if (timer_elapsed32(idle_timer) > IDLE_TIMEOUT_SECS * 20000 && !sleep_mode) {
         print("sleep 1\n");
         sleep_mode  = true;
@@ -356,10 +409,10 @@ void idle_function(void) {
         old_rgb_mode = rgb_matrix_get_mode();
                     print("sleep 2\n");
         dprintf("%i Status sleep\n",sleep_mode);
-        rgb_matrix_mode(RGB_MATRIX_IDLE_MODE);
+        rgb_matrix_mode_noeeprom(RGB_MATRIX_IDLE_MODE);
     }
     if (!idle_mode && last_state_idle) { // falling edge of idle mode
-        rgb_matrix_mode(old_rgb_mode);
+        rgb_matrix_mode_noeeprom(old_rgb_mode);
 
     }
     last_state_idle = idle_mode;
@@ -370,11 +423,11 @@ void sleep_function(void) {
  
     static bool last_state_sleep = false;
     if (sleep_mode && !last_state_sleep) { // rising edge of idle mode
-        rgb_matrix_mode(RGB_MATRIX_SLEEP_MODE);
+        rgb_matrix_mode_noeeprom(RGB_MATRIX_SLEEP_MODE);
 
     }
     if (!sleep_mode && last_state_sleep) { // falling edge of idle mode
-        rgb_matrix_mode(old_rgb_mode);
+        rgb_matrix_mode_noeeprom(old_rgb_mode);
     }
     last_state_sleep = sleep_mode;
 }
