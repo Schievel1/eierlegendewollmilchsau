@@ -43,7 +43,7 @@
 #define USER_COM_POLL_TIME_MS 100 // user data is sent between the two halfes by this time in milliseconds
  #define SPLIT_LED_STATE_ENABLE
  #define SPLIT_WPM_ENABLE
- 
+
 #define UNICODE_SELECTED_MODES UNICODE_MODE_WINCOMPOSE
 /*********************************/
 /*  E n c o d e r   c o n f i g  */
@@ -55,10 +55,10 @@
 /*****************************************************/
 #define PMW33XX_LIFTOFF_DISTANCE 0x04 //default 0x08
 #define POINTING_DEVICE_ROTATION_180
-#undef ROTATIONAL_TRANSFORM_ANGLE 
+#undef ROTATIONAL_TRANSFORM_ANGLE
 #define ROTATIONAL_TRANSFORM_ANGLE -12
 #define CHARYBDIS_MINIMUM_DEFAULT_DPI 1000
-#define CHARYBDIS_DRAGSCROLL_DPI 200
+//#define CHARYBDIS_DRAGSCROLL_DPI 200
 #define CHARYBDIS_DRAGSCROLL_REVERSE_Y
 
 
@@ -144,8 +144,8 @@
 #define OLED_TIMEOUT 20000
 
 
-//Space shift 
-//#define LSPO_KEY KC_RSFT, KC_TRNS, KC_SPC 
+//Space shift
+//#define LSPO_KEY KC_RSFT, KC_TRNS, KC_SPC
 #define LSPO_KEYS KC_LSFT, KC_TRNS, KC_SPC
 
-  
+

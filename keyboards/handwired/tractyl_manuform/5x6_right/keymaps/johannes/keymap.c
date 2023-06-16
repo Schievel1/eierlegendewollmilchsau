@@ -42,19 +42,22 @@ uint8_t ANIM_FRAME_DURATION1_OLD = 1;
  led_t led_usb_state;
 
 //Config mode declarations
-uint8_t OffsLayer_1 = 0;
-uint8_t OffsLayer_2 = 0;
-uint8_t OffsLayer_3 = 0;
+uint8_t OffsLayer_1 = 10;
+uint8_t OffsLayer_2 = 15;
+uint8_t OffsLayer_3 = 20;
 
+/* Smart Backspace Delete */
+bool            shift_held = false;
+static uint16_t held_shift = 0;
 
 int      old_rgb_mode;
 uint32_t idle_timer = 0;
-void     idle_function(void); 
+void     idle_function(void);
 void     sleep_function(void);
 
 void housekeeping_task_user(void) {
         current_wpms   = get_current_wpm();
-        
+
         master_slave_com();
     // draw display every 33 ms
     static uint32_t last_draw = 0;
@@ -67,7 +70,7 @@ void housekeeping_task_user(void) {
     // enable dragscroll mode when left shift key is pressed
     charybdis_set_pointer_dragscroll_enabled(biton32(layer_state) == _RAISE);
 
- 
+
 }
 
 /***********/
@@ -77,8 +80,7 @@ void keyboard_post_init_user(void) {
     // Debug: Customise these values to desired behaviour
     debug_enable   = true;
     debug_matrix   = true;
-    debug_keyboard = true;
-    debug_mouse    = true; 
+    debug_mouse    = true;
     //rgb_matrix_disable();
     // user comms
  print("1");
@@ -95,9 +97,9 @@ void keyboard_post_init_user(void) {
      if (!(host_keyboard_leds() & (1 << USB_LED_NUM_LOCK))) {
         register_code(KC_NUM_LOCK);
         unregister_code(KC_NUM_LOCK);
-    } 
+    }
     //use old RGB mode if it was disconnected in idle or sleep mode
-    
+
 	//normalize_keymap();
 }
 
@@ -118,7 +120,7 @@ void keyboard_post_init_user(void) {
 //     keymap_config.swap_lalt_lgui = keymap_config.swap_ralt_rgui = false;
 //     keymap_config.swap_lctl_lgui = keymap_config.swap_rctl_rgui = false;
 //     eeconfig_update_keymap(keymap_config.raw);
-    
+
 
 
 //     clear_keyboard();
@@ -147,11 +149,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
                          KC_TILD,     KC_F1,       KC_F2,       KC_F3,       KC_F4,       KC_F5,                         KC_F6,       KC_F7,       KC_F8,       KC_F9,       KC_F10,      EE_CLR,
                          _______,     _______,     _______,     _______,     _______,     _______,                       LCTL(KC_Z),  KC_LEFT,     KC_UP,       KC_DOWN,     KC_RGHT,     QK_BOOT,
-                         LGUI(KC_L),  LCTL(KC_A),  UC(0x00DF),  RAISE,       KC_DEL,      KC_LCBR,                       KC_RCBR,     KC_BTN1,     KC_BTN2,     KC_LEFT,     KC_RGHT,     KC_PIPE,
+                         LGUI(KC_L),  LCTL(KC_A),  UC(0x00DF),  RAISE,       KC_LSFT,      KC_LCBR,                       KC_RCBR,     KC_BTN1,     KC_BTN2,     KC_LEFT,     KC_RGHT,     KC_PIPE,
                          KC_CAPS ,    LCTL(KC_Y),  LCTL(KC_X),  LCTL(KC_C),  LSFT(KC_INS),KC_LPRN,                       KC_RPRN,     LSFT(KC_INS),RGB_TOG,     RGB_VAI,     _______,     DB_TOGG,
                                                    RGB_MOD,     RGB_RMOD,                                                                          RGB_HUI,     RGB_SAI,
                                                                              KC_LSFT,    _______,                          LCTL(KC_LBRC),
-                                                                                S_D_RMOD,       S_D_MOD,                              KC_BSPC,
+                                                                                S_D_RMOD,       S_D_MOD,                              KC_BSPC_DEL,
                                                                                 DPI_RMOD,       DPI_MOD,               TG(LOWER),      LGUI(KC_V)
 
                         ),
@@ -167,7 +169,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                                                 KC_LCTL,        KC_LCTL,                            _______,
                                                                                 _______,        KC_LCTL,              TG(RAISE),  _______
                         ),
-                        
+
   [_GAME] = LAYOUT_5x6_right(
 
                          KC_ESC,      KC_ESC,      KC_1,        KC_2,        KC_3,        KC_4,                          _______,     KC_NUM,      KC_PSLS,     KC_PAST,     KC_PMNS,     KC_CALC,
@@ -198,16 +200,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 /*****************************/
 bool encoder_update_user(uint8_t index, bool clockwise) {
     dprintf("encoder index: %d\n", index);
-  
+
    switch (biton32(layer_state)) {
             case _QWERTZ:
-/////////////////////////////////////////////		
+/////////////////////////////////////////////
                 if (index == 1) // master side
     {
         if (clockwise) {
             layer_move(_LOWER);
         } else {
-            rgb_matrix_increase_hue();      
+            rgb_matrix_increase_hue();
         }
     }
     if (index == 0) // slave side
@@ -223,13 +225,13 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 ///////////////////////
                 break;
             case _LOWER:
-/////////////////////////////////////////////	
+/////////////////////////////////////////////
                 if (index == 1) // master side
     {
         if (clockwise) {
-            layer_move(_RAISE); 
+            layer_move(_RAISE);
         } else {
-            
+
         }
     }
     if (index == 0) // slave side
@@ -239,7 +241,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 			tap_code(KC_WH_U);
 			unregister_code(KC_LCTL);
         } else {
-			register_code(KC_LCTL);  
+			register_code(KC_LCTL);
             tap_code(KC_WH_D);
 			unregister_code(KC_LCTL);
         }
@@ -249,13 +251,13 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 ///////////////////////
                 break;
             case _RAISE:
-//////////////////////////////////////////////			
+//////////////////////////////////////////////
                 if (index == 1) // master side
     {
         if (clockwise) {
             layer_move(_GAME);
         } else {
-            
+
         }
     }
     if (index == 0) // slave side
@@ -271,13 +273,13 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 //////////////////////
                 break;
             case _GAME:
-//////////////////////////////////////////////			
+//////////////////////////////////////////////
                 if (index == 1) // master side
     {
         if (clockwise) {
             layer_move(_QWERTZ);
         } else {
-            
+
         }
     }
     if (index == 0) // slave side
@@ -293,13 +295,13 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 //////////////////////
                 break;
             default:
-//////////////////////////////////////////////	
+//////////////////////////////////////////////
                 if (index == 1) // master side
     {
         if (clockwise) {
             layer_move(_QWERTZ);
         } else {
-            layer_move(_QWERTZ);  
+            layer_move(_QWERTZ);
         }
     }
     if (index == 0) // slave side
@@ -309,7 +311,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 			tap_code(KC_WH_U);
 			unregister_code(KC_LCTL);
         } else {
-			register_code(KC_LCTL);  
+			register_code(KC_LCTL);
             tap_code(KC_WH_D);
 			unregister_code(KC_LCTL);
         }
@@ -319,7 +321,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 //////////////////////
 }
 }
-  
+
 
 
 /*******************************************/
@@ -368,6 +370,39 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
 
             /* KEYBOARD PET STATUS END */
 
+        case KC_LSFT:
+        //hack to exclude shift from delete keypress
+            shift_held = record->event.pressed;
+            held_shift = keycode;
+            break;
+        case KC_BSPC_DEL:
+            if (record->event.pressed) {
+                if (shift_held) {
+                    unregister_code(held_shift);
+                    register_code(KC_DEL);
+                } else {
+                    register_code(KC_BSPC);
+                }
+            } else {
+                unregister_code(KC_DEL);
+                unregister_code(KC_BSPC);
+                if (shift_held) {
+                    register_code(held_shift);
+                }
+            }
+            return false;
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////   Config Layer Keycodes ////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////   End Config Layer Keycodes ////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     }
     // If console is enabled, it will print the matrix position and status of each key pressed
 #ifdef CONSOLE_ENABLE
@@ -385,7 +420,7 @@ void matrix_scan_user(void) {
 
     //read chip timer to generate random number for cat idle blinks
     ANIM_FRAME_DURATION1_OLD=timer_read32()%10;
-   
+
     // idle_timer needs to be set one time
     if (idle_timer == 0) idle_timer = timer_read32();
     if (timer_elapsed32(idle_timer) > IDLE_TIMEOUT_SECS * 1000 && !idle_mode) {
@@ -420,7 +455,7 @@ void idle_function(void) {
 
 //To power down my oled when my pc is in sleep mode.
 void sleep_function(void) {
- 
+
     static bool last_state_sleep = false;
     if (sleep_mode && !last_state_sleep) { // rising edge of idle mode
         rgb_matrix_mode_noeeprom(RGB_MATRIX_SLEEP_MODE);
@@ -432,4 +467,3 @@ void sleep_function(void) {
     last_state_sleep = sleep_mode;
 }
 
-  

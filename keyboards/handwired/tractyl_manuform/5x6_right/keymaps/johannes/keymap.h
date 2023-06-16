@@ -10,6 +10,10 @@ enum custom_layers {
     _CONF,
 };
 
+enum custom_keycodes {
+    KC_BSPC_DEL = SAFE_RANGE,
+
+};
 
 typedef int wpm_state_t;
 #define RAISE MO(_RAISE)
@@ -25,7 +29,7 @@ extern bool sleep_mode;
 extern bool isSneaking;
 extern bool isJumping;
 extern wpm_state_t  current_wpms;
-extern uint8_t ANIM_FRAME_DURATION1_OLD; 
+extern uint8_t ANIM_FRAME_DURATION1_OLD;
 extern uint8_t OffsLayer_1;
 extern uint8_t OffsLayer_2;
 extern uint8_t OffsLayer_3;
