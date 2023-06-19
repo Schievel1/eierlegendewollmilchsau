@@ -46,6 +46,9 @@ uint8_t OffsLayer_1 = 10;
 uint8_t OffsLayer_2 = 15;
 uint8_t OffsLayer_3 = 20;
 
+uint16_t DragScrollX = 6;
+uint16_t DragScrollY = 6;
+
 /* Smart Backspace Delete */
 bool            shift_held = false;
 static uint16_t held_shift = 0;
@@ -153,7 +156,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                          KC_CAPS ,    LCTL(KC_Y),  LCTL(KC_X),  LCTL(KC_C),  LSFT(KC_INS),KC_LPRN,                       KC_RPRN,     LSFT(KC_INS),RGB_TOG,     RGB_VAI,     _______,     DB_TOGG,
                                                    RGB_MOD,     RGB_RMOD,                                                                          RGB_HUI,     RGB_SAI,
                                                                              KC_LSFT,    _______,                          LCTL(KC_LBRC),
-                                                                                S_D_RMOD,       S_D_MOD,                              KC_BSPC_DEL,
+                                                                                S_D_RMOD,       S_D_MOD,                              BSPCDEL,
                                                                                 DPI_RMOD,       DPI_MOD,               TG(LOWER),      LGUI(KC_V)
 
                         ),
@@ -166,7 +169,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                          KC_NO,       KC_LCTL,     KC_Y,        KC_X,        KC_C,        KC_V,                          KC_P0,       KC_P1,       KC_P2,       KC_P3,       KC_PEQL,     KC_VOLD,
                                                    _______,     _______,                                                                           KC_DOT,      KC_COMM,
                                                                              KC_LSFT,     KC_LSFT,                          _______,
-                                                                                KC_LCTL,        KC_LCTL,                            _______,
+                                                                                KC_LCTL,        ZOOM,                            _______,
                                                                                 _______,        KC_LCTL,              TG(RAISE),  _______
                         ),
 
@@ -349,24 +352,26 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
         case KC_RCTL:
             if (record->event.pressed) {
                 isSneaking = true;
+               // DragScrollX = 255;
             } else {
                 isSneaking = false;
+               // DragScrollX = 6;
             }
-            break;
+            return true;
         case KC_SPC:
             if (record->event.pressed) {
                 isJumping  = true;
             } else {
                 isJumping = false;
             }
-            break;
+            return true;
             case SC_LSPO:
             if (record->event.pressed&&current_wpms>MIN_WALK_SPEED) {
                 isJumping  = true;
             } else {
                 isJumping = false;
             }
-            break;
+            return true;
 
             /* KEYBOARD PET STATUS END */
 
@@ -374,8 +379,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
         //hack to exclude shift from delete keypress
             shift_held = record->event.pressed;
             held_shift = keycode;
-            break;
-        case KC_BSPC_DEL:
+            return true;
+        case BSPCDEL:
             if (record->event.pressed) {
                 if (shift_held) {
                     unregister_code(held_shift);
@@ -391,6 +396,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
                 }
             }
             return false;
+            case ZOOM:
+            if (record->event.pressed) {
+                DragScrollX = 800;
+                register_code(KC_LCTL);
+            } else {
+                DragScrollX = 6;
+                unregister_code(KC_LCTL);
+            }
+            return false;
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////   Config Layer Keycodes ////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -402,7 +417,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////   End Config Layer Keycodes ////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+default:
+      return true; // Process all other keycodes normally
     }
     // If console is enabled, it will print the matrix position and status of each key pressed
 #ifdef CONSOLE_ENABLE

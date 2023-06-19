@@ -44,9 +44,13 @@
 #        define CHARYBDIS_DRAGSCROLL_DPI 100
 #    endif  // CHARYBDIS_DRAGSCROLL_DPI
 
-#    ifndef CHARYBDIS_DRAGSCROLL_BUFFER_SIZE
-#        define CHARYBDIS_DRAGSCROLL_BUFFER_SIZE 6
-#    endif  // !CHARYBDIS_DRAGSCROLL_BUFFER_SIZE
+#    ifndef CHARYBDIS_DRAGSCROLL_BUFFER_SIZE_Y
+#        define CHARYBDIS_DRAGSCROLL_BUFFER_SIZE_Y 6
+#    endif  // !CHARYBDIS_DRAGSCROLL_BUFFER_SIZE_Y
+
+#    ifndef CHARYBDIS_DRAGSCROLL_BUFFER_SIZE_X
+#        define CHARYBDIS_DRAGSCROLL_BUFFER_SIZE_X 6
+#    endif  // !CHARYBDIS_DRAGSCROLL_BUFFER_SIZE_X
 
 #    ifndef CHARYBDIS_POINTER_ACCELERATION_FACTOR
 #        define CHARYBDIS_POINTER_ACCELERATION_FACTOR 24
@@ -202,11 +206,11 @@ static void pointing_device_task_charybdis(report_mouse_t* mouse_report) {
 #    endif  // CHARYBDIS_DRAGSCROLL_REVERSE_Y
         mouse_report->x = 0;
         mouse_report->y = 0;
-        if (abs(scroll_buffer_x) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE) {
+        if (abs(scroll_buffer_x) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE_X) {
             mouse_report->h = scroll_buffer_x > 0 ? 1 : -1;
             scroll_buffer_x = 0;
         }
-        if (abs(scroll_buffer_y) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE) {
+        if (abs(scroll_buffer_y) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE_Y) {
             mouse_report->v = scroll_buffer_y > 0 ? 1 : -1;
             scroll_buffer_y = 0;
         }

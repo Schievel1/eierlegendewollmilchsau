@@ -10,9 +10,9 @@ enum custom_layers {
     _CONF,
 };
 
-enum custom_keycodes {
-    KC_BSPC_DEL = SAFE_RANGE,
-
+enum my_keycodes {
+    BSPCDEL = SAFE_RANGE,
+    ZOOM
 };
 
 typedef int wpm_state_t;
@@ -33,4 +33,5 @@ extern uint8_t ANIM_FRAME_DURATION1_OLD;
 extern uint8_t OffsLayer_1;
 extern uint8_t OffsLayer_2;
 extern uint8_t OffsLayer_3;
-
+extern uint16_t DragScrollX;
+extern uint16_t DragScrollY;
