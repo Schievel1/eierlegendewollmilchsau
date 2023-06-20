@@ -323,10 +323,27 @@ if (current_wpms <= MIN_WALK_SPEED) {
 }
 
 /* KEYBOARD PET END */
+void Int_to_Oled(uint16_t InputInt ) {
+
+ char tempStr[4+1]; // One extra for terminator
+
+// Clear tempStr and make sure there's always a string-terminating `\0` at the end
+for ( uint16_t i = 0; i < sizeof(tempStr); i++ ) {
+  tempStr[i] = '\0';
+}
+
+itoa(InputInt, tempStr, 10);
+oled_write_P(PSTR(tempStr), false);
+}
+
+
 
 
 
 bool oled_task_user(void) {
+
+
+
 
        /* KEYBOARD PET VARIABLES START */
 
@@ -339,6 +356,7 @@ bool oled_task_user(void) {
         /* Host Keyboard Layer Status */
 		oled_clear();
 	    oled_set_cursor(0, 0);
+        Int_to_Oled(charybdis_get_pointer_default_dpi() );
         oled_write_P(PSTR("\nLayer"), false);
         switch (biton32(layer_state)) {
             case _QWERTZ:
