@@ -356,29 +356,32 @@ bool oled_task_user(void) {
         /* Host Keyboard Layer Status */
 		oled_clear();
 	    oled_set_cursor(0, 0);
-        Int_to_Oled(charybdis_get_pointer_default_dpi() );
-        oled_write_P(PSTR("\nLayer"), false);
+         oled_write_P(PSTR("\nTB:"), false);
         switch (biton32(layer_state)) {
             case _QWERTZ:
-                oled_write_P(PSTR("QWRTZ"), false);
+                Int_to_Oled(charybdis_get_pointer_default_dpi()/100 );
+                oled_write_P(PSTR("\nQWRTZ"), false);
                 break;
             case _LOWER:
-                oled_write_P(PSTR("LOWER"), false);
+                Int_to_Oled(charybdis_get_pointer_sniping_dpi()/100 );
+                oled_write_P(PSTR("\n\nLOWER"), false);
                 break;
             case _RAISE:
-                oled_write_P(PSTR("RAISE"), false);
+                oled_write_P(PSTR("Dg"), false);
+                oled_write_P(PSTR("\nRAISE"), false);
                 break;
             case _GAME:
-                oled_write_P(PSTR("GAME\n"), false);
+                Int_to_Oled(charybdis_get_pointer_default_dpi()/100 );
+                oled_write_P(PSTR("\nGAME\n"), false);
                 break;
             case _CONF:
-                oled_write_P(PSTR("Conf\n"), false);
+                oled_write_P(PSTR("\nConf\n"), false);
                 break;
             default:
                 // Or use the write_ln shortcut over adding '\n' to the end of your string
                 oled_write_ln_P(PSTR("Undef"), false);
         }
-        oled_write_P(PSTR("\nRGB:\n"), false);
+        oled_write_P(PSTR("\n"), false);
         if (!(rgb_matrix_is_enabled())) {
             oled_write_P(PSTR("Off\n"), false);
         } else {
@@ -515,13 +518,15 @@ bool oled_task_user(void) {
                     oled_write_P(PSTR("MtrixEffMx"), false);
                 default:
                     oled_write_P(PSTR("Undef\n"), false);
-            }
+            } 
         }
-        /* Host Keyboard LED Status */
+        /* Host Keyboard LED Status */ 
+
         led_t led_state = host_keyboard_led_state();
+        oled_write_P(PSTR("\n"), false);
         oled_write_P(led_state.num_lock ? PSTR("NUM\n") : PSTR(""), false);
-        oled_write_P(led_state.caps_lock ? PSTR("CAP\n") : PSTR(""), false);
         oled_write_P(led_state.scroll_lock ? PSTR("SCR\n") : PSTR(""), false);
+        oled_write_P(led_state.caps_lock ? PSTR("CAP\n") : PSTR(""), false);
 
 
 
@@ -534,7 +539,7 @@ bool oled_task_user(void) {
 
 
 
-render_luna(0, 10);
+render_luna(0, 11);
 
 
 

@@ -234,7 +234,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
         if (clockwise) {
             layer_move(_RAISE);
         } else {
-
+        charybdis_cycle_pointer_default_dpi_noeeprom(true);
         }
     }
     if (index == 0) // slave side
