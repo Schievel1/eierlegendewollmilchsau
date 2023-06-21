@@ -71,9 +71,7 @@ void housekeeping_task_user(void) {
     // enable sniping mode with lower layer
     charybdis_set_pointer_sniping_enabled(biton32(layer_state) == _LOWER);
     // enable dragscroll mode when left shift key is pressed
-    charybdis_set_pointer_dragscroll_enabled(biton32(layer_state) == _RAISE);
-
-
+    charybdis_set_pointer_dragscroll_enabled((biton32(layer_state) == _RAISE)||(biton32(layer_state) == _GAME));
 }
 
 /***********/
@@ -150,16 +148,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_LOWER] = LAYOUT_5x6_right(
 
-                         KC_TILD,     KC_F1,       KC_F2,       KC_F3,       KC_F4,       KC_F5,                         KC_F6,       KC_F7,       KC_F8,       KC_F9,       KC_F10,      EE_CLR,
-                         _______,     _______,     _______,     KC_LGUI,     _______,     _______,                       LCTL(KC_Z),  KC_LEFT,     KC_UP,       KC_DOWN,     KC_RGHT,     QK_BOOT,
+                         KC_TILD,     KC_F1,       KC_F2,       KC_F3,       KC_F4,       KC_F5,                         KC_F6,       KC_F7,       KC_F8,       KC_F9,       KC_F10,      KC_F11,
+                         _______,     _______,     _______,     KC_LGUI,     _______,     _______,                       LCTL(KC_Z),  KC_LEFT,     KC_UP,       KC_DOWN,     KC_RGHT,     KC_F12,
                          LGUI(KC_L),  LCTL(KC_A),  UC(0x00DF),  RAISE,       KC_LSFT,      KC_LCBR,                       KC_RCBR,     KC_BTN1,     KC_BTN2,     KC_LEFT,     KC_RGHT,     KC_PIPE,
                          KC_CAPS ,    LCTL(KC_Y),  LCTL(KC_X),  LCTL(KC_C),  LSFT(KC_INS),KC_LPRN,                       KC_RPRN,     LSFT(KC_INS),RGB_TOG,     RGB_VAI,     _______,     DB_TOGG,
                                                    RGB_MOD,     RGB_RMOD,                                                                          RGB_HUI,     RGB_SAI,
                                                                              KC_LSFT,    _______,                          LCTL(KC_LBRC),
                                                                                 S_D_RMOD,       S_D_MOD,                              BSPCDEL,
                                                                                 DPI_RMOD,       DPI_MOD,               TG(LOWER),      LGUI(KC_V)
-
                         ),
+
 
   [_RAISE] = LAYOUT_5x6_right(
 
@@ -187,8 +185,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_CONF] = LAYOUT_5x6_right(
 
-                        TG(CONF),      KC_NO,      KC_NO,        KC_NO,        KC_NO,        KC_NO,                          KC_NO,     KC_NO,      KC_NO,     KC_NO,     KC_NO,     KC_NO,
-                         KC_NO,     KC_NO,      KC_NO,        KC_NO,        KC_NO,        KC_NO,                          KC_NO,     KC_NO,       KC_NO,       KC_NO,       KC_NO,     KC_NO,
+                        TG(CONF),      KC_NO,      KC_NO,        KC_NO,        KC_NO,        KC_NO,                          KC_NO,     KC_NO,      KC_NO,     KC_NO,     KC_NO,     EE_CLR,
+                         KC_NO,     KC_NO,      KC_NO,        KC_NO,        KC_NO,        KC_NO,                          KC_NO,     KC_NO,       KC_NO,       KC_NO,       KC_NO,     QK_BOOT,
                          KC_NO,     KC_NO,     KC_NO,        KC_NO,        KC_NO,        KC_NO,                          KC_NO,     KC_NO,       KC_NO,       KC_NO,       KC_NO,     KC_NO,
                          KC_NO,       KC_NO,     KC_NO,        KC_NO,        KC_NO,        KC_NO,                          KC_NO,       KC_NO,       KC_NO,       KC_NO,       KC_NO,     KC_NO,
                                                    KC_NO,     KC_NO,                                                                           KC_NO,      KC_NO,

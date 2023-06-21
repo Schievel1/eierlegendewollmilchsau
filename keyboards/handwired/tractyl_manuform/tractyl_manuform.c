@@ -206,6 +206,24 @@ static void pointing_device_task_charybdis(report_mouse_t* mouse_report) {
 #    endif  // CHARYBDIS_DRAGSCROLL_REVERSE_Y
         mouse_report->x = 0;
         mouse_report->y = 0;
+
+switch (biton32(layer_state)) {
+            case _QWERTZ:
+/////////////////////////////////////////////
+
+
+///////////////////////
+                break;
+            case _LOWER:
+/////////////////////////////////////////////
+
+
+///////////////////////
+                break;
+            case _RAISE:
+//////////////////////////////////////////////
+DragScrollY=6;
+DragScrollX=6;
         if (abs(scroll_buffer_x) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE_X) {
             mouse_report->h = scroll_buffer_x > 0 ? 1 : -1;
             scroll_buffer_x = 0;
@@ -214,7 +232,55 @@ static void pointing_device_task_charybdis(report_mouse_t* mouse_report) {
             mouse_report->v = scroll_buffer_y > 0 ? 1 : -1;
             scroll_buffer_y = 0;
         }
-    } else if (!g_charybdis_config.is_sniping_enabled) {
+//////////////////////
+                break;
+            case _GAME:
+//////////////////////////////////////////////
+DragScrollY=20;
+DragScrollX=20;
+       if (abs(scroll_buffer_x) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE_X) {
+            if (scroll_buffer_x > 0 ? true : false){
+                tap_code(KC_RIGHT);
+            }else{
+                tap_code(KC_LEFT);
+            }
+            scroll_buffer_x = 0;
+            scroll_buffer_y = 0;
+
+        }
+        if (abs(scroll_buffer_y) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE_Y) {
+            if (scroll_buffer_y > 0 ? true : false){
+                tap_code(KC_UP);
+            }else{
+                tap_code(KC_DOWN);
+            }
+            scroll_buffer_y = 0;
+            scroll_buffer_x = 0;
+        }
+
+
+
+
+
+//////////////////////
+                break;
+            default:
+//////////////////////////////////////////////
+
+if (abs(scroll_buffer_x) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE_X) {
+            mouse_report->h = scroll_buffer_x > 0 ? 1 : -1;
+            scroll_buffer_x = 0;
+        }
+        if (abs(scroll_buffer_y) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE_Y) {
+            mouse_report->v = scroll_buffer_y > 0 ? 1 : -1;
+            scroll_buffer_y = 0;
+        }
+
+
+
+//////////////////////
+}
+} else if (!g_charybdis_config.is_sniping_enabled) {
         mouse_report->x = DISPLACEMENT_WITH_ACCELERATION(mouse_report->x);
         mouse_report->y = DISPLACEMENT_WITH_ACCELERATION(mouse_report->y);
     }
