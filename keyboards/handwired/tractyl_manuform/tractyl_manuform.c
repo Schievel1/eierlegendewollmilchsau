@@ -44,13 +44,9 @@
 #        define CHARYBDIS_DRAGSCROLL_DPI 100
 #    endif  // CHARYBDIS_DRAGSCROLL_DPI
 
-#    ifndef CHARYBDIS_DRAGSCROLL_BUFFER_SIZE_Y
-#        define CHARYBDIS_DRAGSCROLL_BUFFER_SIZE_Y 6
-#    endif  // !CHARYBDIS_DRAGSCROLL_BUFFER_SIZE_Y
-
-#    ifndef CHARYBDIS_DRAGSCROLL_BUFFER_SIZE_X
-#        define CHARYBDIS_DRAGSCROLL_BUFFER_SIZE_X 6
-#    endif  // !CHARYBDIS_DRAGSCROLL_BUFFER_SIZE_X
+#    ifndef CHARYBDIS_DRAGSCROLL_BUFFER_SIZE
+#        define CHARYBDIS_DRAGSCROLL_BUFFER_SIZE 6
+#    endif  // !CHARYBDIS_DRAGSCROLL_BUFFER_SIZE
 
 #    ifndef CHARYBDIS_POINTER_ACCELERATION_FACTOR
 #        define CHARYBDIS_POINTER_ACCELERATION_FACTOR 24
@@ -222,23 +218,48 @@ switch (biton32(layer_state)) {
                 break;
             case _RAISE:
 //////////////////////////////////////////////
-DragScrollY=6;
-DragScrollX=6;
-        if (abs(scroll_buffer_x) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE_X) {
+DragScroll=6;
+        if (troughtTime) {
+
+
+
+        }
+
+    }else{
+            if (abs(scroll_buffer_x) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE) {
             mouse_report->h = scroll_buffer_x > 0 ? 1 : -1;
             scroll_buffer_x = 0;
-        }
-        if (abs(scroll_buffer_y) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE_Y) {
-            mouse_report->v = scroll_buffer_y > 0 ? 1 : -1;
             scroll_buffer_y = 0;
         }
+        if (abs(scroll_buffer_y) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE) {
+            mouse_report->v = scroll_buffer_y > 0 ? 1 : -1;
+            scroll_buffer_x = 0;
+            scroll_buffer_y = 0;
+
+    }
 //////////////////////
                 break;
             case _GAME:
 //////////////////////////////////////////////
-DragScrollY=20;
-DragScrollX=20;
-       if (abs(scroll_buffer_x) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE_X) {
+DragScroll=20;
+       if (troughtTime) {
+if (abs(scroll_buffer_x) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE) {
+            if (scroll_buffer_x > 0 ? true : false){
+            register_code(KC_LCTL);
+			tap_code(KC_Y);
+			unregister_code(KC_LCTL);
+            }else{
+            register_code(KC_LCTL);
+			tap_code(KC_Z);
+			unregister_code(KC_LCTL);
+            }
+            scroll_buffer_x = 0;
+            scroll_buffer_y = 0;
+
+        }
+
+       }else{
+       if (abs(scroll_buffer_x) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE) {
             if (scroll_buffer_x > 0 ? true : false){
                 tap_code(KC_RIGHT);
             }else{
@@ -248,7 +269,7 @@ DragScrollX=20;
             scroll_buffer_y = 0;
 
         }
-        if (abs(scroll_buffer_y) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE_Y) {
+        if (abs(scroll_buffer_y) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE) {
             if (scroll_buffer_y > 0 ? true : false){
                 tap_code(KC_UP);
             }else{
@@ -256,7 +277,7 @@ DragScrollX=20;
             }
             scroll_buffer_y = 0;
             scroll_buffer_x = 0;
-        }
+        }}
 
 
 

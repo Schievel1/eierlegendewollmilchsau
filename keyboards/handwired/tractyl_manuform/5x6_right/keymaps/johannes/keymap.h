@@ -33,5 +33,6 @@ extern uint8_t ANIM_FRAME_DURATION1_OLD;
 extern uint8_t OffsLayer_1;
 extern uint8_t OffsLayer_2;
 extern uint8_t OffsLayer_3;
-extern uint16_t DragScrollX;
-extern uint16_t DragScrollY;
+extern uint16_t DragScroll;
+extern bool zoom;
+extern bool troughtTime;
