@@ -179,7 +179,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                          KC_NO,     KC_TAB,      KC_Q,        KC_W,        KC_E,        KC_R,                          KC_RBRC,     KC_1,        KC_2,        KC_3,        KC_4,        KC_MUTE,
                          KC_NO,     KC_LSFT,     KC_A,        KC_S,        KC_D,        KC_F,                          KC_RPRN,     KC_BTN1,     KC_BTN2,     KC_B,       KC_PPLS,     KC_VOLU,
                          UNREDO,       KC_LCTL,     KC_Y,        KC_X,        KC_C,        KC_V,                          KC_NO,       KC_R,       KC_Q,       KC_NO,       KC_PMNS,     KC_VOLD,
-                                                   KC_NO,     KC_NO,                                                                           KC_NO,      KC_NO,
+                                                   KC_NO,     KC_NO,                                                                           KC_NO,      KC_NOr,
                                                                              KC_LSFT,     KC_ENT,                          KC_V,
                                                                                 KC_ENT,         KC_SPC,                            KC_C,
                                                                                 KC_NO,        KC_LCTL,              TG(GAME),  KC_NO
