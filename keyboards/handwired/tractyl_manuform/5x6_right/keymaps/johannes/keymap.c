@@ -46,8 +46,10 @@ uint8_t OffsLayer_1 = 10;
 uint8_t OffsLayer_2 = 15;
 uint8_t OffsLayer_3 = 20;
 
-uint16_t DragScrollX = 6;
-uint16_t DragScrollY = 6;
+uint16_t DragScroll = 6;
+bool zoom=false;
+bool troughtTime=false;
+
 
 /* Smart Backspace Delete */
 bool            shift_held = false;
@@ -173,14 +175,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_GAME] = LAYOUT_5x6_right(
 
-                         KC_ESC,      KC_ESC,      KC_1,        KC_2,        KC_3,        KC_4,                          _______,     KC_NUM,      KC_PSLS,     KC_PAST,     KC_PMNS,     KC_CALC,
-                         _______,     KC_TAB,      KC_Q,        KC_W,        KC_E,        KC_R,                          KC_RBRC,     KC_P7,       KC_P8,       KC_P9,       KC_PPLS,     KC_MUTE,
-                         _______,     KC_LSFT,     KC_A,        KC_S,        KC_D,        KC_F,                          KC_RPRN,     KC_P4,       KC_P5,       KC_P6,       _______,     KC_VOLU,
-                         KC_NO,       KC_LCTL,     KC_Y,        KC_X,        KC_C,        KC_V,                          KC_P0,       KC_P1,       KC_P2,       KC_P3,       KC_PEQL,     KC_VOLD,
-                                                   _______,     _______,                                                                           KC_DOT,      KC_COMM,
-                                                                             KC_LSFT,     KC_LSFT,                          _______,
-                                                                                KC_ENT,         KC_SPC,                            _______,
-                                                                                _______,        KC_LCTL,              TG(GAME),  _______
+                         KC_ESC,      KC_ESC,      KC_1,        KC_2,        KC_3,        KC_4,                          KC_NO,     KC_NO,      KC_NO,     KC_NO,     KC_NO,     LALT(KC_TAB),
+                         KC_NO,     KC_TAB,      KC_Q,        KC_W,        KC_E,        KC_R,                          KC_RBRC,     KC_1,        KC_2,        KC_3,        KC_4,        KC_MUTE,
+                         KC_NO,     KC_LSFT,     KC_A,        KC_S,        KC_D,        KC_F,                          KC_RPRN,     KC_BTN1,     KC_BTN2,     KC_B,       KC_PPLS,     KC_VOLU,
+                         UNREDO,       KC_LCTL,     KC_Y,        KC_X,        KC_C,        KC_V,                          KC_NO,       KC_R,       KC_Q,       KC_NO,       KC_PMNS,     KC_VOLD,
+                                                   KC_NO,     KC_NO,                                                                           KC_NO,      KC_NO,
+                                                                             KC_LSFT,     KC_ENT,                          KC_V,
+                                                                                KC_ENT,         KC_SPC,                            KC_C,
+                                                                                KC_NO,        KC_LCTL,              TG(GAME),  KC_NO
                         ),
 
   [_CONF] = LAYOUT_5x6_right(
@@ -396,14 +398,23 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
             return false;
             case ZOOM:
             if (record->event.pressed) {
-                DragScrollX = 800;
+                zoom = true;
                 register_code(KC_LCTL);
             } else {
-                DragScrollX = 6;
+                zoom = false;
                 unregister_code(KC_LCTL);
             }
             return false;
 
+            case UNREDO:
+            if (record->event.pressed) {
+                troughtTime = true;
+                register_code(KC_LCTL);
+            } else {
+                troughtTime = false;
+                unregister_code(KC_LCTL);
+            }
+            return false;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////   Config Layer Keycodes ////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

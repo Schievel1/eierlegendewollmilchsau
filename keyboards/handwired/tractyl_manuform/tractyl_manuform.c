@@ -17,6 +17,7 @@
 #include "tractyl_manuform.h"
 #include "transactions.h"
 #include <string.h>
+#include "keymap.h"
 
 #ifdef CONSOLE_ENABLE
 #    include "print.h"
@@ -219,14 +220,15 @@ switch (biton32(layer_state)) {
             case _RAISE:
 //////////////////////////////////////////////
 DragScroll=6;
-        if (troughtTime) {
+        if (zoom) {
 
-
-
+        if (abs(scroll_buffer_y) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE) {
+            mouse_report->v = scroll_buffer_y > 0 ? 1 : -1;
+            scroll_buffer_x = 0;
+            scroll_buffer_y = 0;
         }
-
     }else{
-            if (abs(scroll_buffer_x) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE) {
+        if (abs(scroll_buffer_x) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE) {
             mouse_report->h = scroll_buffer_x > 0 ? 1 : -1;
             scroll_buffer_x = 0;
             scroll_buffer_y = 0;
@@ -235,7 +237,7 @@ DragScroll=6;
             mouse_report->v = scroll_buffer_y > 0 ? 1 : -1;
             scroll_buffer_x = 0;
             scroll_buffer_y = 0;
-
+        }
     }
 //////////////////////
                 break;
@@ -245,13 +247,9 @@ DragScroll=20;
        if (troughtTime) {
 if (abs(scroll_buffer_x) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE) {
             if (scroll_buffer_x > 0 ? true : false){
-            register_code(KC_LCTL);
 			tap_code(KC_Y);
-			unregister_code(KC_LCTL);
             }else{
-            register_code(KC_LCTL);
 			tap_code(KC_Z);
-			unregister_code(KC_LCTL);
             }
             scroll_buffer_x = 0;
             scroll_buffer_y = 0;
@@ -288,11 +286,11 @@ if (abs(scroll_buffer_x) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE) {
             default:
 //////////////////////////////////////////////
 
-if (abs(scroll_buffer_x) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE_X) {
+if (abs(scroll_buffer_x) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE) {
             mouse_report->h = scroll_buffer_x > 0 ? 1 : -1;
             scroll_buffer_x = 0;
         }
-        if (abs(scroll_buffer_y) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE_Y) {
+        if (abs(scroll_buffer_y) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE) {
             mouse_report->v = scroll_buffer_y > 0 ? 1 : -1;
             scroll_buffer_y = 0;
         }

@@ -12,7 +12,8 @@ enum custom_layers {
 
 enum my_keycodes {
     BSPCDEL = SAFE_RANGE,
-    ZOOM
+    ZOOM,
+    UNREDO
 };
 
 typedef int wpm_state_t;
