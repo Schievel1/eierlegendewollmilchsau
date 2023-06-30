@@ -179,7 +179,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                          KC_NO,     KC_TAB,      KC_Q,        KC_W,        KC_E,        KC_R,                          KC_RBRC,     KC_1,        KC_2,        KC_3,        KC_4,        KC_MUTE,
                          KC_NO,     KC_LSFT,     KC_A,        KC_S,        KC_D,        KC_F,                          KC_RPRN,     KC_BTN1,     KC_BTN2,     KC_B,       KC_PPLS,     KC_VOLU,
                          UNREDO,       KC_LCTL,     KC_Y,        KC_X,        KC_C,        KC_V,                          KC_NO,       KC_R,       KC_Q,       KC_NO,       KC_PMNS,     KC_VOLD,
-                                                   KC_NO,     KC_NO,                                                                           KC_NO,      KC_NOr,
+                                                   KC_NO,     KC_NO,                                                                           KC_NO,      KC_NO,
                                                                              KC_LSFT,     KC_ENT,                          KC_V,
                                                                                 KC_ENT,         KC_SPC,                            KC_C,
                                                                                 KC_NO,        KC_LCTL,              TG(GAME),  KC_NO
@@ -191,7 +191,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                          KC_NO,     KC_NO,      KC_NO,        KC_NO,        KC_NO,        KC_NO,                          KC_NO,     KC_NO,       KC_NO,       KC_NO,       KC_NO,     QK_BOOT,
                          KC_NO,     KC_NO,     KC_NO,        KC_NO,        KC_NO,        KC_NO,                          KC_NO,     KC_NO,       KC_NO,       KC_NO,       KC_NO,     KC_NO,
                          KC_NO,       KC_NO,     KC_NO,        KC_NO,        KC_NO,        KC_NO,                          KC_NO,       KC_NO,       KC_NO,       KC_NO,       KC_NO,     KC_NO,
-                                                   KC_NO,     KC_NO,                                                                           KC_NO,      KC_NO,
+                                                   DPISPDWN,     DPISPUP,                                                                           DPIDWN,      DPIUP,
                                                                              KC_NO,     KC_NO,                          KC_NO,
                                                                                 KC_NO,         KC_NO,                            KC_NO,
                                                                                 _______,        KC_NO,              KC_NO,  KC_NO
@@ -266,9 +266,9 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
     if (index == 0) // slave side
     {
         if (clockwise) {
-	        rgb_matrix_increase_val();
+	        charybdis_cycle_pointer_default_dpi_noeeprom(true);
         } else {
-            rgb_matrix_decrease_val();
+            charybdis_cycle_pointer_default_dpi_noeeprom(false);
         }
     }
     return true;
@@ -332,7 +332,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 /*******************************************/
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
 
-
+bool oneShot;
 
     if (record->event.pressed) {
         idle_timer = timer_read32();
@@ -415,6 +415,69 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
                 unregister_code(KC_LCTL);
             }
             return false;
+
+            case DPIDWN:
+            if (record->event.pressed) {
+            if (oneShot==false){
+
+            charybdis_cycle_pointer_default_dpi(false);
+            oneShot=true;
+
+            }
+
+            } else {
+
+            oneShot=false;
+
+            }
+            return false;
+
+            case DPIUP:
+            if (record->event.pressed) {
+            if (oneShot==false){
+
+            charybdis_cycle_pointer_default_dpi(true);
+            oneShot=true;
+
+            }
+
+            } else {
+
+            oneShot=false;
+
+            }
+            return false;
+            case DPISPDWN:
+            if (record->event.pressed) {
+            if (oneShot==false){
+
+            charybdis_cycle_pointer_sniping_dpi(false);
+            oneShot=true;
+
+            }
+
+            } else {
+
+            oneShot=false;
+
+            }
+            return false;
+            case DPISPUP:
+            if (record->event.pressed) {
+            if (oneShot==false){
+
+            charybdis_cycle_pointer_sniping_dpi(true);
+            oneShot=true;
+
+            }
+
+            } else {
+
+            oneShot=false;
+
+            }
+            return false;
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////   Config Layer Keycodes ////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

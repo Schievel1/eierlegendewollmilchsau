@@ -375,7 +375,11 @@ bool oled_task_user(void) {
                 oled_write_P(PSTR("\nGAME\n"), false);
                 break;
             case _CONF:
-                oled_write_P(PSTR("\nConf\n"), false);
+                oled_set_cursor(0, 0);
+                oled_write_P(PSTR("\nSETUP-----POINT"), false);
+                Int_to_Oled(charybdis_get_pointer_default_dpi()/100 );
+                oled_write_P(PSTR("\nSNIPE"), false);
+                Int_to_Oled(charybdis_get_pointer_sniping_dpi()/100 );
                 break;
             default:
                 // Or use the write_ln shortcut over adding '\n' to the end of your string
@@ -518,9 +522,9 @@ bool oled_task_user(void) {
                     oled_write_P(PSTR("MtrixEffMx"), false);
                 default:
                     oled_write_P(PSTR("Undef\n"), false);
-            } 
+            }
         }
-        /* Host Keyboard LED Status */ 
+        /* Host Keyboard LED Status */
 
         led_t led_state = host_keyboard_led_state();
         oled_write_P(PSTR("\n"), false);
