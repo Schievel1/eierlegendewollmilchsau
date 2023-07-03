@@ -71,11 +71,11 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
                     rgb_matrix_increase_hue_noeeprom();
                 }
             }
-            re_raise = true; 
+            re_raise = true;
             led_t led_state = host_keyboard_led_state();
-           if (led_state.num_lock){ 
-               rgb_matrix_set_color(33, RGB_RED); 
-             }else{rgb_matrix_set_color(33, RGB_WHITE);} 
+           if (led_state.num_lock){
+               rgb_matrix_set_color(33, RGB_RED);
+             }else{rgb_matrix_set_color(33, RGB_WHITE);}
 
             // set num block keys to static color
             //rgb_matrix_set_color(33, RGB_RED); // num lock
@@ -122,6 +122,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
                 re_game = false;
             }
             break;
+
         case _LOWER:
             if (!re_lower) {
                 for (int i = 0; i < OffsLayer_1; i++) {
@@ -142,6 +143,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
             }
             re_lower = true;
             break;
+
         case _GAME:
             if (!re_game) {
                 for (int i = 0; i < OffsLayer_3; i++) {
@@ -163,6 +165,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 
             re_game = true;
             break;
+
         case _CONF:
             if (re_lower) {
                 for (int i = 0; i < OffsLayer_1; i++) {
@@ -182,13 +185,43 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
             re_raise = false;
             re_lower = false;
             re_game = false;
+            rgb_matrix_set_color_all(RGB_OFF);
+            HSV      hsv      = rgb_matrix_get_hsv();
+            RGB      rgb      = hsv_to_rgb(hsv);
+            rgb_matrix_set_color(1,rgb.r,rgb.g,rgb.b);
 
+             for (int i = 0; i < OffsLayer_1; i++) {
+                    rgb_matrix_increase_hue_noeeprom();
+                }
+                  hsv      = rgb_matrix_get_hsv();
+                  rgb      = hsv_to_rgb(hsv);
+            rgb_matrix_set_color(2,rgb.r,rgb.g,rgb.b);
+            for (int i = 0; i < OffsLayer_1; i++) {
+                    rgb_matrix_decrease_hue_noeeprom();
+                }
 
+            for (int i = 0; i < OffsLayer_2; i++) {
+                    rgb_matrix_increase_hue_noeeprom();
+                }
+                  hsv      = rgb_matrix_get_hsv();
+                  rgb      = hsv_to_rgb(hsv);
+            rgb_matrix_set_color(3,rgb.r,rgb.g,rgb.b);
+            for (int i = 0; i < OffsLayer_2; i++) {
+                    rgb_matrix_decrease_hue_noeeprom();
+                }
 
-
-
+            for (int i = 0; i < OffsLayer_3; i++) {
+                    rgb_matrix_increase_hue_noeeprom();
+                }
+                  hsv      = rgb_matrix_get_hsv();
+                  rgb      = hsv_to_rgb(hsv);
+            rgb_matrix_set_color(4,rgb.r,rgb.g,rgb.b);
+            for (int i = 0; i < OffsLayer_3; i++) {
+                    rgb_matrix_decrease_hue_noeeprom();
+                }
 
             break;
+
         case _QWERTZ:
             if (re_lower) {
                 for (int i = 0; i < OffsLayer_1; i++) {

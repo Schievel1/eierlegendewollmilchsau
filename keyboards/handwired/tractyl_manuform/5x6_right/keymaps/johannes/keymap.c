@@ -45,6 +45,7 @@ uint8_t ANIM_FRAME_DURATION1_OLD = 1;
 uint8_t OffsLayer_1 = 10;
 uint8_t OffsLayer_2 = 15;
 uint8_t OffsLayer_3 = 20;
+bool oneShot = 0;
 
 uint16_t DragScroll = 6;
 bool zoom=false;
@@ -157,7 +158,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                    RGB_MOD,     RGB_RMOD,                                                                          RGB_HUI,     RGB_SAI,
                                                                              KC_LSFT,    _______,                          LCTL(KC_LBRC),
                                                                                 S_D_RMOD,       S_D_MOD,                              BSPCDEL,
-                                                                                DPI_RMOD,       DPI_MOD,               TG(LOWER),      LGUI(KC_V)
+                                                                                DPI_RMOD,       DPI_MOD,               TG(_LOWER),      LGUI(KC_V)
                         ),
 
 
@@ -166,35 +167,35 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                          KC_ESC,      KC_ESC,      KC_1,        KC_2,        KC_3,        KC_4,                          TT(CONF),     KC_NUM,      KC_PSLS,     KC_PAST,     KC_PMNS,     KC_CALC,
                          _______,     KC_TAB,      KC_Q,        KC_W,        KC_E,        KC_R,                          KC_RBRC,     KC_P7,       KC_P8,       KC_P9,       KC_PPLS,     KC_MUTE,
                          _______,     KC_LSFT,     KC_A,        KC_S,        KC_D,        KC_F,                          KC_RPRN,     KC_P4,       KC_P5,       KC_P6,       _______,     KC_VOLU,
-                         KC_NO,       KC_LCTL,     KC_Y,        KC_X,        KC_C,        KC_V,                          KC_P0,       KC_P1,       KC_P2,       KC_P3,       KC_PEQL,     KC_VOLD,
+                         XXXXXXX,       KC_LCTL,     KC_Y,        KC_X,        KC_C,        KC_V,                          KC_P0,       KC_P1,       KC_P2,       KC_P3,       KC_PEQL,     KC_VOLD,
                                                    _______,     _______,                                                                           KC_DOT,      KC_COMM,
                                                                              KC_LSFT,     KC_LSFT,                          _______,
                                                                                 KC_LCTL,        ZOOM,                            _______,
-                                                                                _______,        KC_LCTL,              TG(RAISE),  _______
+                                                                                _______,        KC_LCTL,              TG(_RAISE),  _______
                         ),
 
   [_GAME] = LAYOUT_5x6_right(
 
-                         KC_ESC,      KC_ESC,      KC_1,        KC_2,        KC_3,        KC_4,                          KC_NO,     KC_NO,      KC_NO,     KC_NO,     KC_NO,     LALT(KC_TAB),
-                         KC_NO,     KC_TAB,      KC_Q,        KC_W,        KC_E,        KC_R,                          KC_RBRC,     KC_1,        KC_2,        KC_3,        KC_4,        KC_MUTE,
-                         KC_NO,     KC_LSFT,     KC_A,        KC_S,        KC_D,        KC_F,                          KC_RPRN,     KC_BTN1,     KC_BTN2,     KC_B,       KC_PPLS,     KC_VOLU,
-                         UNREDO,       KC_LCTL,     KC_Y,        KC_X,        KC_C,        KC_V,                          KC_NO,       KC_R,       KC_Q,       KC_NO,       KC_PMNS,     KC_VOLD,
-                                                   KC_NO,     KC_NO,                                                                           KC_NO,      KC_NO,
+                         KC_ESC,      KC_ESC,      KC_1,        KC_2,        KC_3,        KC_4,                          XXXXXXX,     XXXXXXX,      XXXXXXX,     XXXXXXX,     XXXXXXX,     LALT(KC_TAB),
+                         XXXXXXX,     KC_TAB,      KC_Q,        KC_W,        KC_E,        KC_R,                          KC_RBRC,     KC_1,        KC_2,        KC_3,        KC_4,        KC_MUTE,
+                         XXXXXXX,     KC_LSFT,     KC_A,        KC_S,        KC_D,        KC_F,                          KC_RPRN,     KC_BTN1,     KC_BTN2,     KC_B,       KC_PPLS,     KC_VOLU,
+                         UNREDO,       KC_LCTL,     KC_Y,        KC_X,        KC_C,        KC_V,                          XXXXXXX,       KC_R,       KC_Q,       XXXXXXX,       KC_PMNS,     KC_VOLD,
+                                                   XXXXXXX,     XXXXXXX,                                                                           XXXXXXX,      XXXXXXX,
                                                                              KC_LSFT,     KC_ENT,                          KC_V,
                                                                                 KC_ENT,         KC_SPC,                            KC_C,
-                                                                                KC_NO,        KC_LCTL,              TG(GAME),  KC_NO
+                                                                                XXXXXXX,        KC_LCTL,              TG(_GAME),  XXXXXXX
                         ),
 
   [_CONF] = LAYOUT_5x6_right(
 
-                        TG(CONF),      KC_NO,      KC_NO,        KC_NO,        KC_NO,        KC_NO,                          KC_NO,     KC_NO,      KC_NO,     KC_NO,     KC_NO,     EE_CLR,
-                         KC_NO,     KC_NO,      KC_NO,        KC_NO,        KC_NO,        KC_NO,                          KC_NO,     KC_NO,       KC_NO,       KC_NO,       KC_NO,     QK_BOOT,
-                         KC_NO,     KC_NO,     KC_NO,        KC_NO,        KC_NO,        KC_NO,                          KC_NO,     KC_NO,       KC_NO,       KC_NO,       KC_NO,     KC_NO,
-                         KC_NO,       KC_NO,     KC_NO,        KC_NO,        KC_NO,        KC_NO,                          KC_NO,       KC_NO,       KC_NO,       KC_NO,       KC_NO,     KC_NO,
+                        TO(_QWERTZ),      XXXXXXX,      XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                          XXXXXXX,     XXXXXXX,      XXXXXXX,     XXXXXXX,     XXXXXXX,     EE_CLR,
+                         XXXXXXX,     XXXXXXX,      XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                          XXXXXXX,     XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     QK_BOOT,
+                         XXXXXXX,     XXXXXXX,     XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                          XXXXXXX,     XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     XXXXXXX,
+                         XXXXXXX,       XXXXXXX,     XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                          XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     XXXXXXX,
                                                    DPISPDWN,     DPISPUP,                                                                           DPIDWN,      DPIUP,
-                                                                             KC_NO,     KC_NO,                          KC_NO,
-                                                                                KC_NO,         KC_NO,                            KC_NO,
-                                                                                _______,        KC_NO,              KC_NO,  KC_NO
+                                                                             XXXXXXX,     XXXXXXX,                          XXXXXXX,
+                                                                                XXXXXXX,         XXXXXXX,                            XXXXXXX,
+                                                                                _______,        XXXXXXX,              XXXXXXX,  XXXXXXX
                         ),};
 // clang-format on
 
@@ -332,7 +333,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 /*******************************************/
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
 
-bool oneShot;
+
 
     if (record->event.pressed) {
         idle_timer = timer_read32();
@@ -415,6 +416,9 @@ bool oneShot;
                 unregister_code(KC_LCTL);
             }
             return false;
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////   Config Layer Keycodes ////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
             case DPIDWN:
             if (record->event.pressed) {
@@ -447,6 +451,7 @@ bool oneShot;
 
             }
             return false;
+
             case DPISPDWN:
             if (record->event.pressed) {
             if (oneShot==false){
@@ -478,16 +483,9 @@ bool oneShot;
             }
             return false;
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////   Config Layer Keycodes ////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////   End Config Layer Keycodes ////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////   End Config Layer Keycodes ////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 default:
       return true; // Process all other keycodes normally

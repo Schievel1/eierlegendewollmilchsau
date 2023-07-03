@@ -43,7 +43,7 @@
 #define USER_COM_POLL_TIME_MS 100 // user data is sent between the two halfes by this time in milliseconds
  #define SPLIT_LED_STATE_ENABLE
  #define SPLIT_WPM_ENABLE
-
+#define TAPPING_TOGGLE 2
 #define UNICODE_SELECTED_MODES UNICODE_MODE_WINCOMPOSE
 /*********************************/
 /*  E n c o d e r   c o n f i g  */
