@@ -1,11 +1,36 @@
 #include QMK_KEYBOARD_H
 #include "rgb_matrix_user.h"
 #include "keymap.h"
+#include "print.h"
 
 // clang-format off
 #ifdef RGB_MATRIX_ENABLE
 
+HSV    hsv;
+RGB    rgb;
 
+HSV hsv_prev(HSV hsv,uint8_t offset,uint8_t hueStep) {
+    uint16_t h, hOff;
+h = hsv.h;
+dprintf("h1: %d\n", h);
+hOff = offset*hueStep;
+dprintf("hOff2: %d\n", hOff);
+if (hOff>255) {
+hOff = hOff%255;
+}
+dprintf("hOff3: %d\n", hOff);
+
+hOff = h + hOff;
+dprintf("hue4: %d\n", hOff);
+if (hOff>255)
+{
+ hOff = hOff%255;
+}
+dprintf("hue5: %d\n", hOff);
+hsv.h = hOff;
+dprintf("hue6: %d\n", hsv.h);
+return hsv;
+}
 
 led_config_t g_led_config = { {
    //left
@@ -186,39 +211,40 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
             re_lower = false;
             re_game = false;
             rgb_matrix_set_color_all(RGB_OFF);
-            HSV      hsv      = rgb_matrix_get_hsv();
-            RGB      rgb      = hsv_to_rgb(hsv);
+            hsv      = rgb_matrix_get_hsv();
+            rgb  = hsv_to_rgb(hsv_prev(hsv,0,RGB_MATRIX_HUE_STEP));
             rgb_matrix_set_color(1,rgb.r,rgb.g,rgb.b);
-
-             for (int i = 0; i < OffsLayer_1; i++) {
-                    rgb_matrix_increase_hue_noeeprom();
-                }
-                  hsv      = rgb_matrix_get_hsv();
-                  rgb      = hsv_to_rgb(hsv);
+            rgb  = hsv_to_rgb(hsv_prev(hsv,OffsLayer_1,RGB_MATRIX_HUE_STEP));
             rgb_matrix_set_color(2,rgb.r,rgb.g,rgb.b);
-            for (int i = 0; i < OffsLayer_1; i++) {
-                    rgb_matrix_decrease_hue_noeeprom();
-                }
-
-            for (int i = 0; i < OffsLayer_2; i++) {
-                    rgb_matrix_increase_hue_noeeprom();
-                }
-                  hsv      = rgb_matrix_get_hsv();
-                  rgb      = hsv_to_rgb(hsv);
+            dprintf("hk1: %d\n", hsv.h);
+            rgb  = hsv_to_rgb(hsv_prev(hsv,OffsLayer_2,RGB_MATRIX_HUE_STEP));
+            dprintf("hk2: %d\n", hsv.h);
             rgb_matrix_set_color(3,rgb.r,rgb.g,rgb.b);
-            for (int i = 0; i < OffsLayer_2; i++) {
-                    rgb_matrix_decrease_hue_noeeprom();
-                }
-
-            for (int i = 0; i < OffsLayer_3; i++) {
-                    rgb_matrix_increase_hue_noeeprom();
-                }
-                  hsv      = rgb_matrix_get_hsv();
-                  rgb      = hsv_to_rgb(hsv);
+            rgb  = hsv_to_rgb(hsv_prev(hsv,OffsLayer_3,RGB_MATRIX_HUE_STEP));
+            dprintf("hk3: %d\n", hsv.h);
             rgb_matrix_set_color(4,rgb.r,rgb.g,rgb.b);
-            for (int i = 0; i < OffsLayer_3; i++) {
-                    rgb_matrix_decrease_hue_noeeprom();
-                }
+
+
+
+            // for (int i = 0; i < OffsLayer_2; i++) {
+            //         rgb_matrix_increase_hue_noeeprom();
+            //     }
+            //       hsv      = rgb_matrix_get_hsv();
+            //       rgb      = hsv_to_rgb(hsv);
+            // rgb_matrix_set_color(3,rgb.r,rgb.g,rgb.b);
+            // for (int i = 0; i < OffsLayer_2; i++) {
+            //         rgb_matrix_decrease_hue_noeeprom();
+            //     }
+
+            // for (int i = 0; i < OffsLayer_3; i++) {
+            //         rgb_matrix_increase_hue_noeeprom();
+            //     }
+            //       hsv      = rgb_matrix_get_hsv();
+            //       rgb      = hsv_to_rgb(hsv);
+            // rgb_matrix_set_color(4,rgb.r,rgb.g,rgb.b);
+            // for (int i = 0; i < OffsLayer_3; i++) {
+            //         rgb_matrix_decrease_hue_noeeprom();
+            //     }
 
             break;
 
@@ -248,3 +274,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     return false;
 }
 #endif
+
+
+
+

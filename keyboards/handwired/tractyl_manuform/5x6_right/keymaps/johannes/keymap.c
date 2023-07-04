@@ -42,15 +42,16 @@ uint8_t ANIM_FRAME_DURATION1_OLD = 1;
  led_t led_usb_state;
 
 //Config mode declarations
-uint8_t OffsLayer_1 = 10;
-uint8_t OffsLayer_2 = 15;
-uint8_t OffsLayer_3 = 20;
+uint8_t OffsLayer_1;
+uint8_t OffsLayer_2;
+uint8_t OffsLayer_3;
 bool oneShot = 0;
 
 uint16_t DragScroll = 6;
 bool zoom=false;
 bool troughtTime=false;
-
+bool snipe=false;
+bool drag=false;
 
 /* Smart Backspace Delete */
 bool            shift_held = false;
@@ -72,9 +73,9 @@ void housekeeping_task_user(void) {
    //     ili9341_draw_display(big_display);
     }
     // enable sniping mode with lower layer
-    charybdis_set_pointer_sniping_enabled(biton32(layer_state) == _LOWER);
+    charybdis_set_pointer_sniping_enabled((biton32(layer_state) == _LOWER))||(snipe));
     // enable dragscroll mode when left shift key is pressed
-    charybdis_set_pointer_dragscroll_enabled((biton32(layer_state) == _RAISE)||(biton32(layer_state) == _GAME));
+    charybdis_set_pointer_dragscroll_enabled((biton32(layer_state) == _RAISE)||(drag));
 }
 
 /***********/
@@ -85,6 +86,9 @@ void keyboard_post_init_user(void) {
     debug_enable   = true;
     debug_matrix   = true;
     debug_mouse    = true;
+    OffsLayer_1 = 10;
+    OffsLayer_2 = 15;
+    OffsLayer_3 = 20;
     //rgb_matrix_disable();
     // user comms
  print("1");
@@ -188,12 +192,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_CONF] = LAYOUT_5x6_right(
 
-                        TO(_QWERTZ),      XXXXXXX,      XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                          XXXXXXX,     XXXXXXX,      XXXXXXX,     XXXXXXX,     XXXXXXX,     EE_CLR,
-                         XXXXXXX,     XXXXXXX,      XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                          XXXXXXX,     XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     QK_BOOT,
-                         XXXXXXX,     XXXXXXX,     XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                          XXXXXXX,     XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     XXXXXXX,
+                        TO(_QWERTZ),      HUELAY1,      HUELAY2,        HUELAY3,        HUELAY4,        HUELAY5,                          XXXXXXX,     XXXXXXX,      XXXXXXX,     XXXXXXX,     XXXXXXX,     EE_CLR,
+                         DB_TOGG,     XXXXXXX,      XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                          XXXXXXX,     XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     QK_BOOT,
+                         XXXXXXX,     XXXXXXX,     SNIPE,        DRAG,        XXXXXXX,        XXXXXXX,                          XXXXXXX,     XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     XXXXXXX,
                          XXXXXXX,       XXXXXXX,     XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                          XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     XXXXXXX,
                                                    DPISPDWN,     DPISPUP,                                                                           DPIDWN,      DPIUP,
-                                                                             XXXXXXX,     XXXXXXX,                          XXXXXXX,
+                                                                             XXXXXXX,     KC_LSFT,                          XXXXXXX,
                                                                                 XXXXXXX,         XXXXXXX,                            XXXXXXX,
                                                                                 _______,        XXXXXXX,              XXXXXXX,  XXXXXXX
                         ),};
@@ -483,7 +487,137 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
             }
             return false;
 
+            case HUELAY1:
+            if (record->event.pressed) {
+            if (oneShot==false){
 
+                if (shift_held) {
+                 rgb_matrix_decrease_hue();
+                }else{
+                 rgb_matrix_increase_hue();
+                }
+
+                oneShot=true;
+            }
+
+                } else {
+
+                oneShot=false;
+
+                }
+            return false;
+
+            case HUELAY2:
+            if (record->event.pressed) {
+            if (oneShot==false){
+
+                if (shift_held) {
+
+                    if (OffsLayer_1<=0)
+                    {
+                        OffsLayer_1 = 32;
+                    }else
+                    {
+                        OffsLayer_1 = OffsLayer_1-1;
+                    }
+                }else{
+                    if(OffsLayer_1>=32)
+                    {
+                        OffsLayer_1 = 0;
+                    }else
+                    {
+                        OffsLayer_1 = OffsLayer_1+1;
+                    }
+                }
+                oneShot=true;
+            }
+
+                } else {
+
+                oneShot=false;
+
+                }
+            return false;
+
+            case HUELAY3:
+            if (record->event.pressed) {
+            if (oneShot==false){
+
+                if (shift_held) {
+
+                    if (OffsLayer_2<=0)
+                    {
+                        OffsLayer_2 = 32;
+                    }else
+                    {
+                        OffsLayer_2 = OffsLayer_2-1;
+                    }
+                }else{
+                    if(OffsLayer_2>=32)
+                    {
+                        OffsLayer_2 = 0;
+                    }else
+                    {
+                        OffsLayer_2 = OffsLayer_2+1;
+                    }
+                }
+                oneShot=true;
+            }
+
+                } else {
+
+                oneShot=false;
+
+                }
+            return false;
+
+            case HUELAY4:
+            if (record->event.pressed) {
+            if (oneShot==false){
+
+                if (shift_held) {
+                    if (OffsLayer_3<=0)
+                    {
+                        OffsLayer_3 = 32;
+                    }else
+                    {
+                        OffsLayer_3 = OffsLayer_3-1;
+                    }
+                }else{
+                    if(OffsLayer_3>=32)
+                    {
+                        OffsLayer_3 = 0;
+                    }else
+                    {
+                        OffsLayer_3 = OffsLayer_3+1;
+                    }
+
+                }
+                oneShot=true;
+            }
+
+                } else {
+
+                oneShot=false;
+
+                }
+            return false;
+
+            case SNIPE:
+            if (record->event.pressed) {
+                snipe = true;
+            } else {
+                snipe = false;
+            }
+            return false;
+
+            case DRAG:
+            if (record->event.pressed) {
+                drag = true;
+            } else {
+                drag = false;
+            }
+            return false;
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////   End Config Layer Keycodes ////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

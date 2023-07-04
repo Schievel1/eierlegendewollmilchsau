@@ -17,7 +17,14 @@ enum my_keycodes {
     DPIUP,
     DPIDWN,
     DPISPUP,
-    DPISPDWN
+    DPISPDWN,
+    HUELAY1,
+    HUELAY2,
+    HUELAY3,
+    HUELAY4,
+    HUELAY5,
+    SNIPE,
+    DRAG,
 };
 
 typedef int wpm_state_t;

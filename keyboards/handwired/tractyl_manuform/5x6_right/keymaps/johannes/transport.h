@@ -7,6 +7,9 @@ typedef struct _master_to_slave_t {
     bool          current_Sneaking;
     bool          current_Jumping;
     uint8_t current_ANIM_FRAME_DURATION1_OLD;
+    uint8_t current_OffsLayer_1;
+    uint8_t current_OffsLayer_2;
+    uint8_t current_OffsLayer_3;
 } master_to_slave_t;
 
 typedef struct _slave_to_master_t {
@@ -16,6 +19,9 @@ typedef struct _slave_to_master_t {
     bool          current_Sneaking;
     bool          current_Jumping;
     uint8_t current_ANIM_FRAME_DURATION1_OLD;
+    uint8_t current_OffsLayer_1;
+    uint8_t current_OffsLayer_2;
+    uint8_t current_OffsLayer_3;
 } slave_to_master_t;
 
 void user_sync_init(void);
