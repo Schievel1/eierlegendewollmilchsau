@@ -17,7 +17,6 @@
 #include "tractyl_manuform.h"
 #include "transactions.h"
 #include <string.h>
-#include "keymap.h"
 
 #ifdef CONSOLE_ENABLE
 #    include "print.h"
@@ -49,6 +48,15 @@
 #        define CHARYBDIS_DRAGSCROLL_BUFFER_SIZE 6
 #    endif  // !CHARYBDIS_DRAGSCROLL_BUFFER_SIZE
 
+// Fixed DPI for drag-curser.
+#    ifndef CHARYBDIS_DRAGCURSER_DPI
+#        define CHARYBDIS_DRAGCURSER_DPI 100
+#    endif  // CHARYBDIS_DRAGCURSER_DPI
+
+#    ifndef CHARYBDIS_DRAGCURSER_BUFFER_SIZE
+#        define CHARYBDIS_DRAGCURSER_BUFFER_SIZE 6
+#    endif  // !CHARYBDIS_DRAGCURSER_BUFFER_SIZE
+
 #    ifndef CHARYBDIS_POINTER_ACCELERATION_FACTOR
 #        define CHARYBDIS_POINTER_ACCELERATION_FACTOR 24
 #    endif  // !CHARYBDIS_POINTER_ACCELERATION_FACTOR
@@ -59,7 +67,9 @@ typedef union {
         uint8_t pointer_default_dpi : 4;  // 16 steps available.
         uint8_t pointer_sniping_dpi : 2;  // 4 steps available.
         bool    is_dragscroll_enabled : 1;
+        bool    is_dragcurser_enabled : 1;
         bool    is_sniping_enabled : 1;
+        bool    is_timetravel_enabled : 1;
     } __attribute__((packed));
 } charybdis_config_t;
 
@@ -68,7 +78,7 @@ static charybdis_config_t g_charybdis_config = {0};
 /**
  * \brief Set the value of `config` from EEPROM.
  *
- * Note that `is_dragscroll_enabled` and `is_sniping_enabled` are purposefully
+ * Note that `is_dragcurser_enabled` and `is_sniping_enabled` are purposefully
  * ignored since we do not want to persist this state to memory.  In practice,
  * this state is always written to maximize write-performances.  Therefore, we
  * explicitly set them to `false` in this function.
@@ -76,7 +86,9 @@ static charybdis_config_t g_charybdis_config = {0};
 static void read_charybdis_config_from_eeprom(charybdis_config_t* config) {
     config->raw                   = eeconfig_read_kb() & 0xff;
     config->is_dragscroll_enabled = false;
+    config->is_dragcurser_enabled = false;
     config->is_sniping_enabled    = false;
+    config->is_timetravel_enabled = false;
 }
 
 /**
@@ -101,6 +113,8 @@ static void maybe_update_pointing_device_cpi(charybdis_config_t* config) {
         pointing_device_set_cpi(CHARYBDIS_DRAGSCROLL_DPI);
     } else if (config->is_sniping_enabled) {
         pointing_device_set_cpi(get_pointer_sniping_dpi(config));
+    } else if (config->is_dragcurser_enabled) {
+         pointing_device_set_cpi(CHARYBDIS_DRAGCURSER_DPI);
     } else {
         pointing_device_set_cpi(get_pointer_default_dpi(config));
     }
@@ -160,6 +174,20 @@ void charybdis_set_pointer_dragscroll_enabled(bool enable) {
     maybe_update_pointing_device_cpi(&g_charybdis_config);
 }
 
+bool charybdis_get_pointer_dragcurser_enabled(void) { return g_charybdis_config.is_dragcurser_enabled; }
+
+void charybdis_set_pointer_dragcurser_enabled(bool enable) {
+    g_charybdis_config.is_dragcurser_enabled = enable;
+    maybe_update_pointing_device_cpi(&g_charybdis_config);
+}
+
+bool charybdis_get_pointer_timetravel_enabled(void) { return g_charybdis_config.is_timetravel_enabled; }
+
+void charybdis_set_pointer_timetravel_enabled(bool enable) {
+    g_charybdis_config.is_timetravel_enabled = enable;
+    maybe_update_pointing_device_cpi(&g_charybdis_config);
+}
+
 #    ifndef CONSTRAIN_HID
 #        define CONSTRAIN_HID(value) ((value) < XY_REPORT_MIN ? XY_REPORT_MIN : ((value) > XY_REPORT_MAX ? XY_REPORT_MAX : (value)))
 #    endif  // !CONSTRAIN_HID
@@ -190,6 +218,7 @@ void charybdis_set_pointer_dragscroll_enabled(bool enable) {
 static void pointing_device_task_charybdis(report_mouse_t* mouse_report) {
     static int16_t scroll_buffer_x = 0;
     static int16_t scroll_buffer_y = 0;
+
     if (g_charybdis_config.is_dragscroll_enabled) {
 #    ifdef CHARYBDIS_DRAGSCROLL_REVERSE_X
         scroll_buffer_x -= mouse_report->x;
@@ -203,31 +232,6 @@ static void pointing_device_task_charybdis(report_mouse_t* mouse_report) {
 #    endif  // CHARYBDIS_DRAGSCROLL_REVERSE_Y
         mouse_report->x = 0;
         mouse_report->y = 0;
-
-switch (biton32(layer_state)) {
-            case _QWERTZ:
-/////////////////////////////////////////////
-
-
-///////////////////////
-                break;
-            case _LOWER:
-/////////////////////////////////////////////
-
-
-///////////////////////
-                break;
-            case _RAISE:
-//////////////////////////////////////////////
-DragScroll=6;
-        if (zoom) {
-
-        if (abs(scroll_buffer_y) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE) {
-            mouse_report->v = scroll_buffer_y > 0 ? 1 : -1;
-            scroll_buffer_x = 0;
-            scroll_buffer_y = 0;
-        }
-    }else{
         if (abs(scroll_buffer_x) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE) {
             mouse_report->h = scroll_buffer_x > 0 ? 1 : -1;
             scroll_buffer_x = 0;
@@ -238,26 +242,38 @@ DragScroll=6;
             scroll_buffer_x = 0;
             scroll_buffer_y = 0;
         }
+    } else if (!g_charybdis_config.is_sniping_enabled) {
+        mouse_report->x = DISPLACEMENT_WITH_ACCELERATION(mouse_report->x);
+        mouse_report->y = DISPLACEMENT_WITH_ACCELERATION(mouse_report->y);
     }
-//////////////////////
-                break;
-            case _GAME:
-//////////////////////////////////////////////
-DragScroll=20;
-       if (troughtTime) {
-if (abs(scroll_buffer_x) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE) {
+
+    if (g_charybdis_config.is_dragcurser_enabled) {
+#    ifdef CHARYBDIS_DRAGCURSER_REVERSE_X
+        scroll_buffer_x -= mouse_report->x;
+#    else
+        scroll_buffer_x += mouse_report->x;
+#    endif  // CHARYBDIS_DRAGCURSER_REVERSE_X
+#    ifdef CHARYBDIS_DRAGCURSER_REVERSE_Y
+        scroll_buffer_y -= mouse_report->y;
+#    else
+        scroll_buffer_y += mouse_report->y;
+#    endif  // CHARYBDIS_DRAGCURSER_REVERSE_Y
+        mouse_report->x = 0;
+        mouse_report->y = 0;
+
+        if (g_charybdis_config.is_timetravel_enabled)
+        {
+        if (abs(scroll_buffer_x) > CHARYBDIS_DRAGCURSER_BUFFER_SIZE) {
             if (scroll_buffer_x > 0 ? true : false){
-			tap_code(KC_Y);
+			    tap_code(KC_Y);
             }else{
-			tap_code(KC_Z);
+			    tap_code(KC_Z);
             }
             scroll_buffer_x = 0;
             scroll_buffer_y = 0;
-
         }
-
-       }else{
-       if (abs(scroll_buffer_x) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE) {
+        }else{
+        if (abs(scroll_buffer_x) > CHARYBDIS_DRAGCURSER_BUFFER_SIZE) {
             if (scroll_buffer_x > 0 ? true : false){
                 tap_code(KC_RIGHT);
             }else{
@@ -267,7 +283,7 @@ if (abs(scroll_buffer_x) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE) {
             scroll_buffer_y = 0;
 
         }
-        if (abs(scroll_buffer_y) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE) {
+        if (abs(scroll_buffer_y) > CHARYBDIS_DRAGCURSER_BUFFER_SIZE) {
             if (scroll_buffer_y > 0 ? true : false){
                 tap_code(KC_UP);
             }else{
@@ -275,31 +291,9 @@ if (abs(scroll_buffer_x) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE) {
             }
             scroll_buffer_y = 0;
             scroll_buffer_x = 0;
-        }}
-
-
-
-
-
-//////////////////////
-                break;
-            default:
-//////////////////////////////////////////////
-
-if (abs(scroll_buffer_x) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE) {
-            mouse_report->h = scroll_buffer_x > 0 ? 1 : -1;
-            scroll_buffer_x = 0;
         }
-        if (abs(scroll_buffer_y) > CHARYBDIS_DRAGSCROLL_BUFFER_SIZE) {
-            mouse_report->v = scroll_buffer_y > 0 ? 1 : -1;
-            scroll_buffer_y = 0;
-        }
-
-
-
-//////////////////////
-}
-} else if (!g_charybdis_config.is_sniping_enabled) {
+    }
+    } else if (!g_charybdis_config.is_sniping_enabled) {
         mouse_report->x = DISPLACEMENT_WITH_ACCELERATION(mouse_report->x);
         mouse_report->y = DISPLACEMENT_WITH_ACCELERATION(mouse_report->y);
     }
@@ -340,12 +334,13 @@ __attribute__((unused)) static void debug_charybdis_config_to_console(charybdis_
                                   "\traw = 0x%04X,\n"
                                   "\t{\n"
                                   "\t\tis_dragscroll_enabled=%b\n"
+                                  "\t\tis_dragcurser_enabled=%b\n"
                                   "\t\tis_sniping_enabled=%b\n"
                                   "\t\tdefault_dpi=0x%02X (%ld)\n"
                                   "\t\tsniping_dpi=0x%01X (%ld)\n"
                                   "\t}\n"
                                   "}\n",
-                                  config->raw, config->is_dragscroll_enabled, config->is_sniping_enabled, config->pointer_default_dpi, get_pointer_default_dpi(config), config->pointer_sniping_dpi, get_pointer_sniping_dpi(config)));
+                                  config->raw, config->is_dragscroll_enabled,config->is_dragcurser_enabled,config->is_timetravel_enabled, config->is_sniping_enabled, config->pointer_default_dpi, get_pointer_default_dpi(config), config->pointer_sniping_dpi, get_pointer_sniping_dpi(config)));
 #    endif // CONSOLE_ENABLE
 }
 
@@ -393,6 +388,14 @@ bool process_record_kb(uint16_t keycode, keyrecord_t* record) {
         case DRAGSCROLL_MODE_TOGGLE:
             if (record->event.pressed) {
                 charybdis_set_pointer_dragscroll_enabled(!charybdis_get_pointer_dragscroll_enabled());
+            }
+            break;
+            case DRAGCURSER_MODE:
+            charybdis_set_pointer_dragcurser_enabled(record->event.pressed);
+            break;
+        case DRAGCURSER_MODE_TOGGLE:
+            if (record->event.pressed) {
+                charybdis_set_pointer_dragcurser_enabled(!charybdis_get_pointer_dragcurser_enabled());
             }
             break;
     }

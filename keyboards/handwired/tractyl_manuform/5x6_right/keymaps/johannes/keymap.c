@@ -48,10 +48,12 @@ uint8_t OffsLayer_3;
 bool oneShot = 0;
 
 uint16_t DragScroll = 6;
+uint16_t DragCurser = 6;
 bool zoom=false;
 bool troughtTime=false;
 bool snipe=false;
 bool drag=false;
+bool dragc=false;
 
 /* Smart Backspace Delete */
 bool            shift_held = false;
@@ -73,9 +75,13 @@ void housekeeping_task_user(void) {
    //     ili9341_draw_display(big_display);
     }
     // enable sniping mode with lower layer
-    charybdis_set_pointer_sniping_enabled((biton32(layer_state) == _LOWER))||(snipe));
+    charybdis_set_pointer_sniping_enabled((biton32(layer_state) == _LOWER)||(snipe));
     // enable dragscroll mode when left shift key is pressed
     charybdis_set_pointer_dragscroll_enabled((biton32(layer_state) == _RAISE)||(drag));
+
+    charybdis_set_pointer_dragcurser_enabled((biton32(layer_state) == _CONF)||(dragc));
+
+    charybdis_set_pointer_timetravel_enabled((biton32(layer_state) == _CONF)&&(troughtTime));
 }
 
 /***********/

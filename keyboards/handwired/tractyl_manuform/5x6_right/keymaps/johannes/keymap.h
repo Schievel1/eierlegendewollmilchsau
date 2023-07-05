@@ -46,5 +46,6 @@ extern uint8_t OffsLayer_1;
 extern uint8_t OffsLayer_2;
 extern uint8_t OffsLayer_3;
 extern uint16_t DragScroll;
+extern uint16_t DragCurser;
 extern bool zoom;
 extern bool troughtTime;
