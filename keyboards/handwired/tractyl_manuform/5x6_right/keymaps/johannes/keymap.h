@@ -7,6 +7,7 @@ enum custom_layers {
     _LOWER,
     _RAISE,
     _GAME,
+    _PROG
     _CONF,
 };
 
@@ -31,6 +32,7 @@ typedef int wpm_state_t;
 #define RAISE MO(_RAISE)
 #define LOWER MO(_LOWER)
 #define GAME MO(_GAME)
+#define PROG MO(_PROG)
 #define CONF MO(_CONF)
 
 #    define MIN_WALK_SPEED      5
@@ -45,6 +47,7 @@ extern uint8_t ANIM_FRAME_DURATION1_OLD;
 extern uint8_t OffsLayer_1;
 extern uint8_t OffsLayer_2;
 extern uint8_t OffsLayer_3;
+extern uint8_t OffsLayer_4;
 extern uint16_t DragScroll;
 extern uint16_t DragCurser;
 extern bool zoom;

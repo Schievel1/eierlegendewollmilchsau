@@ -140,6 +140,12 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
                 }
                 re_lower = false;
             }
+            if (re_prog) {
+                for (int i = 0; i < OffsLayer_4; i++) {
+                    rgb_matrix_decrease_hue_noeeprom();
+                }
+                re_prog = false;
+            }
             if (re_game) {
                 for (int i = 0; i < OffsLayer_3; i++) {
                     rgb_matrix_decrease_hue_noeeprom();

@@ -196,6 +196,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                                                 XXXXXXX,        KC_LCTL,              TG(_GAME),  XXXXXXX
                         ),
 
+  [_PROG] = LAYOUT_5x6_right(
+
+                        TO(_QWERTZ),      HUELAY1,      HUELAY2,        HUELAY3,        HUELAY4,        HUELAY5,                          XXXXXXX,     XXXXXXX,      XXXXXXX,     XXXXXXX,     XXXXXXX,     EE_CLR,
+                         DB_TOGG,     XXXXXXX,      XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                          XXXXXXX,     XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     QK_BOOT,
+                         XXXXXXX,     XXXXXXX,     SNIPE,        DRAG,        XXXXXXX,        XXXXXXX,                          XXXXXXX,     XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     XXXXXXX,
+                         XXXXXXX,       XXXXXXX,     XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                          XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     XXXXXXX,
+                                                   DPISPDWN,     DPISPUP,                                                                           DPIDWN,      DPIUP,
+                                                                             XXXXXXX,     KC_LSFT,                          XXXXXXX,
+                                                                                XXXXXXX,         XXXXXXX,                            XXXXXXX,
+                                                                                _______,        XXXXXXX,              XXXXXXX,  XXXXXXX
+
   [_CONF] = LAYOUT_5x6_right(
 
                         TO(_QWERTZ),      HUELAY1,      HUELAY2,        HUELAY3,        HUELAY4,        HUELAY5,                          XXXXXXX,     XXXXXXX,      XXXXXXX,     XXXXXXX,     XXXXXXX,     EE_CLR,
@@ -269,7 +280,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
                 if (index == 1) // master side
     {
         if (clockwise) {
-            layer_move(_GAME);
+            layer_move(_PROG);
         } else {
 
         }
@@ -281,6 +292,31 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
         } else {
             charybdis_cycle_pointer_default_dpi_noeeprom(false);
         }
+    }
+    return true;
+
+//////////////////////
+    break;
+    case _PROG:
+//////////////////////////////////////////////
+                if (index == 1) // master side
+    {
+        if (clockwise) {
+            layer_move(_GAME);
+        } else {
+
+        }
+    }
+    if (index == 0) // slave side
+    {
+        if (clockwise) {
+            register_code(KC_LCTL);
+			tap_code(KC_PPLS);
+			unregister_code(KC_LCTL);
+        } else {
+			register_code(KC_LCTL);
+            tap_code(KC_PMNS);
+			unregister_code(KC_LCTL);        }
     }
     return true;
 
@@ -299,9 +335,9 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
     if (index == 0) // slave side
     {
         if (clockwise) {
-	        rgb_matrix_increase_val();
+	        charybdis_cycle_pointer_default_dpi_noeeprom(true);
         } else {
-            rgb_matrix_decrease_val();
+            charybdis_cycle_pointer_default_dpi_noeeprom(false);
         }
     }
     return true;
