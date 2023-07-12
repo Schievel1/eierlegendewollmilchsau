@@ -7,8 +7,8 @@ enum custom_layers {
     _LOWER,
     _RAISE,
     _GAME,
-    _PROG
-    _CONF,
+    _PROG,
+    _CONF
 };
 
 enum my_keycodes {
@@ -26,6 +26,7 @@ enum my_keycodes {
     HUELAY5,
     SNIPE,
     DRAG,
+    COMMDOT,
 };
 
 typedef int wpm_state_t;

@@ -89,6 +89,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     static bool re_raise = false;
     static bool re_lower = false;
     static bool re_game = false;
+    static bool re_prog = false;
     switch (biton32(layer_state)) {
         case _RAISE:
             if (!re_raise) {
@@ -110,7 +111,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
             rgb_matrix_set_color(47, RGB_GREEN);
             rgb_matrix_set_color(46, RGB_GREEN);
             rgb_matrix_set_color(45, RGB_GREEN);
-            rgb_matrix_set_color(55, RGB_GREEN);
+            rgb_matrix_set_color(55, RGB_OFF);
             rgb_matrix_set_color(54, RGB_GREEN);
             rgb_matrix_set_color(53, RGB_GREEN);
             rgb_matrix_set_color(52, RGB_GREEN);
@@ -131,7 +132,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
             rgb_matrix_set_color(57, RGB_OFF);
             rgb_matrix_set_color(58, RGB_OFF);
             rgb_matrix_set_color(59, RGB_OFF);
-            rgb_matrix_set_color(60, RGB_OFF);
+            rgb_matrix_set_color(60, RGB_GREEN);
             rgb_matrix_set_color(61, RGB_OFF);
 		// equals
             if (re_lower) {
@@ -166,6 +167,12 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
                 }
                 re_raise = false;
             }
+            if (re_prog) {
+                for (int i = 0; i < OffsLayer_4; i++) {
+                    rgb_matrix_decrease_hue_noeeprom();
+                }
+                re_prog = false;
+            }
             if (re_game) {
                 for (int i = 0; i < OffsLayer_3; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
@@ -187,6 +194,12 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
                 }
                 re_raise = false;
             }
+            if (re_prog) {
+                for (int i = 0; i < OffsLayer_4; i++) {
+                    rgb_matrix_decrease_hue_noeeprom();
+                }
+                re_prog = false;
+            }
             if (re_lower) {
                 for (int i = 0; i < OffsLayer_1; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
@@ -196,7 +209,32 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
 
             re_game = true;
             break;
+        case _PROG:
+            if (re_prog) {
+                for (int i = 0; i < OffsLayer_4; i++) {
+                    rgb_matrix_increase_hue_noeeprom();
+                }
+            }
+            if (re_raise) {
+                for (int i = 0; i < OffsLayer_2; i++) {
+                    rgb_matrix_decrease_hue_noeeprom();
+                }
+                re_raise = false;
+            }if (re_game) {
+                for (int i = 0; i < OffsLayer_3; i++) {
+                    rgb_matrix_decrease_hue_noeeprom();
+                }
+                re_game = false;
+            }
+            if (re_lower) {
+                for (int i = 0; i < OffsLayer_1; i++) {
+                    rgb_matrix_decrease_hue_noeeprom();
+                }
+                re_lower = false;
+            }
 
+                re_prog = true;
+            break;
         case _CONF:
             if (re_lower) {
                 for (int i = 0; i < OffsLayer_1; i++) {
@@ -207,6 +245,12 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
                 for (int i = 0; i < OffsLayer_2; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
                 }
+            }
+            if (re_prog) {
+                for (int i = 0; i < OffsLayer_4; i++) {
+                    rgb_matrix_decrease_hue_noeeprom();
+                }
+                re_prog = false;
             }
             if (re_game) {
                 for (int i = 0; i < OffsLayer_3; i++) {
@@ -265,6 +309,11 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
                     rgb_matrix_decrease_hue_noeeprom();
                 }
             }
+            if (re_prog) {
+                for (int i = 0; i < OffsLayer_4; i++) {
+                    rgb_matrix_decrease_hue_noeeprom();
+                }
+            }
             if (re_game) {
                 for (int i = 0; i < OffsLayer_3; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
@@ -273,6 +322,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
             re_raise = false;
             re_lower = false;
             re_game = false;
+            re_prog = false;
 
         default:
             break;

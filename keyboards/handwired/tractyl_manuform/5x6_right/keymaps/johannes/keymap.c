@@ -45,6 +45,7 @@ uint8_t ANIM_FRAME_DURATION1_OLD = 1;
 uint8_t OffsLayer_1;
 uint8_t OffsLayer_2;
 uint8_t OffsLayer_3;
+uint8_t OffsLayer_4;
 bool oneShot = 0;
 
 uint16_t DragScroll = 6;
@@ -79,9 +80,9 @@ void housekeeping_task_user(void) {
     // enable dragscroll mode when left shift key is pressed
     charybdis_set_pointer_dragscroll_enabled((biton32(layer_state) == _RAISE)||(drag));
 
-    charybdis_set_pointer_dragcurser_enabled((biton32(layer_state) == _CONF)||(dragc));
+    charybdis_set_pointer_dragcurser_enabled((biton32(layer_state) == _PROG)||((dragc)&&!(snipe)));
 
-    charybdis_set_pointer_timetravel_enabled((biton32(layer_state) == _CONF)&&(troughtTime));
+    charybdis_set_pointer_timetravel_enabled((biton32(layer_state) == _PROG)&&(troughtTime));
 }
 
 /***********/
@@ -162,26 +163,26 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_LOWER] = LAYOUT_5x6_right(
 
                          KC_TILD,     KC_F1,       KC_F2,       KC_F3,       KC_F4,       KC_F5,                         KC_F6,       KC_F7,       KC_F8,       KC_F9,       KC_F10,      KC_F11,
-                         _______,     _______,     _______,     KC_LGUI,     _______,     _______,                       LCTL(KC_Z),  KC_LEFT,     KC_UP,       KC_DOWN,     KC_RGHT,     KC_F12,
+                         XXXXXXX,     XXXXXXX,     XXXXXXX,     KC_LGUI,     XXXXXXX,     XXXXXXX,                       LCTL(KC_Z),  KC_LEFT,     KC_UP,       KC_DOWN,     KC_RGHT,     KC_F12,
                          LGUI(KC_L),  LCTL(KC_A),  UC(0x00DF),  RAISE,       KC_LSFT,      KC_LCBR,                       KC_RCBR,     KC_BTN1,     KC_BTN2,     KC_LEFT,     KC_RGHT,     KC_PIPE,
-                         KC_CAPS ,    LCTL(KC_Y),  LCTL(KC_X),  LCTL(KC_C),  LSFT(KC_INS),KC_LPRN,                       KC_RPRN,     LSFT(KC_INS),RGB_TOG,     RGB_VAI,     _______,     DB_TOGG,
-                                                   RGB_MOD,     RGB_RMOD,                                                                          RGB_HUI,     RGB_SAI,
-                                                                             KC_LSFT,    _______,                          LCTL(KC_LBRC),
-                                                                                S_D_RMOD,       S_D_MOD,                              BSPCDEL,
-                                                                                DPI_RMOD,       DPI_MOD,               TG(_LOWER),      LGUI(KC_V)
+                         KC_CAPS ,    LCTL(KC_Y),  LCTL(KC_X),  LCTL(KC_C),  LSFT(KC_INS),KC_LPRN,                       KC_RPRN,     LSFT(KC_INS),XXXXXXX,     XXXXXXX,     XXXXXXX,     XXXXXXX,
+                                                   XXXXXXX,     XXXXXXX,                                                                          XXXXXXX,     XXXXXXX,
+                                                                             KC_LSFT,    XXXXXXX,                          LCTL(KC_LBRC),
+                                                                                XXXXXXX,       XXXXXXX,                              BSPCDEL,
+                                                                                XXXXXXX,       XXXXXXX,               TG(_LOWER),      LGUI(KC_V)
                         ),
 
 
   [_RAISE] = LAYOUT_5x6_right(
 
                          KC_ESC,      KC_ESC,      KC_1,        KC_2,        KC_3,        KC_4,                          TT(CONF),     KC_NUM,      KC_PSLS,     KC_PAST,     KC_PMNS,     KC_CALC,
-                         _______,     KC_TAB,      KC_Q,        KC_W,        KC_E,        KC_R,                          KC_RBRC,     KC_P7,       KC_P8,       KC_P9,       KC_PPLS,     KC_MUTE,
-                         _______,     KC_LSFT,     KC_A,        KC_S,        KC_D,        KC_F,                          KC_RPRN,     KC_P4,       KC_P5,       KC_P6,       _______,     KC_VOLU,
-                         XXXXXXX,       KC_LCTL,     KC_Y,        KC_X,        KC_C,        KC_V,                          KC_P0,       KC_P1,       KC_P2,       KC_P3,       KC_PEQL,     KC_VOLD,
-                                                   _______,     _______,                                                                           KC_DOT,      KC_COMM,
-                                                                             KC_LSFT,     KC_LSFT,                          _______,
-                                                                                KC_LCTL,        ZOOM,                            _______,
-                                                                                _______,        KC_LCTL,              TG(_RAISE),  _______
+                         XXXXXXX,     KC_TAB,      KC_Q,        KC_W,        KC_E,        KC_R,                          KC_RBRC,     KC_P7,       KC_P8,       KC_P9,       KC_PPLS,     KC_MUTE,
+                         XXXXXXX,     KC_LSFT,     KC_A,        KC_S,        KC_D,        KC_F,                          KC_RBRC,     KC_P4,       KC_P5,       KC_P6,       COMMDOT,     KC_VOLU,
+                         XXXXXXX,       KC_LCTL,     KC_Y,        KC_X,        KC_C,        KC_V,                          KC_RPRN,       KC_P1,       KC_P2,       KC_P3,       KC_PEQL,     KC_VOLD,
+                                                   XXXXXXX,     XXXXXXX,                                                                           KC_P0,      COMMDOT,
+                                                                             KC_LSFT,     KC_LSFT,                          XXXXXXX,
+                                                                                KC_LCTL,        ZOOM,                            XXXXXXX,
+                                                                                XXXXXXX,        KC_LCTL,              TG(_RAISE),  XXXXXXX
                         ),
 
   [_GAME] = LAYOUT_5x6_right(
@@ -198,25 +199,26 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_PROG] = LAYOUT_5x6_right(
 
-                        TO(_QWERTZ),      HUELAY1,      HUELAY2,        HUELAY3,        HUELAY4,        HUELAY5,                          XXXXXXX,     XXXXXXX,      XXXXXXX,     XXXXXXX,     XXXXXXX,     EE_CLR,
-                         DB_TOGG,     XXXXXXX,      XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                          XXXXXXX,     XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     QK_BOOT,
-                         XXXXXXX,     XXXXXXX,     SNIPE,        DRAG,        XXXXXXX,        XXXXXXX,                          XXXXXXX,     XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     XXXXXXX,
-                         XXXXXXX,       XXXXXXX,     XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                          XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     XXXXXXX,
-                                                   DPISPDWN,     DPISPUP,                                                                           DPIDWN,      DPIUP,
+                         QK_GESC,     KC_1,        KC_2,        KC_3,        KC_4,        KC_5,                          KC_6,        KC_7,        KC_8,        KC_9,        KC_0,        KC_EQL,
+                         KC_LSFT,     KC_Q,        KC_W,        KC_E,        KC_R,        KC_T,                          KC_Z,        KC_U,        KC_I,        KC_O,        KC_P,        KC_MINS,
+                         KC_TAB,      KC_A,        KC_S,        MEH_T(KC_D), C_S_T(KC_F), KC_G,                          KC_H,        KC_J,        KC_K,        KC_L,        KC_SCLN,     KC_QUOT,
+                         KC_LCTL,     KC_Y,        KC_X,        KC_C,        KC_V,        KC_B,                          KC_N,        KC_M,        KC_COMM,     KC_DOT,      KC_SLSH,     KC_BSLS,
+                                                   KC_LBRC,     KC_RBRC,                                                                           KC_PGUP,     KC_PGDN,
                                                                              XXXXXXX,     KC_LSFT,                          XXXXXXX,
-                                                                                XXXXXXX,         XXXXXXX,                            XXXXXXX,
-                                                                                _______,        XXXXXXX,              XXXXXXX,  XXXXXXX
+                                                                                XXXXXXX,         RAISE,                            XXXXXXX,
+                                                                                XXXXXXX,        XXXXXXX,              XXXXXXX,  XXXXXXX
+                        ),
 
   [_CONF] = LAYOUT_5x6_right(
 
-                        TO(_QWERTZ),      HUELAY1,      HUELAY2,        HUELAY3,        HUELAY4,        HUELAY5,                          XXXXXXX,     XXXXXXX,      XXXXXXX,     XXXXXXX,     XXXXXXX,     EE_CLR,
-                         DB_TOGG,     XXXXXXX,      XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                          XXXXXXX,     XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     QK_BOOT,
-                         XXXXXXX,     XXXXXXX,     SNIPE,        DRAG,        XXXXXXX,        XXXXXXX,                          XXXXXXX,     XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     XXXXXXX,
-                         XXXXXXX,       XXXXXXX,     XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                          XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     XXXXXXX,
-                                                   DPISPDWN,     DPISPUP,                                                                           DPIDWN,      DPIUP,
+                         TO(_QWERTZ),      HUELAY1,      HUELAY2,        HUELAY3,        HUELAY4,        HUELAY5,        XXXXXXX,     XXXXXXX,      XXXXXXX,     XXXXXXX,          XXXXXXX,     EE_CLR,
+                         DB_TOGG,          XXXXXXX,      XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,     XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     QK_BOOT,
+                         RGB_TOG,          XXXXXXX,      SNIPE,          DRAG,           XXXXXXX,        XXXXXXX,        XXXXXXX,     XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     XXXXXXX,
+                         XXXXXXX,          XXXXXXX,      XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     XXXXXXX,
+                                                         DPISPDWN,     DPISPUP,                                                                           DPIDWN,      DPIUP,
                                                                              XXXXXXX,     KC_LSFT,                          XXXXXXX,
                                                                                 XXXXXXX,         XXXXXXX,                            XXXXXXX,
-                                                                                _______,        XXXXXXX,              XXXXXXX,  XXXXXXX
+                                                                                XXXXXXX,        XXXXXXX,              XXXXXXX,  XXXXXXX
                         ),};
 // clang-format on
 
@@ -231,11 +233,19 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 /////////////////////////////////////////////
                 if (index == 1) // master side
     {
-        if (clockwise) {
-            layer_move(_LOWER);
+        if (shift_held){
+            if (clockwise) {
+                layer_move(_LOWER);
+            } else {
+                layer_move(_GAME);
+            }
         } else {
-            rgb_matrix_increase_hue();
-        }
+            if (clockwise) {
+	        charybdis_cycle_pointer_default_dpi_noeeprom(true);
+        } else {
+            charybdis_cycle_pointer_default_dpi_noeeprom(false);
+            }
+             }
     }
     if (index == 0) // slave side
     {
@@ -253,10 +263,18 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 /////////////////////////////////////////////
                 if (index == 1) // master side
     {
-        if (clockwise) {
-            layer_move(_RAISE);
+        if (shift_held){
+            if (clockwise) {
+                layer_move(_QWERTZ);
+            } else {
+                layer_move(_RAISE);
+            }
         } else {
-        charybdis_cycle_pointer_default_dpi_noeeprom(true);
+            if (clockwise) {
+	        charybdis_cycle_pointer_sniping_dpi_noeeprom(true);
+        } else {
+            charybdis_cycle_pointer_sniping_dpi_noeeprom(false);
+            }
         }
     }
     if (index == 0) // slave side
@@ -279,18 +297,26 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 //////////////////////////////////////////////
                 if (index == 1) // master side
     {
-        if (clockwise) {
-            layer_move(_PROG);
+        if (shift_held){
+            if (clockwise) {
+                layer_move(_PROG);
+            } else {
+                layer_move(_LOWER);
+            }
         } else {
-
+            if (clockwise) {
+                //scroll up
+            } else {
+                //scroll down
+            }
         }
     }
     if (index == 0) // slave side
     {
         if (clockwise) {
-	        charybdis_cycle_pointer_default_dpi_noeeprom(true);
-        } else {
-            charybdis_cycle_pointer_default_dpi_noeeprom(false);
+                //scroll up
+            } else {
+                //scroll down
         }
     }
     return true;
@@ -299,13 +325,22 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
     break;
     case _PROG:
 //////////////////////////////////////////////
-                if (index == 1) // master side
+     if (index == 1) // master side
     {
-        if (clockwise) {
-            layer_move(_GAME);
+        if (shift_held){
+            if (clockwise) {
+                layer_move(_GAME);
+            } else {
+                layer_move(_RAISE);
+            }
         } else {
-
+            if (clockwise) {
+                //scroll up
+            } else {
+                //scroll down
+            }
         }
+
     }
     if (index == 0) // slave side
     {
@@ -316,7 +351,8 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
         } else {
 			register_code(KC_LCTL);
             tap_code(KC_PMNS);
-			unregister_code(KC_LCTL);        }
+			unregister_code(KC_LCTL);
+        }
     }
     return true;
 
@@ -326,18 +362,26 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 //////////////////////////////////////////////
                 if (index == 1) // master side
     {
-        if (clockwise) {
-            layer_move(_QWERTZ);
+        if (shift_held){
+            if (clockwise) {
+                layer_move(_QWERTZ);
+            } else {
+                layer_move(_PROG);
+            }
         } else {
-
+            if (clockwise) {
+	        charybdis_cycle_pointer_default_dpi_noeeprom(true);
+        } else {
+            charybdis_cycle_pointer_default_dpi_noeeprom(false);
+            }
         }
     }
     if (index == 0) // slave side
     {
         if (clockwise) {
-	        charybdis_cycle_pointer_default_dpi_noeeprom(true);
+			tap_code(KC_WH_U);
         } else {
-            charybdis_cycle_pointer_default_dpi_noeeprom(false);
+            tap_code(KC_WH_D);
         }
     }
     return true;
@@ -348,11 +392,19 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 //////////////////////////////////////////////
                 if (index == 1) // master side
     {
-        if (clockwise) {
-            layer_move(_QWERTZ);
+        if (shift_held){
+            if (clockwise) {
+                layer_move(_QWERTZ);
+            } else {
+                layer_move(_QWERTZ);
+            }
         } else {
-            layer_move(_QWERTZ);
-        }
+            if (clockwise) {
+                //scroll up
+            } else {
+                //scroll down
+            }
+    }
     }
     if (index == 0) // slave side
     {
@@ -366,6 +418,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 			unregister_code(KC_LCTL);
         }
     }
+
     return true;
 
 //////////////////////
@@ -645,9 +698,42 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
                 }
             return false;
 
+            case HUELAY5:
+            if (record->event.pressed) {
+            if (oneShot==false){
+
+                if (shift_held) {
+                    if (OffsLayer_4<=0)
+                    {
+                        OffsLayer_4 = 32;
+                    }else
+                    {
+                        OffsLayer_4 = OffsLayer_4-1;
+                    }
+                }else{
+                    if(OffsLayer_4>=32)
+                    {
+                        OffsLayer_4 = 0;
+                    }else
+                    {
+                        OffsLayer_4 = OffsLayer_4+1;
+                    }
+
+                }
+                oneShot=true;
+            }
+
+                } else {
+
+                oneShot=false;
+
+                }
+            return false;
+
             case SNIPE:
             if (record->event.pressed) {
                 snipe = true;
+                drag = false;
             } else {
                 snipe = false;
             }
@@ -656,10 +742,28 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
             case DRAG:
             if (record->event.pressed) {
                 drag = true;
+                snipe = false;
             } else {
                 drag = false;
             }
             return false;
+            case COMMDOT:
+            if (record->event.pressed) {
+             if (shift_held) {
+                    unregister_code(held_shift);
+                    register_code(KC_DOT);
+                } else {
+                    register_code(KC_COMM);
+                }
+            } else {
+                unregister_code(KC_DOT);
+                unregister_code(KC_COMM);
+                if (shift_held) {
+                    register_code(held_shift);
+                }
+            }
+            return false;
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////   End Config Layer Keycodes ////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
