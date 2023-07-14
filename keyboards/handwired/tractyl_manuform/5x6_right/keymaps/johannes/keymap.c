@@ -78,9 +78,9 @@ void housekeeping_task_user(void) {
     // enable sniping mode with lower layer
     charybdis_set_pointer_sniping_enabled((biton32(layer_state) == _LOWER)||(snipe));
     // enable dragscroll mode when left shift key is pressed
-    charybdis_set_pointer_dragscroll_enabled((biton32(layer_state) == _RAISE)||(drag));
+    charybdis_set_pointer_dragscroll_enabled(((biton32(layer_state) == _RAISE)||(drag))&&!(snipe));
 
-    charybdis_set_pointer_dragcurser_enabled((biton32(layer_state) == _PROG)||((dragc)&&!(snipe)));
+    charybdis_set_pointer_dragcurser_enabled(((biton32(layer_state) == _PROG)||(dragc))&&!(snipe));
 
     charybdis_set_pointer_timetravel_enabled((biton32(layer_state) == _PROG)&&(troughtTime));
 }
@@ -143,8 +143,8 @@ void keyboard_post_init_user(void) {
 /*******************/
 /*  k e y m a p s  */
 /*******************/
-const key_override_t   lcbr_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_LCBR, KC_LBRC); // Shift { is [
-const key_override_t   rcbr_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_RCBR, KC_RBRC); // Shift } is ]
+const key_override_t   lcbr_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_PGUP, KC_LPRN); // Shift PGUP is (
+const key_override_t   rcbr_key_override = ko_make_basic(MOD_MASK_SHIFT, KC_PGDN, KC_RPRN); // Shift PGDWN is )
 const key_override_t** key_overrides     = (const key_override_t*[]){&lcbr_key_override, &rcbr_key_override, NULL};
 
 // clang-format off
@@ -155,10 +155,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                          KC_TAB,      KC_A,        KC_S,        MEH_T(KC_D), C_S_T(KC_F), KC_G,                          KC_H,        KC_J,        KC_K,        KC_L,        KC_SCLN,     KC_QUOT,
                          KC_LCTL,     KC_Y,        KC_X,        KC_C,        KC_V,        KC_B,                          KC_N,        KC_M,        KC_COMM,     KC_DOT,      KC_SLSH,     KC_BSLS,
                                                    KC_LBRC,     KC_RBRC,                                                                           KC_PGUP,     KC_PGDN,
-                                                                             KC_LSFT,     SC_LSPO,                         KC_RSFT,
+                                                                             KC_LSFT,     SC_LSPO,                         KC_LSFT,
                                                                                 KC_LCTL,        LOWER,                               SC_LSPO,
                                                                                 KC_LALT,        KC_LGUI,              KC_RALT,       SC_SENT
                          ),
+
+  [_PROG] = LAYOUT_5x6_right(
+
+                         QK_GESC,     KC_1,        KC_2,        KC_3,        KC_4,        KC_5,                          KC_6,        KC_7,        KC_8,        KC_9,        KC_0,        KC_EQL,
+                         KC_LSFT,     KC_Q,        KC_W,        KC_E,        KC_R,        KC_T,                          KC_Z,        KC_U,        KC_I,        KC_O,        KC_P,        KC_MINS,
+                         KC_TAB,      KC_A,        KC_S,        KC_D,        KC_F,        KC_G,                          KC_H,        KC_J,        KC_K,        KC_L,        KC_SCLN,     KC_QUOT,
+                         KC_LCTL,     KC_Y,        KC_X,        KC_C,        KC_V,        KC_B,                          KC_N,        KC_M,        KC_COMM,     KC_DOT,      KC_SLSH,     KC_BSLS,
+                                                   KC_LBRC,     KC_RBRC,                                                                           KC_PGUP,     KC_PGDN,
+                                                                             KC_LSFT,     SC_LSPO,                           LCTL(KC_LBRC),
+                                                                                XXXXXXX,         RAISE,                            SC_LSPO,
+                                                                                XXXXXXX,        XXXXXXX,              XXXXXXX,  SC_SENT
+                        ),
 
   [_LOWER] = LAYOUT_5x6_right(
 
@@ -176,13 +188,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_RAISE] = LAYOUT_5x6_right(
 
                          KC_ESC,      KC_ESC,      KC_1,        KC_2,        KC_3,        KC_4,                          TT(CONF),     KC_NUM,      KC_PSLS,     KC_PAST,     KC_PMNS,     KC_CALC,
-                         XXXXXXX,     KC_TAB,      KC_Q,        KC_W,        KC_E,        KC_R,                          KC_RBRC,     KC_P7,       KC_P8,       KC_P9,       KC_PPLS,     KC_MUTE,
-                         XXXXXXX,     KC_LSFT,     KC_A,        KC_S,        KC_D,        KC_F,                          KC_RBRC,     KC_P4,       KC_P5,       KC_P6,       COMMDOT,     KC_VOLU,
-                         XXXXXXX,       KC_LCTL,     KC_Y,        KC_X,        KC_C,        KC_V,                          KC_RPRN,       KC_P1,       KC_P2,       KC_P3,       KC_PEQL,     KC_VOLD,
-                                                   XXXXXXX,     XXXXXXX,                                                                           KC_P0,      COMMDOT,
+                         XXXXXXX,     KC_TAB,      KC_Q,        KC_W,        KC_E,        KC_R,                          KC_RBRC,      KC_P7,       KC_P8,       KC_P9,       KC_PPLS,     KC_MUTE,
+                         LGUI(KC_L),  LCTL(KC_A),  UC(0x00DF),  SNIPE,        KC_LSFT,     KC_LCBR,                      KC_RBRC,      P4BTN1,      P5BTN2,      KC_P6,       COMMDOT,     KC_VOLU,
+                         XXXXXXX,     LCTL(KC_Y),  LCTL(KC_X),  LCTL(KC_C),  LSFT(KC_INS),KC_LPRN,                       KC_RPRN,      KC_P1,       KC_P2,       KC_P3,       KC_PEQL,     KC_VOLD,
+                                                   XXXXXXX,     XXXXXXX,                                                                            KC_P0,       COMMDOT,
                                                                              KC_LSFT,     KC_LSFT,                          XXXXXXX,
-                                                                                KC_LCTL,        ZOOM,                            XXXXXXX,
-                                                                                XXXXXXX,        KC_LCTL,              TG(_RAISE),  XXXXXXX
+                                                                                KC_LCTL,        ZOOM,                            BSPCDEL,
+                                                                                XXXXXXX,        KC_LCTL,              TG(_RAISE),  LGUI(KC_V)
                         ),
 
   [_GAME] = LAYOUT_5x6_right(
@@ -197,18 +209,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                                                 XXXXXXX,        KC_LCTL,              TG(_GAME),  XXXXXXX
                         ),
 
-  [_PROG] = LAYOUT_5x6_right(
-
-                         QK_GESC,     KC_1,        KC_2,        KC_3,        KC_4,        KC_5,                          KC_6,        KC_7,        KC_8,        KC_9,        KC_0,        KC_EQL,
-                         KC_LSFT,     KC_Q,        KC_W,        KC_E,        KC_R,        KC_T,                          KC_Z,        KC_U,        KC_I,        KC_O,        KC_P,        KC_MINS,
-                         KC_TAB,      KC_A,        KC_S,        MEH_T(KC_D), C_S_T(KC_F), KC_G,                          KC_H,        KC_J,        KC_K,        KC_L,        KC_SCLN,     KC_QUOT,
-                         KC_LCTL,     KC_Y,        KC_X,        KC_C,        KC_V,        KC_B,                          KC_N,        KC_M,        KC_COMM,     KC_DOT,      KC_SLSH,     KC_BSLS,
-                                                   KC_LBRC,     KC_RBRC,                                                                           KC_PGUP,     KC_PGDN,
-                                                                             XXXXXXX,     KC_LSFT,                          XXXXXXX,
-                                                                                XXXXXXX,         RAISE,                            XXXXXXX,
-                                                                                XXXXXXX,        XXXXXXX,              XXXXXXX,  XXXXXXX
-                        ),
-
   [_CONF] = LAYOUT_5x6_right(
 
                          TO(_QWERTZ),      HUELAY1,      HUELAY2,        HUELAY3,        HUELAY4,        HUELAY5,        XXXXXXX,     XXXXXXX,      XXXXXXX,     XXXXXXX,          XXXXXXX,     EE_CLR,
@@ -216,7 +216,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                          RGB_TOG,          XXXXXXX,      SNIPE,          DRAG,           XXXXXXX,        XXXXXXX,        XXXXXXX,     XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     XXXXXXX,
                          XXXXXXX,          XXXXXXX,      XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     XXXXXXX,
                                                          DPISPDWN,     DPISPUP,                                                                           DPIDWN,      DPIUP,
-                                                                             XXXXXXX,     KC_LSFT,                          XXXXXXX,
+                                                                             KC_LSFT,     KC_LSFT,                          XXXXXXX,
                                                                                 XXXXXXX,         XXXXXXX,                            XXXXXXX,
                                                                                 XXXXXXX,        XXXXXXX,              XXXXXXX,  XXXXXXX
                         ),};
@@ -251,6 +251,7 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
     {
         if (clockwise) {
             tap_code(KC_VOLU);
+            reset_keyboard();
         } else {
             tap_code(KC_VOLD);
         }
@@ -265,9 +266,9 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
     {
         if (shift_held){
             if (clockwise) {
-                layer_move(_QWERTZ);
-            } else {
                 layer_move(_RAISE);
+            } else {
+                layer_move(_QWERTZ);
             }
         } else {
             if (clockwise) {
@@ -515,6 +516,41 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
                 unregister_code(KC_LCTL);
             }
             return false;
+
+             case P4BTN1:
+            if (record->event.pressed) {
+                if (shift_held) {
+                    unregister_code(held_shift);
+                    register_code(KC_BTN1);
+                } else {
+                    register_code(KC_P4);
+                }
+            } else {
+                unregister_code(KC_BTN1);
+                unregister_code(KC_P4);
+                if (shift_held) {
+                    register_code(held_shift);
+                }
+            }
+            return false;
+
+             case P5BTN2:
+            if (record->event.pressed) {
+                if (shift_held) {
+                    unregister_code(held_shift);
+                    register_code(KC_BTN2);
+                } else {
+                    register_code(KC_P5);
+                }
+            } else {
+                unregister_code(KC_BTN2);
+                unregister_code(KC_P5);
+                if (shift_held) {
+                    register_code(held_shift);
+                }
+            }
+            return false;
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////   Config Layer Keycodes ////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

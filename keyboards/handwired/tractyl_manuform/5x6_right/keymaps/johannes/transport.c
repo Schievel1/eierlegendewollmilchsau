@@ -61,17 +61,26 @@ void user_sync_a_slave_handler(uint8_t in_buflen, const void* in_data, uint8_t o
 void master_slave_com() {
     if (is_keyboard_master()) {
         static uint32_t last_sync = 0;
+        static uint32_t flash = 0;
         if (timer_elapsed32(last_sync) > USER_COM_POLL_TIME_MS) {
             /* dprintf("current layer state: %d\n", layer_state); */
             master_to_slave_t m2s = {layer_state, idle_mode, sleep_mode, isSneaking, isJumping, ANIM_FRAME_DURATION1_OLD,OffsLayer_1,OffsLayer_2,OffsLayer_3,OffsLayer_4};
             slave_to_master_t s2m = {0};
             if (transaction_rpc_exec(USER_SYNC_A, sizeof(m2s), &m2s, sizeof(s2m), &s2m)) {
                 last_sync = timer_read32();
+                    flash = timer_read32();
                 /* dprintf("Slave current layer value: %d\n", s2m.current_layer_state); */
                 /* dprintf("Slave current idle value: %d\n", s2m.current_idle_state); */
             } else {
+                dprintf("Reboot in %ld\n", timer_elapsed32(flash));
                 dprint("Slave sync failed!\n");
+                        if (timer_elapsed32(flash) > USER_COM_FLASH_TIME_MS) {
+                    dprint("Reboot\n");
+                    reset_keyboard();
+                    flash = timer_read32();
+                 }
             }
         }
     }
 }
+

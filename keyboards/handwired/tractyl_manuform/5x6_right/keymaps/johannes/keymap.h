@@ -4,10 +4,10 @@
 
 enum custom_layers {
     _QWERTZ,
+    _PROG,
     _LOWER,
     _RAISE,
     _GAME,
-    _PROG,
     _CONF
 };
 
@@ -27,6 +27,8 @@ enum my_keycodes {
     SNIPE,
     DRAG,
     COMMDOT,
+    P4BTN1,
+    P5BTN2,
 };
 
 typedef int wpm_state_t;
