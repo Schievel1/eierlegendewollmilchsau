@@ -62,6 +62,7 @@ static uint16_t held_shift = 0;
 
 int      old_rgb_mode;
 uint32_t idle_timer = 0;
+uint32_t sleep_timer = 0;
 void     idle_function(void);
 void     sleep_function(void);
 
@@ -437,6 +438,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
 
     if (record->event.pressed) {
         idle_timer = timer_read32();
+        sleep_timer = timer_read32();
         idle_mode  = false;
         sleep_mode  = false;
     }
@@ -825,15 +827,16 @@ void matrix_scan_user(void) {
 
     // idle_timer needs to be set one time
     if (idle_timer == 0) idle_timer = timer_read32();
+    if (sleep_timer == 0) sleep_timer = timer_read32();
     if (timer_elapsed32(idle_timer) > IDLE_TIMEOUT_SECS * 1000 && !idle_mode) {
         idle_mode  = true;
         idle_timer = timer_read32();
     }
     //Bc I want to use not a new timer and only want to prevent the oled from burning in I used this dirty hack its rou
-    if (timer_elapsed32(idle_timer) > IDLE_TIMEOUT_SECS * 20000 && !sleep_mode) {
+    if (timer_elapsed32(sleep_timer) > IDLE_TIMEOUT_SECS * 20000 && !sleep_mode) {
         print("sleep 1\n");
         sleep_mode  = true;
-        idle_timer = timer_read32();
+        sleep_timer = timer_read32();
     }
     idle_function();
     sleep_function();
