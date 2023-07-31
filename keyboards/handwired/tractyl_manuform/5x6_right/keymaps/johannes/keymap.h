@@ -4,10 +4,10 @@
 
 enum custom_layers {
     _QWERTZ,
+    _GAME,
     _PROG,
     _LOWER,
     _RAISE,
-    _GAME,
     _CONF
 };
 

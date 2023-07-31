@@ -150,7 +150,7 @@ const key_override_t** key_overrides     = (const key_override_t*[]){&lcbr_key_o
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-  [_QWERTZ] = LAYOUT_5x6_right(
+ [_QWERTZ] = LAYOUT_5x6_right(
                          QK_GESC,     KC_1,        KC_2,        KC_3,        KC_4,        KC_5,                          KC_6,        KC_7,        KC_8,        KC_9,        KC_0,        KC_EQL,
                          KC_LSFT,     KC_Q,        KC_W,        KC_E,        KC_R,        KC_T,                          KC_Z,        KC_U,        KC_I,        KC_O,        KC_P,        KC_MINS,
                          KC_TAB,      KC_A,        KC_S,        MEH_T(KC_D), C_S_T(KC_F), KC_G,                          KC_H,        KC_J,        KC_K,        KC_L,        KC_SCLN,     KC_QUOT,
@@ -161,6 +161,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                                                 KC_LALT,        KC_LGUI,              KC_RALT,       SC_SENT
                          ),
 
+  [_GAME] = LAYOUT_5x6_right(
+
+                         KC_ESC,      KC_ESC,      KC_1,        KC_2,        KC_3,        KC_4,                          XXXXXXX,     XXXXXXX,     XXXXXXX,     XXXXXXX,     XXXXXXX,     LALT(KC_TAB),
+                         XXXXXXX,     KC_TAB,      KC_Q,        KC_W,        KC_E,        KC_R,                          KC_RBRC,     KC_1,        KC_2,        KC_3,        KC_4,        KC_MUTE,
+                         XXXXXXX,     KC_LSFT,     KC_A,        KC_S,        KC_D,        KC_F,                          KC_RPRN,     KC_BTN1,     KC_BTN2,     KC_B,        KC_PPLS,     KC_VOLU,
+                         XXXXXXX,      KC_LCTL,     KC_Y,        KC_X,        KC_C,        KC_V,                          KC_G,        KC_R,        KC_Q,        XXXXXXX,     KC_PMNS,     KC_VOLD,
+                                                   XXXXXXX,     XXXXXXX,                                                                           XXXXXXX,     XXXXXXX,
+                                                                             KC_LSFT,     KC_ENT,                          KC_V,
+                                                                                KC_ENT,         KC_SPC,                            KC_C,
+                                                                                TO(_PROG),        KC_LCTL,              TG(_GAME),  LALT(KC_TAB)
+                        ),
+
   [_PROG] = LAYOUT_5x6_right(
 
                          QK_GESC,     KC_1,        KC_2,        KC_3,        KC_4,        KC_5,                          KC_6,        KC_7,        KC_8,        KC_9,        KC_0,        KC_EQL,
@@ -169,8 +181,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                          KC_LCTL,     KC_Y,        KC_X,        KC_C,        KC_V,        KC_B,                          KC_N,        KC_M,        KC_COMM,     KC_DOT,      KC_SLSH,     KC_BSLS,
                                                    KC_LBRC,     KC_RBRC,                                                                           KC_PGUP,     KC_PGDN,
                                                                              KC_LSFT,     SC_LSPO,                           LCTL(KC_LBRC),
-                                                                                XXXXXXX,         RAISE,                            SC_LSPO,
-                                                                                XXXXXXX,        XXXXXXX,              XXXXXXX,  SC_SENT
+                                                                                UNREDO,         LOWER,                            SC_LSPO,
+                                                                                TO(_GAME),        XXXXXXX,              TG(_PROG),  SC_SENT
                         ),
 
   [_LOWER] = LAYOUT_5x6_right(
@@ -198,17 +210,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                                                 XXXXXXX,        KC_LCTL,              TG(_RAISE),  LGUI(KC_V)
                         ),
 
-  [_GAME] = LAYOUT_5x6_right(
-
-                         KC_ESC,      KC_ESC,      KC_1,        KC_2,        KC_3,        KC_4,                          XXXXXXX,     XXXXXXX,      XXXXXXX,     XXXXXXX,     XXXXXXX,     LALT(KC_TAB),
-                         XXXXXXX,     KC_TAB,      KC_Q,        KC_W,        KC_E,        KC_R,                          KC_RBRC,     KC_1,        KC_2,        KC_3,        KC_4,        KC_MUTE,
-                         XXXXXXX,     KC_LSFT,     KC_A,        KC_S,        KC_D,        KC_F,                          KC_RPRN,     KC_BTN1,     KC_BTN2,     KC_B,       KC_PPLS,     KC_VOLU,
-                         UNREDO,       KC_LCTL,     KC_Y,        KC_X,        KC_C,        KC_V,                          XXXXXXX,       KC_R,       KC_Q,       XXXXXXX,       KC_PMNS,     KC_VOLD,
-                                                   XXXXXXX,     XXXXXXX,                                                                           XXXXXXX,      XXXXXXX,
-                                                                             KC_LSFT,     KC_ENT,                          KC_V,
-                                                                                KC_ENT,         KC_SPC,                            KC_C,
-                                                                                XXXXXXX,        KC_LCTL,              TG(_GAME),  XXXXXXX
-                        ),
 
   [_CONF] = LAYOUT_5x6_right(
 
@@ -252,7 +253,6 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
     {
         if (clockwise) {
             tap_code(KC_VOLU);
-            reset_keyboard();
         } else {
             tap_code(KC_VOLD);
         }
