@@ -153,7 +153,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  [_QWERTZ] = LAYOUT_5x6_right(
                          QK_GESC,     KC_1,        KC_2,        KC_3,        KC_4,        KC_5,                          KC_6,        KC_7,        KC_8,        KC_9,        KC_0,        KC_EQL,
                          KC_LSFT,     KC_Q,        KC_W,        KC_E,        KC_R,        KC_T,                          KC_Z,        KC_U,        KC_I,        KC_O,        KC_P,        KC_MINS,
-                         KC_TAB,      KC_A,        KC_S,        MEH_T(KC_D), C_S_T(KC_F), KC_G,                          KC_H,        KC_J,        KC_K,        KC_L,        KC_SCLN,     KC_QUOT,
+                         KC_TAB,      KC_A,        KC_S,        KC_D,        KC_F,        KC_G,                          KC_H,        KC_J,        KC_K,        KC_L,        KC_SCLN,     KC_QUOT,
                          KC_LCTL,     KC_Y,        KC_X,        KC_C,        KC_V,        KC_B,                          KC_N,        KC_M,        KC_COMM,     KC_DOT,      KC_SLSH,     KC_BSLS,
                                                    KC_LBRC,     KC_RBRC,                                                                           KC_PGUP,     KC_PGDN,
                                                                              KC_LSFT,     SC_LSPO,                         KC_LSFT,
@@ -188,8 +188,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_LOWER] = LAYOUT_5x6_right(
 
                          KC_TILD,     KC_F1,       KC_F2,       KC_F3,       KC_F4,       KC_F5,                         KC_F6,       KC_F7,       KC_F8,       KC_F9,       KC_F10,      KC_F11,
-                         XXXXXXX,     XXXXXXX,     XXXXXXX,     KC_LGUI,     XXXXXXX,     XXXXXXX,                       LCTL(KC_Z),  KC_LEFT,     KC_UP,       KC_DOWN,     KC_RGHT,     KC_F12,
-                         LGUI(KC_L),  LCTL(KC_A),  UC(0x00DF),  RAISE,       KC_LSFT,      KC_LCBR,                       KC_RCBR,     KC_BTN1,     KC_BTN2,     KC_LEFT,     KC_RGHT,     KC_PIPE,
+                         XXXXXXX,     XXXXXXX,     XXXXXXX,     LSG(KC_S),   RCS(KC_J),   RCS(KC_K),                       LCTL(KC_Z),  KC_LEFT,     KC_UP,       KC_DOWN,     KC_RGHT,     KC_F12,
+                         LGUI(KC_L),  LCTL(KC_A),  UC(0x00DF),  RAISE,       KC_LSFT,     KC_LCBR,                       KC_RCBR,     KC_BTN1,     KC_BTN2,     KC_LEFT,     KC_RGHT,     KC_PIPE,
                          KC_CAPS ,    LCTL(KC_Y),  LCTL(KC_X),  LCTL(KC_C),  LSFT(KC_INS),KC_LPRN,                       KC_RPRN,     LSFT(KC_INS),XXXXXXX,     XXXXXXX,     XXXXXXX,     XXXXXXX,
                                                    XXXXXXX,     XXXXXXX,                                                                          XXXXXXX,     XXXXXXX,
                                                                              KC_LSFT,    XXXXXXX,                          LCTL(KC_LBRC),
