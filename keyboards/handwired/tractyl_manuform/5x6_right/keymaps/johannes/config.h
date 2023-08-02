@@ -29,7 +29,7 @@
 /*  i d l e   m o d e  */
 /***********************/
 #define IDLE_TIMEOUT_SECS 30
-#define RGB_MATRIX_IDLE_MODE MY_RGB_MATRIX_BREATHING
+#define RGB_MATRIX_IDLE_MODE 5
 #define RGB_MATRIX_SLEEP_MODE MY_RGB_MATRIX_MULTISPLASH
 /*************************************************************************************************************************/
 /*  S p l i t   o p t i o n s                                                                                            */

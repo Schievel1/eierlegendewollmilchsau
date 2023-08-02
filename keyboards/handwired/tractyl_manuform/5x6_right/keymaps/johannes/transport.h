@@ -11,7 +11,7 @@ typedef struct _master_to_slave_t {
     uint8_t current_OffsLayer_2;
     uint8_t current_OffsLayer_3;
     uint8_t current_OffsLayer_4;
-
+    uint8_t current_LayerEFF;
 } master_to_slave_t;
 
 typedef struct _slave_to_master_t {
@@ -25,6 +25,7 @@ typedef struct _slave_to_master_t {
     uint8_t current_OffsLayer_2;
     uint8_t current_OffsLayer_3;
     uint8_t current_OffsLayer_4;
+    uint8_t current_LayerEFF;
 } slave_to_master_t;
 
 void user_sync_init(void);

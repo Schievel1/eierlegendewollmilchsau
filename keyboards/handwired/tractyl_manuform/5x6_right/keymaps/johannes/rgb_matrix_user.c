@@ -90,12 +90,15 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
     static bool re_lower = false;
     static bool re_game = false;
     static bool re_prog = false;
+    static bool re_conf = false;
+
     switch (biton32(layer_state)) {
         case _RAISE:
             if (!re_raise) {
-                for (int i = 0; i < OffsLayer_2; i++) {
+                for (int i = 0; i < user_config.EE_OffsLayer_2; i++) {
                     rgb_matrix_increase_hue_noeeprom();
                 }
+                rgb_matrix_mode_noeeprom(user_config.EE_EffectL3);
             }
             re_raise = true;
             led_t led_state = host_keyboard_led_state();
@@ -136,124 +139,138 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
             rgb_matrix_set_color(61, RGB_OFF);
 		// equals
             if (re_lower) {
-                for (int i = 0; i < OffsLayer_1; i++) {
+                for (int i = 0; i < user_config.EE_OffsLayer_1; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
                 }
                 re_lower = false;
             }
             if (re_prog) {
-                for (int i = 0; i < OffsLayer_4; i++) {
+                for (int i = 0; i < user_config.EE_OffsLayer_4; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
                 }
                 re_prog = false;
             }
             if (re_game) {
-                for (int i = 0; i < OffsLayer_3; i++) {
+                for (int i = 0; i < user_config.EE_OffsLayer_3; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
                 }
                 re_game = false;
             }
+            if (re_conf) {
+                re_conf = false;
+            }
+
             break;
 
         case _LOWER:
             if (!re_lower) {
-                for (int i = 0; i < OffsLayer_1; i++) {
+                for (int i = 0; i < user_config.EE_OffsLayer_1; i++) {
                     rgb_matrix_increase_hue_noeeprom();
                 }
+                rgb_matrix_mode_noeeprom(user_config.EE_EffectL2);
             }
             if (re_raise) {
-                for (int i = 0; i < OffsLayer_2; i++) {
+                for (int i = 0; i < user_config.EE_OffsLayer_2; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
                 }
                 re_raise = false;
             }
             if (re_prog) {
-                for (int i = 0; i < OffsLayer_4; i++) {
+                for (int i = 0; i < user_config.EE_OffsLayer_4; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
                 }
                 re_prog = false;
             }
             if (re_game) {
-                for (int i = 0; i < OffsLayer_3; i++) {
+                for (int i = 0; i < user_config.EE_OffsLayer_3; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
                 }
                 re_game = false;
+            }
+            if (re_conf) {
+                re_conf = false;
             }
             re_lower = true;
             break;
 
         case _GAME:
             if (!re_game) {
-                for (int i = 0; i < OffsLayer_3; i++) {
+                for (int i = 0; i < user_config.EE_OffsLayer_3; i++) {
                     rgb_matrix_increase_hue_noeeprom();
                 }
+                rgb_matrix_mode_noeeprom(user_config.EE_EffectL4);
             }
             if (re_raise) {
-                for (int i = 0; i < OffsLayer_2; i++) {
+                for (int i = 0; i < user_config.EE_OffsLayer_2; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
                 }
                 re_raise = false;
             }
             if (re_prog) {
-                for (int i = 0; i < OffsLayer_4; i++) {
+                for (int i = 0; i < user_config.EE_OffsLayer_4; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
                 }
                 re_prog = false;
             }
             if (re_lower) {
-                for (int i = 0; i < OffsLayer_1; i++) {
+                for (int i = 0; i < user_config.EE_OffsLayer_1; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
                 }
                 re_lower = false;
             }
-
+            if (re_conf) {
+                re_conf = false;
+            }
             re_game = true;
             break;
         case _PROG:
-            if (re_prog) {
-                for (int i = 0; i < OffsLayer_4; i++) {
+            if (!re_prog) {
+                for (int i = 0; i < user_config.EE_OffsLayer_4; i++) {
                     rgb_matrix_increase_hue_noeeprom();
                 }
+                rgb_matrix_mode_noeeprom(user_config.EE_EffectL5);
             }
             if (re_raise) {
-                for (int i = 0; i < OffsLayer_2; i++) {
+                for (int i = 0; i < user_config.EE_OffsLayer_2; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
                 }
                 re_raise = false;
             }if (re_game) {
-                for (int i = 0; i < OffsLayer_3; i++) {
+                for (int i = 0; i < user_config.EE_OffsLayer_3; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
                 }
                 re_game = false;
             }
             if (re_lower) {
-                for (int i = 0; i < OffsLayer_1; i++) {
+                for (int i = 0; i < user_config.EE_OffsLayer_1; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
                 }
                 re_lower = false;
             }
-
+            if (re_conf) {
+                re_conf = false;
+            }
                 re_prog = true;
             break;
         case _CONF:
             if (re_lower) {
-                for (int i = 0; i < OffsLayer_1; i++) {
+                for (int i = 0; i < user_config.EE_OffsLayer_1; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
                 }
             }
             if (re_raise) {
-                for (int i = 0; i < OffsLayer_2; i++) {
+                for (int i = 0; i < user_config.EE_OffsLayer_2; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
                 }
             }
             if (re_prog) {
-                for (int i = 0; i < OffsLayer_4; i++) {
+                for (int i = 0; i < user_config.EE_OffsLayer_4; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
                 }
                 re_prog = false;
             }
             if (re_game) {
-                for (int i = 0; i < OffsLayer_3; i++) {
+                for (int i = 0; i < user_config.EE_OffsLayer_3; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
                 }
             }
@@ -264,65 +281,56 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
             hsv      = rgb_matrix_get_hsv();
             rgb  = hsv_to_rgb(hsv_prev(hsv,0,RGB_MATRIX_HUE_STEP));
             rgb_matrix_set_color(1,rgb.r,rgb.g,rgb.b);
-            rgb  = hsv_to_rgb(hsv_prev(hsv,OffsLayer_1,RGB_MATRIX_HUE_STEP));
+            rgb  = hsv_to_rgb(hsv_prev(hsv,user_config.EE_OffsLayer_1,RGB_MATRIX_HUE_STEP));
             rgb_matrix_set_color(2,rgb.r,rgb.g,rgb.b);
             dprintf("hk1: %d\n", hsv.h);
-            rgb  = hsv_to_rgb(hsv_prev(hsv,OffsLayer_2,RGB_MATRIX_HUE_STEP));
+            rgb  = hsv_to_rgb(hsv_prev(hsv,user_config.EE_OffsLayer_2,RGB_MATRIX_HUE_STEP));
             dprintf("hk2: %d\n", hsv.h);
             rgb_matrix_set_color(3,rgb.r,rgb.g,rgb.b);
-            rgb  = hsv_to_rgb(hsv_prev(hsv,OffsLayer_3,RGB_MATRIX_HUE_STEP));
+            rgb  = hsv_to_rgb(hsv_prev(hsv,user_config.EE_OffsLayer_3,RGB_MATRIX_HUE_STEP));
             dprintf("hk3: %d\n", hsv.h);
             rgb_matrix_set_color(4,rgb.r,rgb.g,rgb.b);
+            rgb  = hsv_to_rgb(hsv_prev(hsv,user_config.EE_OffsLayer_4,RGB_MATRIX_HUE_STEP));
+            dprintf("hk4: %d\n", hsv.h);
+            rgb_matrix_set_color(5,rgb.r,rgb.g,rgb.b);
 
 
-
-            // for (int i = 0; i < OffsLayer_2; i++) {
-            //         rgb_matrix_increase_hue_noeeprom();
-            //     }
-            //       hsv      = rgb_matrix_get_hsv();
-            //       rgb      = hsv_to_rgb(hsv);
-            // rgb_matrix_set_color(3,rgb.r,rgb.g,rgb.b);
-            // for (int i = 0; i < OffsLayer_2; i++) {
-            //         rgb_matrix_decrease_hue_noeeprom();
-            //     }
-
-            // for (int i = 0; i < OffsLayer_3; i++) {
-            //         rgb_matrix_increase_hue_noeeprom();
-            //     }
-            //       hsv      = rgb_matrix_get_hsv();
-            //       rgb      = hsv_to_rgb(hsv);
-            // rgb_matrix_set_color(4,rgb.r,rgb.g,rgb.b);
-            // for (int i = 0; i < OffsLayer_3; i++) {
-            //         rgb_matrix_decrease_hue_noeeprom();
-            //     }
-
+            re_conf = true;
             break;
 
         case _QWERTZ:
             if (re_lower) {
-                for (int i = 0; i < OffsLayer_1; i++) {
+                for (int i = 0; i < user_config.EE_OffsLayer_1; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
+                    re_lower = false;
                 }
+                rgb_matrix_mode_noeeprom(user_config.EE_EffectL1);
             }
             if (re_raise) {
-                for (int i = 0; i < OffsLayer_2; i++) {
+                for (int i = 0; i < user_config.EE_OffsLayer_2; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
+                    re_raise = false;
                 }
+                rgb_matrix_mode_noeeprom(user_config.EE_EffectL1);
             }
             if (re_prog) {
-                for (int i = 0; i < OffsLayer_4; i++) {
+                for (int i = 0; i < user_config.EE_OffsLayer_4; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
+                    re_prog = false;
                 }
             }
             if (re_game) {
-                for (int i = 0; i < OffsLayer_3; i++) {
+                for (int i = 0; i < user_config.EE_OffsLayer_3; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
+                    re_game = false;
                 }
+                rgb_matrix_mode_noeeprom(user_config.EE_EffectL1);
             }
-            re_raise = false;
-            re_lower = false;
-            re_game = false;
-            re_prog = false;
+            if (re_conf) {
+                rgb_matrix_mode_noeeprom(user_config.EE_EffectL1);
+                re_conf = false;
+            }
+
 
         default:
             break;
