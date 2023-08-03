@@ -562,13 +562,13 @@ if (is_oled_on()){
                 break;
             case _CONF:
                 oled_set_cursor(0, 0);
-                oled_write_P(PSTR("\nSETUP-----POINT"), false);
+                oled_write_P(PSTR("SETUP-----\nPOINT"), false);
                 Int_to_Oled(charybdis_get_pointer_default_dpi()/100 );
-                oled_write_P(PSTR("\nSNIPE"), false);
+                oled_write_P(PSTR("\n\nSNIPE"), false);
                 Int_to_Oled(charybdis_get_pointer_sniping_dpi()/100 );
-                oled_write_P(PSTR("\nSleep"), false);
-                write_LED(user_config.EE_EffectSleep);
-                oled_write_P(PSTR("\nAktiv"), false);
+                oled_write_P(PSTR("\n\nSleep"), false);
+                write_LED(user_config2.EE_EffectSleep);
+                oled_write_P(PSTR("Aktiv"), false);
                 write_LED(LayerEFF);
                 break;
             default:

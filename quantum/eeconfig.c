@@ -26,7 +26,7 @@ void eeconfig_init_via(void);
 __attribute__((weak)) void eeconfig_init_user(void) {
 #if (EECONFIG_USER_DATA_SIZE) == 0
     // Reset user EEPROM value to blank, rather than to a set value
-    eeconfig_update_user(0);
+    eeconfig_update_user(0,0,0);
 #endif
 }
 
@@ -229,12 +229,20 @@ void eeconfig_update_kb(uint32_t val) {
 uint32_t eeconfig_read_user(void) {
     return eeprom_read_dword(EECONFIG_USER);
 }
+uint32_t eeconfig_read_user1(void) {
+    return eeprom_read_dword(EECONFIG_USER1);
+}
+uint32_t eeconfig_read_user2(void) {
+    return eeprom_read_dword(EECONFIG_USER2);
+}
 /** \brief eeconfig update user
  *
  * FIXME: needs doc
  */
-void eeconfig_update_user(uint32_t val) {
+void eeconfig_update_user(uint32_t val,uint32_t val1,uint32_t val2) {
     eeprom_update_dword(EECONFIG_USER, val);
+    eeprom_update_dword(EECONFIG_USER1, val1);
+    eeprom_update_dword(EECONFIG_USER2, val2);
 }
 #endif // (EECONFIG_USER_DATA_SIZE) == 0
 

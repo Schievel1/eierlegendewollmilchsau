@@ -50,8 +50,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define EECONFIG_LED_MATRIX_EXTENDED (uint16_t *)32
 #define EECONFIG_RGB_MATRIX_EXTENDED (uint16_t *)32
 
+#define EECONFIG_USER1 (uint32_t *)34
+#define EECONFIG_USER2 (uint32_t *)38
+
 // Size of EEPROM being used for core data storage
-#define EECONFIG_BASE_SIZE 34
+#define EECONFIG_BASE_SIZE 42
 
 // Size of EEPROM dedicated to keyboard- and user-specific data
 #ifndef EECONFIG_KB_DATA_SIZE
@@ -122,7 +125,9 @@ void     eeconfig_update_kb(uint32_t val);
 
 #if (EECONFIG_USER_DATA_SIZE) == 0
 uint32_t eeconfig_read_user(void);
-void     eeconfig_update_user(uint32_t val);
+uint32_t eeconfig_read_user1(void);
+uint32_t eeconfig_read_user2(void);
+void     eeconfig_update_user(uint32_t val,uint32_t val1,uint32_t val2);
 #endif // (EECONFIG_USER_DATA_SIZE) == 0
 
 #ifdef HAPTIC_ENABLE

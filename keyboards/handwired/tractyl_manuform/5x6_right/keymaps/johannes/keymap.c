@@ -33,7 +33,8 @@
 
 
 user_config_t user_config;
-
+user_config_t1 user_config1;
+user_config_t2 user_config2;
 
 
 //static void normalize_keymap(void);
@@ -100,9 +101,11 @@ void keyboard_post_init_user(void) {
     debug_matrix   = true;
     debug_mouse    = true;
 
-    user_config.raw1 = eeconfig_read_user();
-    user_config.raw2 = eeconfig_read_user();
-    rgb_matrix_mode_noeeprom(user_config.EE_EffectL1);
+    user_config.raw = eeconfig_read_user();
+    user_config1.raw = eeconfig_read_user1();
+    user_config2.raw = eeconfig_read_user2();
+
+    rgb_matrix_mode_noeeprom(user_config1.EE_EffectL1);
     // user comms
  print("1");
     user_sync_init();
@@ -125,21 +128,22 @@ void keyboard_post_init_user(void) {
 }
 
 void eeconfig_init_user(void) {  // EEPROM is getting reset!
-  user_config.raw1 = 0;
-    user_config.raw2 = 0;
-    user_config.EE_EffectL1= 31;
-    user_config.EE_EffectL2= 31;
-    user_config.EE_EffectL3= 31;
-    user_config.EE_EffectL4= 31;
-    user_config.EE_EffectL5= 31;
-    user_config.EE_EffectSleep= 25;
+  user_config.raw = 0;
+    user_config1.raw = 0;
+    user_config2.raw = 0;
+
+    user_config1.EE_EffectL1= 31;
+    user_config1.EE_EffectL2= 31;
+    user_config1.EE_EffectL3= 31;
+    user_config1.EE_EffectL4= 31;
+    user_config2.EE_EffectL5= 31;
+    user_config2.EE_EffectSleep= 25;
      user_config.EE_OffsLayer_1 = 10;
      user_config.EE_OffsLayer_2 = 15;
      user_config.EE_OffsLayer_3 = 20;
      user_config.EE_OffsLayer_4 = 25;
  // We want this enabled by default
-  eeconfig_update_user(user_config.raw1); // Write default value to EEPROM now
-   eeconfig_update_user(user_config.raw2); // Write default value to EEPROM now
+  eeconfig_update_user(user_config.raw,user_config1.raw,user_config2.raw); // Write default value to EEPROM now
 }
 
 // HACK terrible hack to UNmagic the keymap
@@ -237,12 +241,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_CONF] = LAYOUT_5x6_right(
 
                          TO(_QWERTZ),  HUELAY1,      HUELAY2,        HUELAY3,        HUELAY4,        HUELAY5,            XXXXXXX,     XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     EE_CLR,
-                         DB_TOGG,      EFFLAY1,      EFFLAY2,        EFFLAY3,        EFFLAY4,        EFFLAY5,            XXXXXXX,     XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     QK_BOOT,
+                         DB_TOGG,      EFFLAY1,      EFFLAY2,        EFFLAY3,        EFFLAY4,        EFFLAY5,            EFFSleep,     XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     QK_BOOT,
                          RGB_TOG,      XXXXXXX,      SNIPE,          DRAG,           XXXXXXX,        XXXXXXX,            XXXXXXX,     XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     XXXXXXX,
                          EESave,       XXXXXXX,      XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,            XXXXXXX,     XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     XXXXXXX,
                                                      DPISPDWN,       DPISPUP,                                                                        DPIDWN,       DPIUP,
                                                                              KC_LSFT,     KC_LSFT,                          XXXXXXX,
-                                                                                XXXXXXX,         XXXXXXX,                            XXXXXXX,
+                                                                                KC_LCTL,         XXXXXXX,                            XXXXXXX,
                                                                                 XXXXXXX,        XXXXXXX,                      XXXXXXX,  XXXXXXX
                         ),};
 // clang-format on
@@ -794,31 +798,34 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
             case EFFLAY1:
             if (record->event.pressed) {
             if (oneShot==false){
-
+            if (isSneaking){
+                LayerEFF=user_config1.EE_EffectL1;
+                rgb_matrix_mode_noeeprom(LayerEFF);
+            } else {
                 if (shift_held) {
-                    if (user_config.EE_EffectL1<=0)
+                    if (user_config1.EE_EffectL1<=0)
                     {
-                        user_config.EE_EffectL1 = 42;
+                        user_config1.EE_EffectL1 = 42;
                     }else
                     {
-                        user_config.EE_EffectL1 = user_config.EE_EffectL1-1;
+                        user_config1.EE_EffectL1 = user_config1.EE_EffectL1-1;
                     }
                 }else{
-                    if(user_config.EE_EffectL1>=42)
+                    if(user_config1.EE_EffectL1>=42)
                     {
-                        user_config.EE_EffectL1 = 0;
+                        user_config1.EE_EffectL1 = 0;
                     }else
                     {
-                        user_config.EE_EffectL1 = user_config.EE_EffectL1+1;
+                        user_config1.EE_EffectL1 = user_config1.EE_EffectL1+1;
                     }
 
                 }
-
+                LayerEFF=user_config1.EE_EffectL1;
+                rgb_matrix_mode_noeeprom(LayerEFF);
                 oneShot=true;
-            }
+            }}
 
                 } else {
-                LayerEFF=user_config.EE_EffectL1;
                 oneShot=false;
 
                 }
@@ -827,28 +834,32 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
             case EFFLAY2:
             if (record->event.pressed) {
             if (oneShot==false){
-
+            if (isSneaking){
+                LayerEFF=user_config1.EE_EffectL2;
+                rgb_matrix_mode_noeeprom(LayerEFF);
+            } else {
                 if (shift_held) {
-                    if (user_config.EE_EffectL2<=0)
+                    if (user_config1.EE_EffectL2<=0)
                     {
-                        user_config.EE_EffectL2 = 42;
+                        user_config1.EE_EffectL2 = 42;
                     }else
                     {
-                        user_config.EE_EffectL2 = user_config.EE_EffectL2-1;
+                        user_config1.EE_EffectL2 = user_config1.EE_EffectL2-1;
                     }
                 }else{
-                    if(user_config.EE_EffectL2>=42)
+                    if(user_config1.EE_EffectL2>=42)
                     {
-                        user_config.EE_EffectL2 = 0;
+                        user_config1.EE_EffectL2 = 0;
                     }else
                     {
-                        user_config.EE_EffectL2 = user_config.EE_EffectL2+1;
+                        user_config1.EE_EffectL2 = user_config1.EE_EffectL2+1;
                     }
 
                 }
-                LayerEFF=user_config.EE_EffectL2;
+                LayerEFF=user_config1.EE_EffectL2;
+                rgb_matrix_mode_noeeprom(LayerEFF);
                 oneShot=true;
-            }
+            }}
 
                 } else {
 
@@ -860,28 +871,32 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
             case EFFLAY3:
             if (record->event.pressed) {
             if (oneShot==false){
-
+            if (isSneaking){
+                LayerEFF=user_config1.EE_EffectL3;
+                rgb_matrix_mode_noeeprom(LayerEFF);
+            } else {
                 if (shift_held) {
-                    if (user_config.EE_EffectL3<=0)
+                    if (user_config1.EE_EffectL3<=0)
                     {
-                        user_config.EE_EffectL3 = 42;
+                        user_config1.EE_EffectL3 = 42;
                     }else
                     {
-                        user_config.EE_EffectL3 = user_config.EE_EffectL3-1;
+                        user_config1.EE_EffectL3 = user_config1.EE_EffectL3-1;
                     }
                 }else{
-                    if(user_config.EE_EffectL3>=42)
+                    if(user_config1.EE_EffectL3>=42)
                     {
-                        user_config.EE_EffectL3 = 0;
+                        user_config1.EE_EffectL3 = 0;
                     }else
                     {
-                        user_config.EE_EffectL3 = user_config.EE_EffectL3+1;
+                        user_config1.EE_EffectL3 = user_config1.EE_EffectL3+1;
                     }
 
                 }
-                LayerEFF=user_config.EE_EffectL3;
+                LayerEFF=user_config1.EE_EffectL3;
+                rgb_matrix_mode_noeeprom(LayerEFF);
                 oneShot=true;
-            }
+            }}
 
                 } else {
 
@@ -893,28 +908,32 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
             case EFFLAY4:
             if (record->event.pressed) {
             if (oneShot==false){
-
+            if (isSneaking){
+                LayerEFF=user_config1.EE_EffectL4;
+                rgb_matrix_mode_noeeprom(LayerEFF);
+            } else {
                 if (shift_held) {
-                    if (user_config.EE_EffectL4<=0)
+                    if (user_config1.EE_EffectL4<=0)
                     {
-                        user_config.EE_EffectL4 = 42;
+                        user_config1.EE_EffectL4 = 42;
                     }else
                     {
-                        user_config.EE_EffectL4 = user_config.EE_EffectL4-1;
+                        user_config1.EE_EffectL4 = user_config1.EE_EffectL4-1;
                     }
                 }else{
-                    if(user_config.EE_EffectL4>=42)
+                    if(user_config1.EE_EffectL4>=42)
                     {
-                        user_config.EE_EffectL4 = 0;
+                        user_config1.EE_EffectL4 = 0;
                     }else
                     {
-                        user_config.EE_EffectL4 = user_config.EE_EffectL4+1;
+                        user_config1.EE_EffectL4 = user_config1.EE_EffectL4+1;
                     }
 
                 }
-                LayerEFF=user_config.EE_EffectL4;
+                LayerEFF=user_config1.EE_EffectL4;
+                rgb_matrix_mode_noeeprom(LayerEFF);
                 oneShot=true;
-            }
+            }}
 
                 } else {
 
@@ -926,28 +945,32 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
             case EFFLAY5:
             if (record->event.pressed) {
             if (oneShot==false){
-
+            if (isSneaking){
+                LayerEFF=user_config2.EE_EffectL5;
+                rgb_matrix_mode_noeeprom(LayerEFF);
+            } else {
                 if (shift_held) {
-                    if (user_config.EE_EffectL5<=0)
+                    if (user_config2.EE_EffectL5<=0)
                     {
-                        user_config.EE_EffectL5 = 42;
+                        user_config2.EE_EffectL5 = 42;
                     }else
                     {
-                        user_config.EE_EffectL5 = user_config.EE_EffectL5-1;
+                        user_config2.EE_EffectL5 = user_config2.EE_EffectL5-1;
                     }
                 }else{
-                    if(user_config.EE_EffectL5>=42)
+                    if(user_config2.EE_EffectL5>=42)
                     {
-                        user_config.EE_EffectL5 = 0;
+                        user_config2.EE_EffectL5 = 0;
                     }else
                     {
-                        user_config.EE_EffectL5 = user_config.EE_EffectL5+1;
+                        user_config2.EE_EffectL5 = user_config2.EE_EffectL5+1;
                     }
 
                 }
-                LayerEFF=user_config.EE_EffectL5;
+                LayerEFF=user_config2.EE_EffectL5;
+                rgb_matrix_mode_noeeprom(LayerEFF);
                 oneShot=true;
-            }
+            }}
 
                 } else {
 
@@ -956,7 +979,42 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
                 }
             return false;
 
+            case EFFSleep:
+            if (record->event.pressed) {
+            if (oneShot==false){
+            if (isSneaking){
+                LayerEFF=user_config2.EE_EffectSleep;
+                rgb_matrix_mode_noeeprom(LayerEFF);
+            } else {
+                if (shift_held) {
+                    if (user_config2.EE_EffectSleep<=0)
+                    {
+                        user_config2.EE_EffectSleep = 42;
+                    }else
+                    {
+                        user_config2.EE_EffectSleep = user_config2.EE_EffectSleep-1;
+                    }
+                }else{
+                    if(user_config2.EE_EffectSleep>=42)
+                    {
+                        user_config2.EE_EffectSleep = 0;
+                    }else
+                    {
+                        user_config2.EE_EffectSleep = user_config2.EE_EffectSleep+1;
+                    }
 
+                }
+                LayerEFF=user_config2.EE_EffectSleep;
+                rgb_matrix_mode_noeeprom(LayerEFF);
+                oneShot=true;
+            }}
+
+                } else {
+
+                oneShot=false;
+
+                }
+            return false;
 
 
 
@@ -998,8 +1056,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
             case  EESave:
             if (record->event.pressed) {
             if (oneShot==false){
-               eeconfig_update_user(user_config.raw1);
-               eeconfig_update_user(user_config.raw2);
+               eeconfig_update_user(user_config.raw,user_config1.raw,user_config2.raw);
                oneShot=true;
                 }
             } else {
@@ -1056,7 +1113,7 @@ void idle_function(void) {
         old_rgb_mode = rgb_matrix_get_mode();
                     print("sleep 2\n");
         dprintf("%i Status sleep\n",sleep_mode);
-        rgb_matrix_mode_noeeprom(user_config.EE_EffectSleep);
+        rgb_matrix_mode_noeeprom(user_config2.EE_EffectSleep);
     }
     if (!idle_mode && last_state_idle) { // falling edge of idle mode
         rgb_matrix_mode_noeeprom(old_rgb_mode);

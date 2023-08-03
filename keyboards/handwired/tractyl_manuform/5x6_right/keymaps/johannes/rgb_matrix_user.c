@@ -98,7 +98,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
                 for (int i = 0; i < user_config.EE_OffsLayer_2; i++) {
                     rgb_matrix_increase_hue_noeeprom();
                 }
-                rgb_matrix_mode_noeeprom(user_config.EE_EffectL3);
+                rgb_matrix_mode_noeeprom(user_config1.EE_EffectL3);
             }
             re_raise = true;
             led_t led_state = host_keyboard_led_state();
@@ -167,7 +167,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
                 for (int i = 0; i < user_config.EE_OffsLayer_1; i++) {
                     rgb_matrix_increase_hue_noeeprom();
                 }
-                rgb_matrix_mode_noeeprom(user_config.EE_EffectL2);
+                rgb_matrix_mode_noeeprom(user_config1.EE_EffectL2);
             }
             if (re_raise) {
                 for (int i = 0; i < user_config.EE_OffsLayer_2; i++) {
@@ -198,7 +198,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
                 for (int i = 0; i < user_config.EE_OffsLayer_3; i++) {
                     rgb_matrix_increase_hue_noeeprom();
                 }
-                rgb_matrix_mode_noeeprom(user_config.EE_EffectL4);
+                rgb_matrix_mode_noeeprom(user_config1.EE_EffectL4);
             }
             if (re_raise) {
                 for (int i = 0; i < user_config.EE_OffsLayer_2; i++) {
@@ -228,7 +228,7 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
                 for (int i = 0; i < user_config.EE_OffsLayer_4; i++) {
                     rgb_matrix_increase_hue_noeeprom();
                 }
-                rgb_matrix_mode_noeeprom(user_config.EE_EffectL5);
+                rgb_matrix_mode_noeeprom(user_config2.EE_EffectL5);
             }
             if (re_raise) {
                 for (int i = 0; i < user_config.EE_OffsLayer_2; i++) {
@@ -277,7 +277,6 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
             re_raise = false;
             re_lower = false;
             re_game = false;
-            rgb_matrix_set_color_all(RGB_OFF);
             hsv      = rgb_matrix_get_hsv();
             rgb  = hsv_to_rgb(hsv_prev(hsv,0,RGB_MATRIX_HUE_STEP));
             rgb_matrix_set_color(1,rgb.r,rgb.g,rgb.b);
@@ -304,30 +303,31 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
                     rgb_matrix_decrease_hue_noeeprom();
                     re_lower = false;
                 }
-                rgb_matrix_mode_noeeprom(user_config.EE_EffectL1);
+                rgb_matrix_mode_noeeprom(user_config1.EE_EffectL1);
             }
             if (re_raise) {
                 for (int i = 0; i < user_config.EE_OffsLayer_2; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
                     re_raise = false;
                 }
-                rgb_matrix_mode_noeeprom(user_config.EE_EffectL1);
+                rgb_matrix_mode_noeeprom(user_config1.EE_EffectL1);
             }
             if (re_prog) {
                 for (int i = 0; i < user_config.EE_OffsLayer_4; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
                     re_prog = false;
                 }
+                rgb_matrix_mode_noeeprom(user_config1.EE_EffectL1);
             }
             if (re_game) {
                 for (int i = 0; i < user_config.EE_OffsLayer_3; i++) {
                     rgb_matrix_decrease_hue_noeeprom();
                     re_game = false;
                 }
-                rgb_matrix_mode_noeeprom(user_config.EE_EffectL1);
+                rgb_matrix_mode_noeeprom(user_config1.EE_EffectL1);
             }
             if (re_conf) {
-                rgb_matrix_mode_noeeprom(user_config.EE_EffectL1);
+                rgb_matrix_mode_noeeprom(user_config1.EE_EffectL1);
                 re_conf = false;
             }
 

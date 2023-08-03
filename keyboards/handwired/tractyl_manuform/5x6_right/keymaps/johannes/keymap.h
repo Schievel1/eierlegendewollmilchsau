@@ -29,6 +29,7 @@ enum my_keycodes {
     EFFLAY3,
     EFFLAY4,
     EFFLAY5,
+    EFFSleep,
     SNIPE,
     DRAG,
     COMMDOT,
@@ -37,7 +38,7 @@ enum my_keycodes {
     EESave,
 };
 typedef union {
-  int32_t raw1;
+  int32_t raw;
   struct {
 uint8_t EE_OffsLayer_1;
 uint8_t EE_OffsLayer_2;
@@ -46,17 +47,30 @@ uint8_t EE_OffsLayer_4;
 
   };
 
-  int64_t raw2;
+
+} user_config_t;
+typedef union {
+
+  int32_t raw;
   struct {
 uint8_t EE_EffectL1;
 uint8_t EE_EffectL2;
 uint8_t EE_EffectL3;
 uint8_t EE_EffectL4;
+
+  };
+
+} user_config_t1;
+typedef union {
+
+
+  int32_t raw;
+  struct {
 uint8_t EE_EffectL5;
 uint8_t EE_EffectSleep;
 
   };
-} user_config_t;
+} user_config_t2;
 
 
 
@@ -78,6 +92,8 @@ extern bool isJumping;
 extern wpm_state_t  current_wpms;
 extern uint8_t ANIM_FRAME_DURATION1_OLD;
 extern user_config_t user_config;
+extern user_config_t1 user_config1;
+extern user_config_t2 user_config2;
 extern uint16_t DragScroll;
 extern uint16_t DragCurser;
 extern bool zoom;
