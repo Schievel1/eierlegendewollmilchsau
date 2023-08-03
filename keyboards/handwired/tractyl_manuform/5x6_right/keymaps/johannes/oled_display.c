@@ -562,7 +562,7 @@ if (is_oled_on()){
                 break;
             case _CONF:
                 oled_set_cursor(0, 0);
-                oled_write_P(PSTR("SETUP-----\nPOINT"), false);
+                oled_write_P(PSTR("SETUP-----POINT"), false);
                 Int_to_Oled(charybdis_get_pointer_default_dpi()/100 );
                 oled_write_P(PSTR("\n\nSNIPE"), false);
                 Int_to_Oled(charybdis_get_pointer_sniping_dpi()/100 );

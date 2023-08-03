@@ -280,18 +280,23 @@ bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
             hsv      = rgb_matrix_get_hsv();
             rgb  = hsv_to_rgb(hsv_prev(hsv,0,RGB_MATRIX_HUE_STEP));
             rgb_matrix_set_color(1,rgb.r,rgb.g,rgb.b);
+            rgb_matrix_set_color(10,rgb.r,rgb.g,rgb.b);
             rgb  = hsv_to_rgb(hsv_prev(hsv,user_config.EE_OffsLayer_1,RGB_MATRIX_HUE_STEP));
             rgb_matrix_set_color(2,rgb.r,rgb.g,rgb.b);
+            rgb_matrix_set_color(9,rgb.r,rgb.g,rgb.b);
             dprintf("hk1: %d\n", hsv.h);
             rgb  = hsv_to_rgb(hsv_prev(hsv,user_config.EE_OffsLayer_2,RGB_MATRIX_HUE_STEP));
             dprintf("hk2: %d\n", hsv.h);
             rgb_matrix_set_color(3,rgb.r,rgb.g,rgb.b);
+            rgb_matrix_set_color(8,rgb.r,rgb.g,rgb.b);
             rgb  = hsv_to_rgb(hsv_prev(hsv,user_config.EE_OffsLayer_3,RGB_MATRIX_HUE_STEP));
             dprintf("hk3: %d\n", hsv.h);
             rgb_matrix_set_color(4,rgb.r,rgb.g,rgb.b);
+            rgb_matrix_set_color(7,rgb.r,rgb.g,rgb.b);
             rgb  = hsv_to_rgb(hsv_prev(hsv,user_config.EE_OffsLayer_4,RGB_MATRIX_HUE_STEP));
             dprintf("hk4: %d\n", hsv.h);
             rgb_matrix_set_color(5,rgb.r,rgb.g,rgb.b);
+            rgb_matrix_set_color(6,rgb.r,rgb.g,rgb.b);
 
 
             re_conf = true;
