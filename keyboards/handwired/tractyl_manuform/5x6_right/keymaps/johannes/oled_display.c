@@ -566,10 +566,13 @@ if (is_oled_on()){
                 Int_to_Oled(charybdis_get_pointer_default_dpi()/100 );
                 oled_write_P(PSTR("\n\nSNIPE"), false);
                 Int_to_Oled(charybdis_get_pointer_sniping_dpi()/100 );
-                oled_write_P(PSTR("\n\nSleep"), false);
-                write_LED(user_config2.EE_EffectSleep);
-                oled_write_P(PSTR("Aktiv"), false);
+                oled_write_P(PSTR("\nAktiv"), false);
                 write_LED(LayerEFF);
+                oled_write_P(PSTR("\nTime\n"), false);
+                 oled_write_P(PSTR("I:"), false);
+                Int_to_Oled(user_config2.EE_TimeIdle );
+                 oled_write_P(PSTR("\nS:"), false);
+                Int_to_Oled(user_config2.EE_TimeSleep);
                 break;
             default:
                 // Or use the write_ln shortcut over adding '\n' to the end of your string

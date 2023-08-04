@@ -29,13 +29,15 @@ enum my_keycodes {
     EFFLAY3,
     EFFLAY4,
     EFFLAY5,
-    EFFSleep,
+    EFFIdle,
     SNIPE,
     DRAG,
     COMMDOT,
     P4BTN1,
     P5BTN2,
     EESave,
+    TimeSleep,
+    TimeIdle,
 };
 typedef union {
   int32_t raw;
@@ -67,7 +69,9 @@ typedef union {
   int32_t raw;
   struct {
 uint8_t EE_EffectL5;
-uint8_t EE_EffectSleep;
+uint8_t EE_EffectIdle;
+uint8_t EE_TimeSleep;
+uint8_t EE_TimeIdle;
 
   };
 } user_config_t2;
@@ -99,5 +103,3 @@ extern uint16_t DragCurser;
 extern bool zoom;
 extern bool troughtTime;
 extern uint8_t LayerEFF;
-
-

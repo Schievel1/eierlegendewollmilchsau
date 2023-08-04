@@ -36,7 +36,6 @@ user_config_t user_config;
 user_config_t1 user_config1;
 user_config_t2 user_config2;
 
-
 //static void normalize_keymap(void);
 // global declarations for idle mode
 bool     idle_mode = false;
@@ -137,11 +136,13 @@ void eeconfig_init_user(void) {  // EEPROM is getting reset!
     user_config1.EE_EffectL3= 31;
     user_config1.EE_EffectL4= 31;
     user_config2.EE_EffectL5= 31;
-    user_config2.EE_EffectSleep= 25;
+    user_config2.EE_EffectIdle= 25;
      user_config.EE_OffsLayer_1 = 10;
      user_config.EE_OffsLayer_2 = 15;
      user_config.EE_OffsLayer_3 = 20;
      user_config.EE_OffsLayer_4 = 25;
+     user_config2.EE_TimeSleep = 30;
+     user_config2.EE_TimeIdle = 10;
  // We want this enabled by default
   eeconfig_update_user(user_config.raw,user_config1.raw,user_config2.raw); // Write default value to EEPROM now
 }
@@ -240,8 +241,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [_CONF] = LAYOUT_5x6_right(
 
-                         TO(_QWERTZ),  HUELAY1,      HUELAY2,        HUELAY3,        HUELAY4,        HUELAY5,            XXXXXXX,     XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     EE_CLR,
-                         DB_TOGG,      EFFLAY1,      EFFLAY2,        EFFLAY3,        EFFLAY4,        EFFLAY5,            EFFSleep,     XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     QK_BOOT,
+                         TO(_QWERTZ),  HUELAY1,      HUELAY2,        HUELAY3,        HUELAY4,        HUELAY5,            TimeIdle,    TimeSleep,     XXXXXXX,       XXXXXXX,       XXXXXXX,     EE_CLR,
+                         DB_TOGG,      EFFLAY1,      EFFLAY2,        EFFLAY3,        EFFLAY4,        EFFLAY5,            EFFIdle,     XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     QK_BOOT,
                          RGB_TOG,      XXXXXXX,      SNIPE,          DRAG,           XXXXXXX,        XXXXXXX,            XXXXXXX,     XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     XXXXXXX,
                          EESave,       XXXXXXX,      XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,            XXXXXXX,     XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     XXXXXXX,
                                                      DPISPDWN,       DPISPUP,                                                                        DPIDWN,       DPIUP,
@@ -979,32 +980,32 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
                 }
             return false;
 
-            case EFFSleep:
+            case EFFIdle:
             if (record->event.pressed) {
             if (oneShot==false){
             if (isSneaking){
-                LayerEFF=user_config2.EE_EffectSleep;
+                LayerEFF=user_config2.EE_EffectIdle;
                 rgb_matrix_mode_noeeprom(LayerEFF);
             } else {
                 if (shift_held) {
-                    if (user_config2.EE_EffectSleep<=0)
+                    if (user_config2.EE_EffectIdle<=0)
                     {
-                        user_config2.EE_EffectSleep = 42;
+                        user_config2.EE_EffectIdle = 42;
                     }else
                     {
-                        user_config2.EE_EffectSleep = user_config2.EE_EffectSleep-1;
+                        user_config2.EE_EffectIdle = user_config2.EE_EffectIdle-1;
                     }
                 }else{
-                    if(user_config2.EE_EffectSleep>=42)
+                    if(user_config2.EE_EffectIdle>=42)
                     {
-                        user_config2.EE_EffectSleep = 0;
+                        user_config2.EE_EffectIdle = 0;
                     }else
                     {
-                        user_config2.EE_EffectSleep = user_config2.EE_EffectSleep+1;
+                        user_config2.EE_EffectIdle = user_config2.EE_EffectIdle+1;
                     }
 
                 }
-                LayerEFF=user_config2.EE_EffectSleep;
+                LayerEFF=user_config2.EE_EffectIdle;
                 rgb_matrix_mode_noeeprom(LayerEFF);
                 oneShot=true;
             }}
@@ -1066,6 +1067,76 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
             }
             return false;
 
+            case TimeIdle:
+            if (record->event.pressed) {
+            if (oneShot==false){
+            if (isSneaking){
+                LayerEFF=user_config2.EE_TimeIdle;
+                rgb_matrix_mode_noeeprom(LayerEFF);
+            } else {
+                if (shift_held) {
+                    if (user_config2.EE_TimeIdle<=0)
+                    {
+                        user_config2.EE_TimeIdle = 99;
+                    }else
+                    {
+                        user_config2.EE_TimeIdle = user_config2.EE_TimeIdle-1;
+                    }
+                }else{
+                    if(user_config2.EE_TimeIdle>=99)
+                    {
+                        user_config2.EE_TimeIdle = 0;
+                    }else
+                    {
+                        user_config2.EE_TimeIdle = user_config2.EE_TimeIdle+1;
+                    }
+
+                }
+                oneShot=true;
+            }}
+
+                } else {
+
+                oneShot=false;
+
+                }
+            return false;
+
+            case TimeSleep:
+            if (record->event.pressed) {
+            if (oneShot==false){
+            if (isSneaking){
+                LayerEFF=user_config2.EE_TimeSleep;
+                rgb_matrix_mode_noeeprom(LayerEFF);
+            } else {
+                if (shift_held) {
+                    if (user_config2.EE_TimeSleep<=0)
+                    {
+                        user_config2.EE_TimeSleep = 180;
+                    }else
+                    {
+                        user_config2.EE_TimeSleep = user_config2.EE_TimeSleep-1;
+                    }
+                }else{
+                    if(user_config2.EE_TimeSleep>=180)
+                    {
+                        user_config2.EE_TimeSleep = 0;
+                    }else
+                    {
+                        user_config2.EE_TimeSleep = user_config2.EE_TimeSleep+1;
+                    }
+
+                }
+                oneShot=true;
+            }}
+
+                } else {
+
+                oneShot=false;
+
+                }
+            return false;
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////   End Config Layer Keycodes ////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1092,12 +1163,12 @@ void matrix_scan_user(void) {
     // idle_timer needs to be set one time
     if (idle_timer == 0) idle_timer = timer_read32();
     if (sleep_timer == 0) sleep_timer = timer_read32();
-    if (timer_elapsed32(idle_timer) > IDLE_TIMEOUT_SECS * 1000 && !idle_mode) {
+    if (timer_elapsed32(idle_timer) > user_config2.EE_TimeIdle * 1000 && !idle_mode && user_config2.EE_TimeIdle > 0) {
         idle_mode  = true;
         idle_timer = timer_read32();
     }
     //Bc I want to use not a new timer and only want to prevent the oled from burning in I used this dirty hack its rou
-    if (timer_elapsed32(sleep_timer) > IDLE_TIMEOUT_SECS * 20000 && !sleep_mode) {
+    if (timer_elapsed32(sleep_timer) > (user_config2.EE_TimeIdle + user_config2.EE_TimeSleep) * 1000 && !sleep_mode && user_config2.EE_TimeSleep > 0) {
         print("sleep 1\n");
         sleep_mode  = true;
         sleep_timer = timer_read32();
@@ -1113,7 +1184,7 @@ void idle_function(void) {
         old_rgb_mode = rgb_matrix_get_mode();
                     print("sleep 2\n");
         dprintf("%i Status sleep\n",sleep_mode);
-        rgb_matrix_mode_noeeprom(user_config2.EE_EffectSleep);
+        rgb_matrix_mode_noeeprom(user_config2.EE_EffectIdle);
     }
     if (!idle_mode && last_state_idle) { // falling edge of idle mode
         rgb_matrix_mode_noeeprom(old_rgb_mode);
