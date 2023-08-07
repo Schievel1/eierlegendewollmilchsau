@@ -76,6 +76,18 @@ uint8_t EE_TimeIdle;
   };
 } user_config_t2;
 
+typedef union {
+
+
+  int32_t raw;
+  struct {
+
+uint8_t EE_DragScroll;
+uint8_t EE_DragCurser;
+
+  };
+} user_config_t3;
+
 
 
 
@@ -98,8 +110,7 @@ extern uint8_t ANIM_FRAME_DURATION1_OLD;
 extern user_config_t user_config;
 extern user_config_t1 user_config1;
 extern user_config_t2 user_config2;
-extern uint16_t DragScroll;
-extern uint16_t DragCurser;
+extern user_config_t3 user_config3;
 extern bool zoom;
 extern bool troughtTime;
 extern uint8_t LayerEFF;

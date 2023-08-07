@@ -52,9 +52,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define EECONFIG_USER1 (uint32_t *)34
 #define EECONFIG_USER2 (uint32_t *)38
+#define EECONFIG_USER3 (uint32_t *)42
 
 // Size of EEPROM being used for core data storage
-#define EECONFIG_BASE_SIZE 42
+#define EECONFIG_BASE_SIZE 46
 
 // Size of EEPROM dedicated to keyboard- and user-specific data
 #ifndef EECONFIG_KB_DATA_SIZE
@@ -127,6 +128,7 @@ void     eeconfig_update_kb(uint32_t val);
 uint32_t eeconfig_read_user(void);
 uint32_t eeconfig_read_user1(void);
 uint32_t eeconfig_read_user2(void);
+uint32_t eeconfig_read_user3(void);
 void     eeconfig_update_user(uint32_t val,uint32_t val1,uint32_t val2);
 #endif // (EECONFIG_USER_DATA_SIZE) == 0
 

@@ -235,14 +235,18 @@ uint32_t eeconfig_read_user1(void) {
 uint32_t eeconfig_read_user2(void) {
     return eeprom_read_dword(EECONFIG_USER2);
 }
+uint32_t eeconfig_read_user3(void) {
+    return eeprom_read_dword(EECONFIG_USER3);
+}
 /** \brief eeconfig update user
  *
  * FIXME: needs doc
  */
-void eeconfig_update_user(uint32_t val,uint32_t val1,uint32_t val2) {
+void eeconfig_update_user(uint32_t val,uint32_t val1,uint32_t val2,uint32_t val3) {
     eeprom_update_dword(EECONFIG_USER, val);
     eeprom_update_dword(EECONFIG_USER1, val1);
     eeprom_update_dword(EECONFIG_USER2, val2);
+    eeprom_update_dword(EECONFIG_USER3, val3);
 }
 #endif // (EECONFIG_USER_DATA_SIZE) == 0
 

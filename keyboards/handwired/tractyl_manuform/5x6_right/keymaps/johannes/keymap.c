@@ -35,6 +35,7 @@
 user_config_t user_config;
 user_config_t1 user_config1;
 user_config_t2 user_config2;
+user_config_t3 user_config3;
 
 //static void normalize_keymap(void);
 // global declarations for idle mode
@@ -53,8 +54,8 @@ uint8_t ANIM_FRAME_DURATION1_OLD = 1;
 bool oneShot = 0;
 
 uint8_t LayerEFF = 0;
-uint16_t DragScroll = 6;
-uint16_t DragCurser = 6;
+
+
 bool zoom=false;
 bool troughtTime=false;
 bool snipe=false;
@@ -103,6 +104,7 @@ void keyboard_post_init_user(void) {
     user_config.raw = eeconfig_read_user();
     user_config1.raw = eeconfig_read_user1();
     user_config2.raw = eeconfig_read_user2();
+    user_config3.raw = eeconfig_read_user3();
 
     rgb_matrix_mode_noeeprom(user_config1.EE_EffectL1);
     // user comms
@@ -127,24 +129,27 @@ void keyboard_post_init_user(void) {
 }
 
 void eeconfig_init_user(void) {  // EEPROM is getting reset!
-  user_config.raw = 0;
+    user_config.raw = 0;
     user_config1.raw = 0;
     user_config2.raw = 0;
+    user_config3.raw = 0;
 
+    user_config.EE_OffsLayer_1 = 10;
+    user_config.EE_OffsLayer_2 = 15;
+    user_config.EE_OffsLayer_3 = 20;
+    user_config.EE_OffsLayer_4 = 25;
     user_config1.EE_EffectL1= 31;
     user_config1.EE_EffectL2= 31;
     user_config1.EE_EffectL3= 31;
     user_config1.EE_EffectL4= 31;
     user_config2.EE_EffectL5= 31;
     user_config2.EE_EffectIdle= 25;
-     user_config.EE_OffsLayer_1 = 10;
-     user_config.EE_OffsLayer_2 = 15;
-     user_config.EE_OffsLayer_3 = 20;
-     user_config.EE_OffsLayer_4 = 25;
-     user_config2.EE_TimeSleep = 30;
-     user_config2.EE_TimeIdle = 10;
+    user_config2.EE_TimeSleep = 30;
+    user_config2.EE_TimeIdle = 10;
+    user_config3.EE_DragCurser = 6;
+    user_config3.EE_DragScroll = 6;
  // We want this enabled by default
-  eeconfig_update_user(user_config.raw,user_config1.raw,user_config2.raw); // Write default value to EEPROM now
+  eeconfig_update_user(user_config.raw,user_config1.raw,user_config2.raw,user_config3.raw,); // Write default value to EEPROM now
 }
 
 // HACK terrible hack to UNmagic the keymap
@@ -196,7 +201,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                          XXXXXXX,     KC_LSFT,     KC_A,        KC_S,        KC_D,        KC_F,                          KC_RPRN,     KC_BTN1,     KC_BTN2,     KC_B,        KC_PPLS,     KC_VOLU,
                          XXXXXXX,      KC_LCTL,     KC_Y,        KC_X,        KC_C,        KC_V,                          KC_G,        KC_R,        KC_Q,        XXXXXXX,     KC_PMNS,     KC_VOLD,
                                                    XXXXXXX,     XXXXXXX,                                                                           XXXXXXX,     XXXXXXX,
-                                                                             KC_LSFT,     KC_ENT,                          KC_V,
+                                                                             KC_LSFT,     KC_SPC,                          KC_V,
                                                                                 KC_ENT,         KC_SPC,                            KC_C,
                                                                                 TO(_PROG),        KC_LCTL,              TG(_GAME),  LALT(KC_TAB)
                         ),
@@ -230,12 +235,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
                          KC_ESC,      KC_ESC,      KC_1,        KC_2,        KC_3,        KC_4,                          TT(CONF),     KC_NUM,      KC_PSLS,     KC_PAST,     KC_PMNS,     KC_CALC,
                          XXXXXXX,     KC_TAB,      KC_Q,        KC_W,        KC_E,        KC_R,                          KC_RBRC,      KC_P7,       KC_P8,       KC_P9,       KC_PPLS,     KC_MUTE,
-                         LGUI(KC_L),  LCTL(KC_A),  UC(0x00DF),  SNIPE,        KC_LSFT,     KC_LCBR,                      KC_RBRC,      P4BTN1,      P5BTN2,      KC_P6,       COMMDOT,     KC_VOLU,
+                         LGUI(KC_L),  LCTL(KC_A),  UC(0x00DF),  XXXXXXX,     KC_LSFT,     KC_LCBR,                      KC_RBRC,      P4BTN1,      P5BTN2,      KC_P6,       COMMDOT,     KC_VOLU,
                          XXXXXXX,     LCTL(KC_Y),  LCTL(KC_X),  LCTL(KC_C),  LSFT(KC_INS),KC_LPRN,                       KC_RPRN,      KC_P1,       KC_P2,       KC_P3,       KC_PEQL,     KC_VOLD,
                                                    XXXXXXX,     XXXXXXX,                                                                            KC_P0,       COMMDOT,
-                                                                             KC_LSFT,     KC_LSFT,                          XXXXXXX,
+                                                                             KC_LSFT,     KC_LSFT,                          KC_LSFT,
                                                                                 KC_LCTL,        ZOOM,                            BSPCDEL,
-                                                                                XXXXXXX,        KC_LCTL,              TG(_RAISE),  LGUI(KC_V)
+                                                                                SNIPE,        KC_LCTL,              TG(_RAISE),  LGUI(KC_V)
                         ),
 
 
@@ -250,7 +255,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                                                 KC_LCTL,         XXXXXXX,                            XXXXXXX,
                                                                                 XXXXXXX,        XXXXXXX,                      XXXXXXX,  XXXXXXX
                         ),};
-// clang-format on
+// clang-format onß
 
 /*****************************/
 /*  f o r   e n c o d e r s  */
@@ -527,6 +532,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
                 }
             }
             return false;
+
             case ZOOM:
             if (record->event.pressed) {
                 zoom = true;
@@ -1168,7 +1174,7 @@ void matrix_scan_user(void) {
         idle_timer = timer_read32();
     }
     //Bc I want to use not a new timer and only want to prevent the oled from burning in I used this dirty hack its rou
-    if (timer_elapsed32(sleep_timer) > (user_config2.EE_TimeIdle + user_config2.EE_TimeSleep) * 1000 && !sleep_mode && user_config2.EE_TimeSleep > 0) {
+    if (timer_elapsed32(sleep_timer) > (user_config2.EE_TimeIdle + (user_config2.EE_TimeSleep * 10)) * 1000 && !sleep_mode && user_config2.EE_TimeSleep > 0) {
         print("sleep 1\n");
         sleep_mode  = true;
         sleep_timer = timer_read32();
