@@ -541,13 +541,13 @@ if (is_oled_on()){
                 write_LED(rgb_matrix_get_mode());
                 break;
             case _RAISE:
-                oled_write_P(PSTR("Dg"), false);
+                Int_to_Oled( user_config3.EE_DragScroll);
                 oled_write_P(PSTR("\nRAISE"), false);
                 oled_write_P(PSTR("\n"), false);
                 write_LED(rgb_matrix_get_mode());
                 break;
             case _PROG:
-                oled_write_P(PSTR("Dc"), false);
+                Int_to_Oled( user_config3.EE_DragCurser);
                 oled_write_P(PSTR("\nPROG\n"), false);
                 oled_write_P(PSTR("\n"), false);
                 write_LED(rgb_matrix_get_mode());
@@ -562,10 +562,14 @@ if (is_oled_on()){
                 break;
             case _CONF:
                 oled_set_cursor(0, 0);
-                oled_write_P(PSTR("SETUP-----POINT"), false);
+                oled_write_P(PSTR("SETUP-----P:"), false);
                 Int_to_Oled(charybdis_get_pointer_default_dpi()/100 );
-                oled_write_P(PSTR("\n\nSNIPE"), false);
+                oled_write_P(PSTR("\nS:"), false);
                 Int_to_Oled(charybdis_get_pointer_sniping_dpi()/100 );
+                oled_write_P(PSTR("\n\nDS:"), false);
+                Int_to_Oled( user_config3.EE_DragScroll);
+                oled_write_P(PSTR("\nDC:"), false);
+                Int_to_Oled(user_config3.EE_DragCurser );
                 oled_write_P(PSTR("\n\nAktiv"), false);
                 write_LED(LayerEFF);
                 oled_write_P(PSTR("\nTime\n"), false);

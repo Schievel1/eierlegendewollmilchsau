@@ -129,7 +129,7 @@ uint32_t eeconfig_read_user(void);
 uint32_t eeconfig_read_user1(void);
 uint32_t eeconfig_read_user2(void);
 uint32_t eeconfig_read_user3(void);
-void     eeconfig_update_user(uint32_t val,uint32_t val1,uint32_t val2);
+void     eeconfig_update_user(uint32_t val,uint32_t val1,uint32_t val2,uint32_t val3);
 #endif // (EECONFIG_USER_DATA_SIZE) == 0
 
 #ifdef HAPTIC_ENABLE

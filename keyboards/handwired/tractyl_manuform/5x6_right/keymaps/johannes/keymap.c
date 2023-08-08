@@ -149,7 +149,7 @@ void eeconfig_init_user(void) {  // EEPROM is getting reset!
     user_config3.EE_DragCurser = 6;
     user_config3.EE_DragScroll = 6;
  // We want this enabled by default
-  eeconfig_update_user(user_config.raw,user_config1.raw,user_config2.raw,user_config3.raw,); // Write default value to EEPROM now
+  eeconfig_update_user(user_config.raw,user_config1.raw,user_config2.raw,user_config3.raw); // Write default value to EEPROM now
 }
 
 // HACK terrible hack to UNmagic the keymap
@@ -221,7 +221,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [_LOWER] = LAYOUT_5x6_right(
 
                          KC_TILD,     KC_F1,       KC_F2,       KC_F3,       KC_F4,       KC_F5,                         KC_F6,       KC_F7,       KC_F8,       KC_F9,       KC_F10,      KC_F11,
-                         XXXXXXX,     XXXXXXX,     XXXXXXX,     LSG(KC_S),   RCS(KC_J),   RCS(KC_K),                       LCTL(KC_Z),  KC_LEFT,     KC_UP,       KC_DOWN,     KC_RGHT,     KC_F12,
+                         XXXXXXX,     XXXXXXX,     XXXXXXX,     RCS(KC_J),   LSG(KC_S),   RCS(KC_K),                     LCTL(KC_Z),  KC_LEFT,     KC_UP,       KC_DOWN,     KC_RGHT,     KC_F12,
                          LGUI(KC_L),  LCTL(KC_A),  UC(0x00DF),  RAISE,       KC_LSFT,     KC_LCBR,                       KC_RCBR,     KC_BTN1,     KC_BTN2,     KC_LEFT,     KC_RGHT,     KC_PIPE,
                          KC_CAPS ,    LCTL(KC_Y),  LCTL(KC_X),  LCTL(KC_C),  LSFT(KC_INS),KC_LPRN,                       KC_RPRN,     LSFT(KC_INS),XXXXXXX,     XXXXXXX,     XXXXXXX,     XXXXXXX,
                                                    XXXXXXX,     XXXXXXX,                                                                          XXXXXXX,     XXXXXXX,
@@ -248,9 +248,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
                          TO(_QWERTZ),  HUELAY1,      HUELAY2,        HUELAY3,        HUELAY4,        HUELAY5,            TimeIdle,    TimeSleep,     XXXXXXX,       XXXXXXX,       XXXXXXX,     EE_CLR,
                          DB_TOGG,      EFFLAY1,      EFFLAY2,        EFFLAY3,        EFFLAY4,        EFFLAY5,            EFFIdle,     XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     QK_BOOT,
-                         RGB_TOG,      XXXXXXX,      SNIPE,          DRAG,           XXXXXXX,        XXXXXXX,            XXXXXXX,     XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     XXXXXXX,
-                         EESave,       XXXXXXX,      XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,            XXXXXXX,     XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     XXXXXXX,
-                                                     DPISPDWN,       DPISPUP,                                                                        DPIDWN,       DPIUP,
+                         RGB_TOG,      XXXXXXX,      SNIPE,          DRAG,           DRAGC,          XXXXXXX,            XXXXXXX,     XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     XXXXXXX,
+                         EESave,       DPIUP,        DPISPUP,        DragScroll,     DragCurser,     XXXXXXX,            XXXXXXX,     XXXXXXX,       XXXXXXX,       XXXXXXX,       XXXXXXX,     XXXXXXX,
+                                                     RGB_SAI,        RGB_VAI,                                                                        XXXXXXX,       XXXXXXX,
                                                                              KC_LSFT,     KC_LSFT,                          XXXXXXX,
                                                                                 KC_LCTL,         XXXXXXX,                            XXXXXXX,
                                                                                 XXXXXXX,        XXXXXXX,                      XXXXXXX,  XXXXXXX
@@ -371,8 +371,23 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
         } else {
             if (clockwise) {
                 //scroll up
+                if(user_config3.EE_DragScroll>=15)
+                    {
+                        user_config3.EE_DragScroll = 0;
+                    }else
+                    {
+                        user_config3.EE_DragScroll = user_config3.EE_DragScroll+1;
+                    }
+
             } else {
                 //scroll down
+                if (user_config3.EE_DragScroll<=0)
+                    {
+                        user_config3.EE_DragScroll = 15;
+                    }else
+                    {
+                        user_config3.EE_DragScroll = user_config3.EE_DragScroll-1;
+                    }
             }
         }
 
@@ -402,6 +417,36 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
                 layer_move(_QWERTZ);
             } else {
                 layer_move(_PROG);
+            }
+        } else {
+            if (clockwise) {
+	        charybdis_cycle_pointer_default_dpi_noeeprom(true);
+        } else {
+            charybdis_cycle_pointer_default_dpi_noeeprom(false);
+            }
+        }
+    }
+    if (index == 0) // slave side
+    {
+        if (clockwise) {
+			tap_code(KC_WH_U);
+        } else {
+            tap_code(KC_WH_D);
+        }
+    }
+    return true;
+
+//////////////////////
+                break;
+            case _CONF:
+//////////////////////////////////////////////
+                if (index == 1) // master side
+    {
+        if (shift_held){
+            if (clockwise) {
+
+            } else {
+
             }
         } else {
             if (clockwise) {
@@ -1043,6 +1088,82 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
                 drag = false;
             }
             return false;
+
+            case DRAGC:
+            if (record->event.pressed) {
+                dragc = true;
+                snipe = false;
+                drag = false;
+            } else {
+                dragc = false;
+            }
+            return false;
+
+            case DragScroll:
+            if (record->event.pressed) {
+            if (oneShot==false){
+
+                if (shift_held) {
+                    if (user_config3.EE_DragScroll<=0)
+                    {
+                        user_config3.EE_DragScroll = 15;
+                    }else
+                    {
+                        user_config3.EE_DragScroll = user_config3.EE_DragScroll-1;
+                    }
+                }else{
+                    if(user_config3.EE_DragScroll>=15)
+                    {
+                        user_config3.EE_DragScroll = 0;
+                    }else
+                    {
+                        user_config3.EE_DragScroll = user_config3.EE_DragScroll+1;
+                    }
+
+                }
+                oneShot=true;
+            }
+
+                } else {
+
+                oneShot=false;
+
+                }
+            return false;
+
+            case DragCurser:
+            if (record->event.pressed) {
+            if (oneShot==false){
+
+                if (shift_held) {
+                    if (user_config3.EE_DragCurser<=0)
+                    {
+                        user_config3.EE_DragCurser = 15;
+                    }else
+                    {
+                        user_config3.EE_DragCurser = user_config3.EE_DragCurser-1;
+                    }
+                }else{
+                    if(user_config3.EE_DragCurser>=15)
+                    {
+                        user_config3.EE_DragCurser = 0;
+                    }else
+                    {
+                        user_config3.EE_DragCurser = user_config3.EE_DragCurser+1;
+                    }
+
+                }
+                oneShot=true;
+            }
+
+                } else {
+
+                oneShot=false;
+
+                }
+            return false;
+
+
             case COMMDOT:
             if (record->event.pressed) {
              if (shift_held) {
@@ -1063,7 +1184,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
             case  EESave:
             if (record->event.pressed) {
             if (oneShot==false){
-               eeconfig_update_user(user_config.raw,user_config1.raw,user_config2.raw);
+               eeconfig_update_user(user_config.raw,user_config1.raw,user_config2.raw,user_config3.raw);
                oneShot=true;
                 }
             } else {

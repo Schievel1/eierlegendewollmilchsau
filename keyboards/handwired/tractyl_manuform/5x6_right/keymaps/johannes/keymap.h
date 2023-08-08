@@ -32,12 +32,15 @@ enum my_keycodes {
     EFFIdle,
     SNIPE,
     DRAG,
+    DRAGC,
     COMMDOT,
     P4BTN1,
     P5BTN2,
     EESave,
     TimeSleep,
     TimeIdle,
+    DragScroll,
+    DragCurser,
 };
 typedef union {
   int32_t raw;

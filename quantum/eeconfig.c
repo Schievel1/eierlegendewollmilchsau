@@ -26,7 +26,7 @@ void eeconfig_init_via(void);
 __attribute__((weak)) void eeconfig_init_user(void) {
 #if (EECONFIG_USER_DATA_SIZE) == 0
     // Reset user EEPROM value to blank, rather than to a set value
-    eeconfig_update_user(0,0,0);
+    eeconfig_update_user(0,0,0,0);
 #endif
 }
 

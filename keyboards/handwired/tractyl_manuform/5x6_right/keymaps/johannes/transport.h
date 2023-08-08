@@ -14,6 +14,8 @@ typedef struct _master_to_slave_t {
     uint8_t current_LayerEFF;
     uint8_t current_TimeIdle;
     uint8_t current_TimeSleep;
+    uint8_t current_DragCurser;
+    uint8_t current_DragScroll;
 
 } master_to_slave_t;
 
@@ -31,6 +33,8 @@ typedef struct _slave_to_master_t {
     uint8_t current_LayerEFF;
     uint8_t current_TimeIdle;
     uint8_t current_TimeSleep;
+    uint8_t current_DragCurser;
+    uint8_t current_DragScroll;
 } slave_to_master_t;
 
 void user_sync_init(void);
