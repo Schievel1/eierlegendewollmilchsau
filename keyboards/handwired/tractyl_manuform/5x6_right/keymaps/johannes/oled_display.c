@@ -542,12 +542,21 @@ if (is_oled_on()){
                 break;
             case _RAISE:
                 Int_to_Oled( user_config3.EE_DragScroll);
+                if (user_config3.EE_DragScroll<10)
+                {
+                    oled_write_P(PSTR("\n"), false);
+                }
+
                 oled_write_P(PSTR("\nRAISE"), false);
                 oled_write_P(PSTR("\n"), false);
                 write_LED(rgb_matrix_get_mode());
                 break;
             case _PROG:
                 Int_to_Oled( user_config3.EE_DragCurser);
+                if (user_config3.EE_DragCurser<10)
+                {
+                    oled_write_P(PSTR("\n"), false);
+                }
                 oled_write_P(PSTR("\nPROG\n"), false);
                 oled_write_P(PSTR("\n"), false);
                 write_LED(rgb_matrix_get_mode());
