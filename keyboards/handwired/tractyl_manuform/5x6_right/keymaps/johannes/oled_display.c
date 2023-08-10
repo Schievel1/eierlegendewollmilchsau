@@ -577,9 +577,17 @@ if (is_oled_on()){
                 Int_to_Oled(charybdis_get_pointer_sniping_dpi()/100 );
                 oled_write_P(PSTR("\n\nDS:"), false);
                 Int_to_Oled( user_config3.EE_DragScroll);
-                oled_write_P(PSTR("\nDC:"), false);
+                if (user_config3.EE_DragScroll<10)
+                {
+                    oled_write_P(PSTR("\n"), false);
+                }
+                oled_write_P(PSTR("DC:"), false);
                 Int_to_Oled(user_config3.EE_DragCurser );
-                oled_write_P(PSTR("\n\nAktiv"), false);
+                 if (user_config3.EE_DragCurser<10)
+                {
+                    oled_write_P(PSTR("\n"), false);
+                }
+                oled_write_P(PSTR("\nAktiv"), false);
                 write_LED(LayerEFF);
                 oled_write_P(PSTR("\nTime\n"), false);
                  oled_write_P(PSTR("I"), false);
