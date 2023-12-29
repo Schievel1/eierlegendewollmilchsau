@@ -1,1 +1,3 @@
 JOYSTICK_ENABLE = yes
+RAW_ENABLE = yes
+DEBUG_ENABLE = yes

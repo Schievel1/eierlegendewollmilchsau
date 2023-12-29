@@ -18,3 +18,9 @@ joystick_config_t joystick_axes[JOYSTICK_AXIS_COUNT] = {
     [0] = JOYSTICK_AXIS_IN(ADC_PIN, 0, 512, 1023),
     [1] = JOYSTICK_AXIS_VIRTUAL
 };
+
+
+void raw_hid_receive(uint8_t *data, uint8_t length) {
+    data[length-1] = 0;
+    dprintf("got: %s", data);
+}
