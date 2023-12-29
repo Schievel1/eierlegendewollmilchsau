@@ -11,6 +11,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 void matrix_scan_user(void) {
     int16_t val = (((uint32_t)timer_read() % 5000 - 2500) * 255) / 5000;
     joystick_set_axis(1, val);
+    dprintf("got: %u", ADC_PIN);
 }
 
 // Joystick config
