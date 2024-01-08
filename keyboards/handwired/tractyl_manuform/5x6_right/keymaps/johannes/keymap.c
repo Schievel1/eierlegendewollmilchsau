@@ -45,6 +45,7 @@ bool     sleep_mode = false;
 //global WPM declarations
 bool isSneaking = false;
 bool isJumping  = false;
+bool isJiggle = false;
 uint8_t ANIM_FRAME_DURATION1_OLD = 1;
 /* status variables */
  wpm_state_t   current_wpms = 0;
@@ -71,6 +72,7 @@ uint32_t idle_timer = 0;
 uint32_t sleep_timer = 0;
 void     idle_function(void);
 void     sleep_function(void);
+void     jiggle_function(void);
 
 void housekeeping_task_user(void) {
         current_wpms   = get_current_wpm();
@@ -253,7 +255,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                      RGB_SAI,        RGB_VAI,                                                                        XXXXXXX,       XXXXXXX,
                                                                              KC_LSFT,     KC_LSFT,                          XXXXXXX,
                                                                                 KC_LCTL,         XXXXXXX,                            XXXXXXX,
-                                                                                XXXXXXX,        XXXXXXX,                      XXXXXXX,  XXXXXXX
+                                                                                XXXXXXX,        XXXXXXX,                      JiggleTg,  XXXXXXX
                         ),};
 // clang-format onß
 
@@ -1264,6 +1266,23 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
                 }
             return false;
 
+            case JiggleTg:
+            if (record->event.pressed) {
+            if (oneShot==false){
+            if (isJiggle){
+                isJiggle = false;
+            } else {
+                isJiggle = true;
+                oneShot=true;
+            }}
+
+                } else {
+
+                oneShot=false;
+
+                }
+            return false;          
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////   End Config Layer Keycodes ////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1302,6 +1321,7 @@ void matrix_scan_user(void) {
     }
     idle_function();
     sleep_function();
+    jiggle_function();
 
 }
 
@@ -1333,4 +1353,15 @@ void sleep_function(void) {
     }
     last_state_sleep = sleep_mode;
 }
+void jiggle_function(void) {
+uint8_t jiggle = timer_read32()%10;
+    if (isJiggle && jiggle == 5) { // rising edge of idle mode
 
+  tap_code(KC_MS_UP);
+    }
+
+    if (isJiggle && jiggle == 6) { // rising edge of idle mode 
+  tap_code(KC_MS_DOWN);
+    }
+    
+}
