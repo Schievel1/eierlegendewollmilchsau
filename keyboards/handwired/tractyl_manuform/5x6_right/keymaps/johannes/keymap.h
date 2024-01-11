@@ -41,7 +41,6 @@ enum my_keycodes {
     TimeIdle,
     DragScroll,
     DragCurser,
-    JiggleTg,
 };
 typedef union {
   int32_t raw;
