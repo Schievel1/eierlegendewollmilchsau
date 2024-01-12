@@ -41,6 +41,7 @@ enum my_keycodes {
     TimeIdle,
     DragScroll,
     DragCurser,
+    JiggleTg,
 };
 typedef union {
   int32_t raw;
@@ -117,3 +118,4 @@ extern user_config_t3 user_config3;
 extern bool zoom;
 extern bool troughtTime;
 extern uint8_t LayerEFF;
+extern bool isJiggle;
