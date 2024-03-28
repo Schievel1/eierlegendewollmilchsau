@@ -73,6 +73,8 @@ uint32_t sleep_timer = 0;
 void     idle_function(void);
 void     sleep_function(void);
 void     jiggle_function(void);
+static report_mouse_t last_mouse_report   = {0};
+static report_mouse_t new_mouse_report   = {0};
 
 void housekeeping_task_user(void) {
         current_wpms   = get_current_wpm();
@@ -84,6 +86,19 @@ void housekeeping_task_user(void) {
         last_draw = timer_read32();
    //     ili9341_draw_display(big_display);
     }
+
+new_mouse_report = pointing_device_get_report();
+dprint("maus Update");
+    if (has_mouse_report_changed(last_mouse_report, new_mouse_report)) {
+        idle_timer = timer_read32();
+        sleep_timer = timer_read32();
+        idle_mode  = false;
+        sleep_mode  = false;
+        last_mouse_report = pointing_device_get_report();
+        dprint("maus Aktuell");
+    }
+
+
     // enable sniping mode with lower layer
     charybdis_set_pointer_sniping_enabled((biton32(layer_state) == _LOWER)||(snipe));
     // enable dragscroll mode when left shift key is pressed
@@ -94,8 +109,8 @@ void housekeeping_task_user(void) {
     charybdis_set_pointer_timetravel_enabled((biton32(layer_state) == _PROG)&&(troughtTime));
 }
 
-/***********/
-/*  i n i t */
+  /***********/
+ /* i n i t */
 /***********/
 void keyboard_post_init_user(void) {
     // Debug: Customise these values to desired behaviour
@@ -107,6 +122,8 @@ void keyboard_post_init_user(void) {
     user_config1.raw = eeconfig_read_user1();
     user_config2.raw = eeconfig_read_user2();
     user_config3.raw = eeconfig_read_user3();
+
+        last_mouse_report = pointing_device_get_report();
 
     rgb_matrix_mode_noeeprom(user_config1.EE_EffectL1);
     // user comms
@@ -192,7 +209,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                          KC_LCTL,     KC_Y,        KC_X,        KC_C,        KC_V,        KC_B,                          KC_N,        KC_M,        KC_COMM,     KC_DOT,      KC_SLSH,     KC_BSLS,
                                                    KC_LBRC,     KC_RBRC,                                                                           KC_PGUP,     KC_PGDN,
                                                                              KC_LSFT,     SC_LSPO,                         KC_LSFT,
-                                                                                KC_LCTL,        LOWER,                               SC_LSPO,
+                                                                                KC_LCTL,        TT(LOWER),                               SC_LSPO,
                                                                                 KC_LALT,        KC_LGUI,              KC_RALT,       SC_SENT
                          ),
 
@@ -514,21 +531,19 @@ bool encoder_update_user(uint8_t index, bool clockwise) {
 /*******************************************/
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
 
-
-
-    if (record->event.pressed) {
+    if (record->event.pressed ) {
         idle_timer = timer_read32();
         sleep_timer = timer_read32();
         idle_mode  = false;
         sleep_mode  = false;
+
     }
 
     switch (keycode) {
         // case KC_ESC:
         //     if (record->event.pressed) {
-        //         SEND_STRING("Hello, world!\n");
+        //         SEND_STRING("Hello, world!\n");ys
         //     }
-        //     return false;
         //      /* KEYBOARD PET STATUS START */
 
         case KC_LCTL:
